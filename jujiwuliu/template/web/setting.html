@@ -1,0 +1,327 @@
+﻿{template 'common/header'}
+
+<ul class="nav nav-tabs">
+	<li {if $op=='display' }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('setting')}">页面设置</a>
+	</li>
+	<li {if $op=='carry' }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('setting',array('op'=>'carry'))}">搬运设置</a>
+	</li>
+
+	<li {if $op == 'explain'}class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('setting',array('op'=>'explain'))}">使用说明</a>
+	</li>
+</ul>
+
+{if $op == 'display'}
+	<form action="" method="post"> 
+		<div class="main form-horizontal">
+			<input type="hidden" name="id" value="{$_GPC['id']}" />
+			<div class="panel panel-info">
+				<div class="panel-heading">启动页设置</div>
+				<div class="panel-body"><br />
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">启动轮播图片</label>
+						<div class="col-xs-12 col-sm-9"> 
+							{php echo tpl_form_field_multi_image('rolling_diagram',$item['rolling_diagram']);}
+							<span class="help-block">建议图片大小375*812 (适配iphoneX)或者倍数<span style="color: red;">（底部尽量多留一些出血）</span></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">展示时间</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="rolling_time" value="{$item['rolling_time']}" placeholder="请输入轮播图展示间隔时间"/>
+							<span class="help-block" style="color: red;">单位：秒 (此时间有一定偏差，以实际显示为准)</span></span>					</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">展示间隔</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="rolling_interval_time" value="{$item['rolling_interval_time']}" placeholder="请输入轮播图展示时间"/>
+							<span class="help-block" style="color: red;">单位：分钟 (此时间有一定偏差，以实际显示为准)  如：60 则为1个小时后如果用户重新打开小程序首页即展示引导页</span></span>					</div>
+					</div>
+				</div>
+			</div>
+			
+			<!--<div class="panel panel-info">
+				<div class="panel-heading">分享设置</div>
+				<div class="panel-body"><br />
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享显示图片</label>
+						<div class="col-xs-12 col-sm-9"> 
+							{php echo tpl_form_field_multi_image('share_img',$item['share_img']);}
+							<span class="help-block"> <span style="color: red;">上传多张为随机展示，</span>建议图片大小  <span style="color: red;">无</span></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享显示标题</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="share_title" value="{$item['share_title']}" placeholder="请输入分享标题"/>
+							<span class="help-block" style="color: red;">单位：秒</span></span>					</div>
+					</div>
+				</div>
+			</div>
+			-->
+			<!--<div class="panel panel-info">
+				<div class="panel-heading">发布设置</div>
+				<div class="panel-body"><br />
+					
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">展示时间</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="rolling_time" value="{$item['rolling_time']}" placeholder="请输入轮播图展示时间"/>
+							<span class="help-block" style="color: red;">单位：秒</span></span>					</div>
+					</div>
+				</div>
+			</div>-->
+			<div class="form-group col-sm-12">
+				<input class="btn btn-primary col-lg-1" type="submit" name="submit" style="margin-right:30px;" value="保存">
+				<input type="hidden" name="token" value="{$_W['token']}" />
+				<a href="javascript:void(0)" onClick="javascript :history.back(-1);" class="btn btn-primary col-lg-1">返回</a>
+			</div>
+		</div>
+		
+		
+	</form>
+
+
+{/if}
+{if $op == 'carry'}
+	<form action="" method="post">
+		<div class="main form-horizontal">
+			<input type="hidden" name="id" value="{$_GPC['id']}" />
+			<div class="panel panel-info">
+				<div class="panel-heading">平台设置</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">平台抽成比例</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="pumping" value="{$item['pumping']}" placeholder="请输入平台抽成比例"/>
+							<span class="help-block" style="color: red;">单位：% 最终工人看到的结果为计算结果四舍五入保留两位小数</span></span>					</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">每单接单押金</label>
+						<div class="col-xs-12 col-sm-9">
+							<input class="form-control" name="security" value="{$item['security']}" placeholder="请输入平台抽成比例"/>
+							<span class="help-block" style="color: red;">按百分比计算的</span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">发布设置</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">轻活</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<div class="input-group">
+							 	<span class="input-group-addon">装卸工</span>
+								<input class="form-control" name="dock_light" value="{$item['dock_light']}" placeholder="请输入轻度装卸价格"/>
+							 	<span class="input-group-addon">元/吨 ，临时工</span>
+								<input class="form-control" name="temporary_light" value="{$item['temporary_light']}" placeholder="请输入轻度临时工价格"/>
+							 	<span class="input-group-addon">元/天</span>
+							</div>
+							<span class="help-block" style="color: red;">单位：元</span></span>					
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">中活</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<div class="input-group">
+							 	<span class="input-group-addon">装卸工</span>
+								<input class="form-control" name="dock_moderate" value="{$item['dock_moderate']}" placeholder="请输入中度装卸价格"/>
+							 	<span class="input-group-addon">元/吨 ，临时工</span>
+								<input class="form-control" name="temporary_moderate" value="{$item['temporary_moderate']}" placeholder="请输入中度临时工价格"/>
+							 	<span class="input-group-addon">元/天</span>
+							</div>
+							<span class="help-block" style="color: red;">单位：元</span></span>					
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">重活</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<div class="input-group">
+							 	<span class="input-group-addon">装卸工</span>
+								<input class="form-control" name="dock_heavy" value="{$item['dock_heavy']}" placeholder="请输入重度装卸价格"/>
+							 	<span class="input-group-addon">元/吨 ，临时工</span>
+								<input class="form-control" name="temporary_heavy" value="{$item['temporary_heavy']}" placeholder="请输入重度临时工价格"/>
+							 	<span class="input-group-addon">元/天</span>
+							</div>
+							<span class="help-block" style="color: red;">单位：元</span></span>					
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">免责取消时间</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="issue_cancel_time" value="{$item['issue_cancel_time']}" placeholder="请输入免责取消时间"/>
+							<span class="help-block" style="color: red;">单位：分钟 </span></span>					</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">自动结算时间</label>
+						<div class="col-xs-12 col-sm-9">
+							<input class="form-control" name="auto_settle_time" value="{$item['auto_settle_time']}" placeholder="请输入自动结算时间"/>
+							<span class="help-block" style="color: red;">单位：小时,默认48小时 </span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-info">
+				<div class="panel-heading">接单设置</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">取消订单违约金</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<div class="input-group">
+							 	<span class="input-group-addon">开工前取消</span>
+								<input class="form-control" name="pre_sales_penalty" value="{$item['pre_sales_penalty']}" placeholder="输入违约金"/>
+							 	<span class="input-group-addon">元，开工后取消</span>
+								<input class="form-control" name="customer_service_penalty" value="{$item['customer_service_penalty']}" placeholder="输入违约金"/>
+							 	<span class="input-group-addon">元</span>
+							</div>
+							<!--<span class="help-block" style="color: red;">带%表示按单价的百分比自动计算（可以超过100%,金额四舍五入）,不带%则为固定金额</span></span>-->					
+								
+							</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">免责取消时间</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="issue_worker_time" value="{$item['issue_worker_time']}" placeholder="免责取消时间"/>
+							<span class="help-block" style="color: red;">单位：分钟 </span></span>					</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">自动取消时间</label>
+						<div class="col-xs-12 col-sm-9">
+							<input class="form-control" name="auto_cancel_time" value="{$item['auto_cancel_time']}" placeholder="请输入自动取消时间"/>
+							<span class="help-block" style="color: red;">单位：小时,默认48小时 </span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!--<div class="panel panel-info">
+				<div class="panel-heading">发布设置</div>
+				<div class="panel-body"><br />
+					
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">展示时间</label>
+						<div class="col-xs-12 col-sm-9"> 
+							<input class="form-control" name="rolling_time" value="{$item['rolling_time']}" placeholder="请输入轮播图展示时间"/>
+							<span class="help-block" style="color: red;">单位：秒</span></span>					</div>
+					</div>
+				</div>
+			</div>-->
+			<div class="form-group col-sm-12">
+				<input class="btn btn-primary col-lg-1" type="submit" name="submit" style="margin-right:30px;" value="保存">
+				<input type="hidden" name="token" value="{$_W['token']}" />
+				<a href="javascript:void(0)" onClick="javascript :history.back(-1);" class="btn btn-primary col-lg-1">返回</a>
+			</div>
+		</div>
+		
+		
+	</form>
+
+
+{/if}
+
+{if $op == 'explain'}
+<form action="" method="post">
+	<div class="main form-horizontal">
+		<input type="hidden" name="id" value="{$_GPC['id']}" />
+		<div class="panel panel-info">
+			<div class="panel-heading">使用说明</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">发布方使用说明</label>
+					<div class="col-sm-9">
+						{php echo tpl_ueditor('explain',$item['explain'],array('height'=>'300'))}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">接单方使用说明</label>
+					<div class="col-sm-9">
+						{php echo tpl_ueditor('explain_receipt',$item['explain_receipt'],array('height'=>'300'))}
+					</div>
+				</div>
+				<div class="form-group col-sm-12">
+					<input class="btn btn-primary col-lg-1" type="submit" name="submit" style="margin-right:30px;" value="保存">
+					<input type="hidden" name="token" value="{$_W['token']}" />
+					<a href="javascript:void(0)" onClick="javascript :history.back(-1);" class="btn btn-primary col-lg-1">返回</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{/if}
+
+{if $op=='11'}
+
+<div class="panel panel-default">
+
+	<div class="table-responsive panel-body">
+		<form action="" method="get" enctype="multipart/form-data">
+			<input type="hidden" name="c" value="{$_GPC['c']}" />
+			<input type="hidden" name="a" value="{$_GPC['a']}" />
+			<input type="hidden" name="op" value="{$_GPC['op']}" />
+			<input type="hidden" name="do" value="{$_GPC['do']}" />
+			<input type="hidden" name="m" value="{$_GPC['m']}" />
+			<input type="hidden" name="version_id" value="{$_GPC['version_id']}" />
+			<div class="form-group">
+				<label class="col-sm-3 col-md-3 col-lg-2 col-xs-12">
+                	<select	name="type" class="form-control">
+                		<option value="">会员身份</option>
+						<option {if $_GPC['type']==2}selected{/if} value="2">发布方</option>
+						<option {if $_GPC['type']==1}selected{/if} value="1">搬运工</option>
+                	</select>
+                </label>
+				<div class="col-sm-9 col-lg-9 col-xs-12">
+					<input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入昵称/手机号码/姓名搜索" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
+				<div class="col-sm-7 col-lg-9 col-xs-12">
+					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+		<div class="panel panel-default">
+			<div class="panel-body table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th width="50">UID</th>
+							<th>头像</th>
+							<th>昵称</th>
+							<th>姓名</th>
+							<th>会员身份</th>
+							<th>手机号码</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $row}
+						<tr>
+							<td>{$row['uid']}</td>
+							<td class="dm-hover" style="position: relative;">
+								<img src="{if $row['avatar']}{$row['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35">
+							</td>
+							<td>{$row['nickname']}</td>
+							<td>{$row['realname']}</td>
+							<td>{if $row['type']==1}搬运工{else}发布方{/if}</td>
+							<td>{$row['mobile']}</td>
+							<td>
+								<a href="{php echo $this->createWebUrl('member', array('op' => 'post','id' => $row['id']))}" class="btn btn-default btn-sm" title="编辑"><i class="fa fa-edit"></i> 编辑</a>
+								<a href="{php echo $this->createWebUrl('member', array('op' => 'del','id' => $row['id']))}" class="btn btn-default btn-sm" title="删除" onclick="if(!confirm('确定删除吗?')) return false;"><i class="fa fa-times"> </i></a>
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	</div>
+</div>
+{/if} 
+{template 'common/footer'}

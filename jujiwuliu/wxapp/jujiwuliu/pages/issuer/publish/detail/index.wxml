@@ -1,0 +1,214 @@
+<!--jujiwuliu/pages/issuer/publish/detail/index.wxml-->
+
+<view class='item-list'>
+  <view class='item-title split_2'>
+  <view>
+    <view class='line-title'>搬运工种</view>
+    <view class='line-centent'>{{issuer.typename}}</view>
+  </view>
+  <view>
+    <view class='line-title'>轻度活</view>
+    <view class='line-centent'>{{issuer.price}}元/{{issuer.unit}}</view>
+  </view>
+  </view>
+</view>
+
+<view class='list_card'>
+  <view class=' list-item' >
+    <view class='list-text'>
+      <view class='line-title'>数量</view>
+      <view class='line-centent'>{{issuer.count}}{{issuer.unit}}</view>
+    </view>
+  </view>
+  <view class=' list-item' >
+    <view class='list-text'>
+      <view class='line-title'>开始时间</view>
+      <view class='line-centent'>{{issuer.starttime}}</view>
+    </view>
+  </view>
+  <view class=' list-item'>
+    <view class='list-text'>
+      <view class='line-title'>用工地点</view>
+      <view class='line-centent'>{{issuer.address}}</view>
+    </view>
+  </view>
+  <view class=' list-item' >
+    <view class='list-text split_2'>
+      <view>
+        <view class='line-title'>需要人数</view>
+        <view class='line-centent'>{{issuer.nums}}人</view>
+      </view>
+      <view>
+        <view class='line-title'>性别</view>
+        <view class='line-centent'>{{issuer.sex}}</view>
+      </view>
+      </view>
+  </view>
+</view>
+
+<view class='item-list'>
+  <view class='item-title'>
+  <view>货物图片</view>
+  </view>
+  <view class='item-content'>
+    <block wx:for="{{issuer.images}}" data-item="item" wx:for-index="idx">
+      <image mode="widthFix" src='{{siteinfo.attachurl}}{{item}}'></image>
+    </block>
+  </view>
+</view>
+
+<view class='item-list'>
+  <view class='item-title'>
+  <view>货物描述</view>
+  </view>
+  <view  class='item-content'>
+    {{issuer.description}}
+  </view>
+</view>
+<view class='item-list'>
+  <view class='item-title'>
+  <view>{{issuer.is_appoint?'指定人员':'接单人员'}}<text>(已接单的点击头像可查看订单)</text></view>
+  </view>
+  <view  class='item-content'>
+        <view class='release-images'>
+            <view >
+            <block wx:for="{{issuer.accepts}}" wx:key="{{index}}" >
+                <view class='release-image' bindtap='url_order' data-orderid="{{item.order.id}}">
+                    <image src='{{item.user.avatar}}' mode='aspectFit'></image>
+                    <view class='mark' wx:if="{{!item.order}}" >未接单</view>
+                    <view class='mark' wx:elif="{{(item.order.status==0 || item.order.status==1) && item.order.apply==0}}">已接单</view>
+                    <view class='mark' wx:elif="{{item.order.status==3 }}">已完成</view>
+                    <view class='mark' wx:elif="{{item.order.status==4 }}">已取消</view>
+                    <view class='mark' wx:elif="{{item.order.apply==1 }}">申请打款</view>
+                </view>
+               
+            </block>
+            </view>
+        </view>
+  </view>
+</view>
+
+<!-- <view class='item-list'>
+  <view class='item-title'>
+    <view>
+      <view class='line-title'>指定人员</view>
+      <view class='line-centent'>张工、李工</view>
+    </view>
+  </view>
+</view>
+
+<view class='item-list'>
+  <view class='item-title'>
+  <view>接单人员</view>
+  </view>
+  <view  class='item-content'>
+    货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描、述货物描
+  </view>
+</view> -->
+
+<view class='item-list'>
+  <view class='item-title'>
+  <view>
+    <view class='line-centent'>价格</view>
+    <view class='line-centent red'>{{issuer.count_price}}元</view>
+  </view>
+  <view class='line-title' bindtap='receipt_model_show'  wx:if="{{issuer.invoice_status==0}}" >申请开票</view>
+  <view class='line-title'    wx:if="{{issuer.invoice_status==1}}" >发票开具中</view>
+  <view class='line-title'    wx:if="{{issuer.invoice_status==2}}" >发票已开</view> 
+   
+  <!-- <view class='line-title' wx:if="{{issuer.accepts.length<=0}}" >可修改价格</view> -->
+  </view>
+</view>
+
+
+<!-- <view class='btn btn-draw_money' wx:if="{{issuer.accepts.length<=0}}" >更改价格</view> -->
+<block wx:if="{{issuer.status != 4}}">
+<!--<block wx:if="{{close_order_show}}">-->
+<block wx:if="{{issuer.status == 0}}">
+<!--<view class='btn btn-draw_money'  bindtap='make_money_model_show'>一键打款</view>-->
+<!--
+<block we:if="{{issuer.pay_status == 99}}">
+<view class='btn btn-draw_money' bindtap='pay_status'>支付</view>
+</block>
+-->
+<view class='btn btn-draw_money' bindtap='cancel_ord'>取消发布</view>
+</block>
+<block wx:elif="{{issuer.status == 1}}">
+<view class='btn btn-draw_money'  bindtap='close_order'>完成订单</view>
+</block>
+<block wx:elif="{{issuer.status == 3 && issuer.can_refund_bond == 1 && apply_bond_status == 0}}">
+  <view class='btn btn-draw_money' bindtap='apply_bond'>申请退还保证金</view>
+</block>
+</block>
+<block wx:else>
+  <block wx:if="{{apply_money_status == 0}}">
+    <view class='btn btn-draw_money' bindtap='apply_money'>申请退款</view>
+  </block>
+  <block wx:if="{{issuer.can_refund_bond == 1 && apply_bond_status == 0}}">
+    <view class='btn btn-draw_money' bindtap='apply_bond'>申请退还保证金</view>
+  </block>
+</block>
+
+<!-- 支付方式选择 -->
+<view class='model_window {{modalPayBtns?"model_show":""}}' bindtap='hide_paybtns'>
+  <view class='model_content'>
+    <view class='model_title'>请选择支付方式</view>
+    <view class='model_body'>
+      <view data-paytype='1' bindtap='check_pay' class='fui_item' >微信支付</view>
+      <view data-paytype='2' bindtap='check_pay' class="fui_item {{!credit_enough?'disabled':''}}" >余额支付<text wx:if="{{!credit_enough}}">(余额不足以支付)</text></view>
+    </view>
+  </view>
+</view>
+
+    
+  
+<view  class='modal_receipt_list' wx:if="{{receipt_model_show}}">
+    <view class='back' bindtap='receipt_model_hide'></view>
+    <view class='receipt_body'> 
+        <radio-group class="receipt_list" bindchange="firm_check">
+                <view class='list_item'  wx:if="{{firms==0}}" >请添加开票公司信息</view>
+                <label class="list_item" wx:for="{{firms}}" wx:key='index' wx:for-index="index">
+                <view class='firm_detail'>
+                    <view>{{item.firm_name}}</view>
+                    <view>{{item.firm_identifier}}</view>
+                    <view>{{item.firm_email}}</view>
+                </view>
+                <view class='btn_edit' >
+                    <radio value="{{item.id}}" checked="{{item.checked}}" />
+                </view>
+            </label>
+        </radio-group>
+        <view class='btn btn-draw_money' bindtap='submit_invoice'>提交</view>
+    </view>
+</view>
+
+ 
+<view  class='modal_make_money' wx:if="{{make_money_model}}">
+<form bindsubmit="submit_make_money">
+    <view class='back' bindtap='make_money_model_hide'></view>
+    <view class='make_money_body'> 
+        <radio-group class="make_money_check" bindchange="make_money_check">
+            <label class="list_item" >
+                    <radio value="1"   />
+                    立即打款
+            </label>
+            <label class="list_item" >
+                    <radio value="2"  />
+                    选择打款时间
+            </label>
+        </radio-group>
+        <view class='make_money_time' wx:if="{{make_money_check==2}}" >
+          打款时间：
+            <picker mode="multiSelector" value="{{dateTime}}" bindchange="getDateTime" bindcolumnchange="getDateTimeColumn" range="{{dateTimeArray}}">    
+            <input hidden='true' name='makemoneytime' value='{{starttime}}'></input>
+            <view class="tui-picker-detail"  style='ont-size:28rpx;'>{{starttime}}
+            </view>  
+          </picker>
+        </view>
+          <button class='btn btn-draw_money' form-type="submit">提交</button>
+    </view>
+    </form>
+</view>
+
+<import src="../../../common/template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

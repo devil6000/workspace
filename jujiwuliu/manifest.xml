@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.jujiwuliu.com" versionCode="">
+	<application setting='false'>
+		<name><![CDATA[巨吉搬运]]></name>
+		<identifie><![CDATA[jujiwuliu]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<ability><![CDATA[巨吉搬运]]></ability>
+		<type><![CDATA[services]]></type>
+		<description><![CDATA[]]></description>
+		<author><![CDATA[Duming]]></author>
+		<url><![CDATA[]]></url>
+		<setting><![CDATA[]]></setting>
+	</application>
+
+	<platform>
+		<subscribes>
+			<message type="text" />
+			<message type="location" />
+			<message type="trace" />
+		</subscribes>
+
+		<handles>
+			<message type="text" />
+			<message type="location" />
+			<message type="trace" />
+		</handles>
+		<rule embed="false" />
+		<rule embed="false" />
+	<supports>
+			<!-- <item type="app" /> -->
+			<item type="wxapp" />
+	</supports>
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="首页" do="index" state="" direct="false" />
+		</cover>
+		<menu>
+			<entry title="会员管理" do="member" state="member" direct="" />
+			<entry title="订单管理" do="order" state="order" direct="" />
+			<entry title="发布管理" do="release" state="release" direct="" />
+			<entry title="系统设置" do="setting" state="setting" direct="" />
+		</menu>
+		<page>
+			<entry title="首页" do="/jujiwuliu/pages/index/index" state="" direct="" />
+		</page>
+	</bindings>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

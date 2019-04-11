@@ -1,0 +1,65 @@
+<!--jujiwuliu/pages/issuer/index.wxml-->
+<view class='container'>
+ <view class='userinfo'>
+    <view class='info avatar'>
+      <image mode="widthFix" src="{{memberInfo.avatar}}" />
+    </view>
+    <view class='info title'>
+      <view>{{memberInfo.realname}}</view>
+      <view>{{memberInfo.mobile}}</view>
+    </view>
+    <view class='btn-bell'>
+      <navigator>
+        <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+        <text>1</text>
+      </navigator>
+    </view>
+ </view>
+
+ <view class='info_card'>
+  <view class='info_card-title'>我的信息</view>
+  <view class='info_card-ul'>
+    <view class='info_card-li'>
+      <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_03.png'></image></view>
+      <view class='info_card-info'>
+        <view>我的发布</view>
+        <view class='des'>0次</view>
+      </view>
+    </view>
+    <view class='info_card-line'></view>
+    <view class='info_card-li'>
+      <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+      <view class='info_card-info'>
+        <view>我的钱包</view>
+        <view class='des'>￥{{memberInfo.credit2}}</view>
+      </view>
+    </view>
+  </view>
+ </view>
+
+<view class='list_card'>
+      <navigator class='weui-cell list-item'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
+        <view class='list-text'>我的积分</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <navigator class='weui-cell list-item'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_05.png'></image>
+        <view class='list-text'>邀请注册</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <navigator class='weui-cell list-item'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_06.png'></image>
+        <view class='list-text'>申请开票</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <navigator class='weui-cell list-item'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_07.png'></image>
+        <view class='list-text'>在线客服</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+  </view>
+
+</view>
+<import src="../stemplate/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

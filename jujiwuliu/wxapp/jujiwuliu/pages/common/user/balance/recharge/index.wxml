@@ -1,0 +1,25 @@
+<!--jujiwuliu/pages/common/user/balance/recharge/index.wxml-->
+<view class='container'>
+
+  <view class='item-list'>
+    <view class='item-title'>
+      <view  class='headline'>充值金额</view>
+      <view class='input'><input placeholder='请输入充值金额' bindinput='money_check'/></view>
+      <view class='img'></view>
+    </view>
+
+    <view class='item-title'>
+      <view class='headline'>支付方式</view>
+      <view class='input'></view>
+      <view class='img'>
+        <image mode="widthFix"  src='../../../../../resource/images/wechat-pay-logo.png' />
+      </view>
+
+    </view>
+
+    <view class='btn btn-draw_money' bindtap="recharge">充值</view>
+  </view>
+</view>
+
+  <import src="../../../template/footer.wxml"/>
+  <template is="footerWx" data="{{...tabBar}}"/>

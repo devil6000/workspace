@@ -1,0 +1,369 @@
+/* jujiwuliu/pages/issuer/index/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.container{
+  padding-bottom: 133rpx;
+}
+.release-type{
+  display: flex;
+  height: 88rpx;
+  color: #333;
+  background: #fff;
+}
+.release-type-item{
+  flex: 1;
+  font-size: 36rpx;
+  line-height: 88rpx;
+  text-align: center;
+}
+.release-type-active{
+  color: #f66620;
+  border-bottom: 2rpx solid #f66620;
+}
+.release-cates{
+  padding: 20rpx;
+  padding-left: 0;
+  background: #fff;
+  overflow: hidden;
+  margin-top: 20rpx;
+  display: n
+}
+.release-cate{
+  margin-left: 20rpx;
+  line-height: 40rpx;
+  font-size: 24rpx;
+  color: #333;
+  background: #f4f4f4;
+  text-align: center;
+  float: left;
+  width: calc(25% - 20rpx);
+  padding: 30rpx 0;
+}
+.release-cate image{
+  width: 80rpx;
+  height: 80rpx;
+}
+.release-cate-active{
+  background: #f66620;
+  color: #fff;
+}
+.release-cate-input{
+  background: #fff;
+  color: #333;
+  font-size: 24rpx;
+  width: 120rpx;
+  text-align: center;
+  margin: 0 auto;
+  line-height: 40rpx;
+  /* padding: 0  20rpx; */
+  box-sizing: border-box;
+}
+.input-cells{
+  padding-left: 24rpx;
+  margin-top: 20rpx;
+}
+.input-cell{
+  padding: 20rpx 24rpx 20rpx 0;
+  line-height:50rpx;
+  height:90rpx;
+  box-sizing: border-box;
+  display: block;
+}
+.input-label{
+  width: 140rpx;
+  font-size: 28rpx;
+  float: left;
+}
+.input-input{
+  height:50rpx;
+  min-height:50rpx;
+  line-height:50rpx;
+  margin-left: 20rpx;
+  width: calc(100% - 160rpx);
+  float: left;
+  font-size: 28rpx;
+}
+.input-input.address{
+    overflow: hidden;
+}
+.input-input input{
+  height: 50rpx;
+  line-height: 50rpx;
+  font-size: 28rpx;
+  color: #b2b2b2;
+  
+}
+.cell-title{
+  padding: 20rpx 24rpx;
+  line-height: 50rpx;
+  font-size: 28rpx;
+}
+.release-images{
+  position: relative;
+  background: #fff;
+  padding: 0 24rpx 24rpx 0;
+  overflow: hidden;
+}
+.release-image{
+  margin-left: 24rpx;
+  position: relative;
+  width: 110rpx;
+  height: 110rpx;
+  margin-top: 24rpx;
+  float: left;
+}
+.release-image image{
+  width: 110rpx;
+  height: 110rpx;
+}
+.remove{
+  border-radius: 50%;
+  height: 30rpx;
+  width: 30rpx;
+  color: #fff;
+  background: #f66620;
+  bottom: 10rpx;
+  right: 10rpx;
+  position: absolute;
+  text-align: center;
+  line-height: 30rpx;
+  font-size: 24rpx;
+}
+.release-textarea{
+  background: #fff;
+}
+.release-textarea textarea,.release-textarea .remarks{
+  padding: 24rpx;
+  font-size: 28rpx;
+  width: 100%;
+  height: 146rpx;
+  box-sizing: border-box;
+}
+.release-textarea .remarks{
+  color: #666;
+}
+.release-staffs{
+  width: calc(100% - 220rpx);
+  float: left;
+}
+.choice{
+  font-size: 28rpx;
+  color: #999;
+  float: right;
+}
+.release-staff{
+  background: #f4f4f4;
+  line-height: 50rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #666;
+  float:left;
+  padding:0 20rpx;
+}
+.staff-remove{
+  font-size: 28rpx;
+  color: #999;
+  float: right;
+  margin-left: 20rpx;
+}
+.price{
+  color: #f66620;
+  font-size: 32rpx;
+}
+.btn_view{
+  padding: 0 30rpx;
+  margin-top: 30rpx;
+}
+.btn-subimt{
+  font-size: 36rpx;
+  line-height: 90rpx;
+  border-radius: 10rpx;
+  border: none;
+  background: #f66620;
+  color: #fff;
+}
+.hide{
+display: none;
+}
+.show{
+display: block;
+}
+
+/*价格浮动在最下面*/
+.count_price{
+  position: fixed;
+  bottom: 133rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  left: 0;
+  width:calc(100% - 100rpx);
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0% 50rpx;
+  border-top: 1px solid #ccc;
+}
+.count_price text{
+  color: red;
+}
+.count_price .btn-subimt{
+  font-size: 36rpx;
+  border-radius: 10rpx;
+  border: none;
+  background: #f66620;
+  padding: 0% 20rpx;
+  color: #fff;
+  display: inline-block;
+  line-height: 80rpx;
+}
+
+/* 指定人员 */
+.modal_user_check{
+  position: fixed;
+  background:rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10000;
+}
+
+.modal_user_check>view{
+  width: 80%;
+  background: #fff;
+  position: relative;
+  margin-left: 10% ;
+  margin-top:calc( ( 100%  - 500rpx ) / 2 ) ;
+  height: 600rpx;
+  border-radius: 10rpx;
+
+}
+.modal_user_check>view .close{
+  position: absolute;
+  right: -10rpx;
+  top: -10rpx;
+  border-radius: 50%;
+  height: 50rpx;
+  width: 50rpx;
+  background: #f66620;
+  line-height: 50rpx;
+  text-align: center;
+  color:#fff;
+}
+.modal_user_check>view .btn_bar{
+    height: 100rpx;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+
+.modal_user_check>view .btn_bar .btn_sub{
+    width: 50%;
+    margin-top: 12.5rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    margin-left: 25%;
+    border-radius: 10rpx;
+    background: #f66620;
+    color: white;
+}
+
+.modal_user_check>view .swiper{
+  width: 100%;
+  height: 500rpx;
+  overflow-y: auto;
+  overflow-x:hidden;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+.modal_user_check>view .swiper view{
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 15rpx;
+}
+.modal_user_check>view .swiper .swiper-item {
+  width: 120rpx;
+  height: 32%;
+  border-radius: 10rpx;
+  text-align: center;
+    background: rgba(30,30,30, 0.1)
+}
+.modal_user_check>view .swiper .swiper-item.active{
+    background: rgba(246,102,32, 0.5)
+}
+.modal_user_check>view .swiper .swiper-item .image{
+    margin: 0;
+    padding: 0;
+    margin-left: 10rpx;
+    width: 100rpx;
+    height: 100rpx;
+    margin-top: calc( ( 100% - 90rpx ) / 2 );
+}
+.modal_user_check>view .swiper .swiper-item .image image{
+    height: 100%;
+    width: 100%;
+}
+.modal_user_check>view .swiper .swiper-item .nickname{
+    height: 35rpx;
+    font-size: 30rpx; 
+    line-height: 35rpx;
+    overflow: hidden;
+}
+
+/* 支付方式选择 */
+
+.page_over_hidden{
+  position:fixed;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+}
+
+.model_pay{
+    position: fixed;
+    z-index: 2000;
+    height: 100%;
+    width: 100%;
+    transition: 0.3s;
+    left: 0;
+    top: 100%;
+}
+.model_pay.show{
+    top: 0;
+
+}
+.model_pay .model_background{
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+    z-index: 2001;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+.model_pay  .model_btns{
+  position: absolute;
+  width: 100%;
+  height: auto;
+    z-index: 2002;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+}
+
+.model_pay  .model_btns view{
+    border-top: 1rpx solid #ccc;
+  padding: 15rpx;
+}
+.model_pay  .model_btns .model_btns_title{
+    padding: 5rpx;
+    background: #eee;
+}
+.model_pay  .model_btns .disabled{
+    color: #ccc;
+}

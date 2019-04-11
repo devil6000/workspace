@@ -1,0 +1,399 @@
+{template '_header'}
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $("[href$='./index.php?c=site&a=entry&i=2&do=classmanage&m=cnvp_complain']").addClass("active");
+	});
+</script>
+
+<script src="{MODULE_URL}/static/js/alert.min.js"></script>
+<script src="{MODULE_URL}/static/js/jquery-ui.min.1.10.4.js"></script>
+<script src="{MODULE_URL}/static/js/inestedsortable.js"></script>
+
+<div class="main">
+    <form class="form-horizontal form" id="form2" action="" method="post">
+        <div class="panel panel-default">
+        
+			<div class="panel-heading">参数设置</div>
+            <div class="panel-body">
+				<!--<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">地图标记logo</label>
+					<div class="col-xs-12 col-sm-8">
+						{php echo tpl_form_field_image('icon', $parameter['icon']);}
+						<span class="help-block">该LOGO将作为标记，出现在地图中</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">用户中心点标记LOGO</label>
+					<div class="col-xs-12 col-sm-8">
+						{php echo tpl_form_field_image('marker', $parameter['marker']);}
+						<span class="help-block">该LOGO将作为用户所处的位置的标记,不填为默认！</span>
+					</div>
+				</div>-->
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-2 control-label">自定义地图页标题</label>
+					<div class="col-xs-12 col-sm-8">
+						<input type="text" required="required" name="title" class="form-control" value="{$parameter['title']}" placeholder="请输入自定义地图页标题"/>
+					</div>
+				</div>
+				<!--<div class="fenlei">
+					<div class="form-group class_0">
+						<label for="inputEmail3" style="padding-top:0px;" class="col-sm-2 control-label">分类&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary tianjia"><span class="glyphicon glyphicon-plus"></span>&nbsp; 添加</button></label>
+                        {if $classs == ''}
+						<div class="col-xs-5 col-sm-3">
+							<input type="text"  required="required" class="form-control arr" value="" placeholder="请输入分类名称"/>
+						</div>
+                        {/if}
+					</div>
+                    {loop $classs $index $class}
+                    <div class="form-group">
+                    	<label class="col-sm-2 control-label"></label>
+                    	<div class="col-xs-5 col-sm-3">
+                    		<input type="text"  required="required" class="form-control arr" value="{$class}" placeholder="请输入分类名称"/>
+                    	</div>
+                        {if $index != 0}
+                    	<div class="col-xs-3 col-sm-1">
+                    		<button type="button" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"></span>&nbsp; 删除</button>
+                    	</div>
+                        {/if}
+                    </div>
+                    {/loop}
+				</div>
+				-->
+				<!--新增 serveitem 服务项目-->
+				
+				<div class="serveitem">
+					<style type="text/css">
+			div.wrap {
+				border:1px solid #BBBBBB;
+				padding: 1em 1em 1em 1em;
+			}
+			
+			.page-list {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				display: block;
+			}
+			
+			.clear-element {
+				clear: both;
+			}
+			
+			.page-item1 > div,
+			.page-item2 > div,
+			.page-item3 > div,
+			.page-item4 > div {
+				background: #f8f8f8;
+				margin: 0.25em 0 0 0;
+			}
+
+			.left {
+				text-align: left;
+			}
+			
+			.right {
+				text-align: right;
+			}
+
+			.sort-handle {
+				cursor:move;
+				display: flex;
+				justify-content:space-around;
+				padding: 5px 20px;
+			}
+			
+			.sort-handle div{
+				flex: 1;
+				text-align: left;
+			}
+			.sort-handle div:hover{
+				font-weight: 900;
+			}
+			.sort-handle div:last-child{
+				text-align: right;
+			}
+			
+			.sort-handle div:last-child i{height: 20px;width:20px;text-align: center;line-height: 20px;border-radius: 5px;border:1px solid #ccc;margin: 0 5px;cursor: pointer;}
+			.sort-handle div:last-child .btn_show{height: 20px;border-radius: 5px;width: 40px;text-align: center;cursor: pointer;padding: 2px 5px;}
+			.sort-handle div:last-child .btn_show.is_show{
+				background: blue;color:#fff;
+			}
+			.sort-handle div:last-child .btn_show.is_hide{
+				background: red;color:#fff;
+			}
+			.helper {
+			border:2px dashed #777777;
+			}
+			
+			.current-nesting {
+				background-color: yellow;
+			}
+			
+			.bold {
+				color: red;
+				font-weight: bold;
+			}
+			
+		</style>
+		   	      	<script>$(function () {$(".closead").click(function () {var pr = $(this).parent().css("bottom").replace("px","");if (pr == "0") {$(this).html("展开");$(this).parent().animate({ "bottom": "-262px" });}else {$(this).html("收起");$(this).parent().animate({ "bottom": "0" });}});});</script>	
+		   	      	<script>
+		   	      		$(document).ready(function () {
+							$('html').on('click','.sortable .delete_classify',function(){
+								//删除
+								var __that=$(this);
+								$.confirms(
+									'温馨提示',
+									'删除分类将无法恢复<br />您确定删除？',
+									function(__that){
+										var $ifyid=__that.parent().parent().parent().data('ifyid');
+										$.ajax({
+											type:"post",
+											url:"{php echo $this->createWebUrl('edit_class',array('op'=>'classify_edit'))}",
+											async:true,
+											dataType:'json',
+											data:{'id':$ifyid,'deleted':1},
+											success:function(data){
+												if(data.status=1){
+				   	      							__that.parent().parent().parent().remove(); 
+				   	      							$.tip(data.result.message);
+												}else{
+													$.tip(data.result.message);
+												}
+		
+											}
+										})
+									}
+									,__that
+								)
+								
+
+		   	      			})
+							$('html').on('click','.sortable .toggle_child',function(){
+								//折叠
+								var __that=$(this);
+								if(__that.children('i').hasClass('fa-chevron-circle-up')){
+									__that.children('i').addClass('fa-chevron-circle-down').removeClass('fa-chevron-circle-up');
+									__that.parent().parent().parent().children('ol').show()
+								}else{
+									__that.children('i').addClass('fa-chevron-circle-up').removeClass('fa-chevron-circle-down');
+									__that.parent().parent().parent().children('ol').hide()
+
+								}
+		   	      			})
+							$('html').on('click','.sortable .btn_show',function(){
+								var $ifyid=$(this).parent().parent().parent().data('ifyid');
+								var $is_show=$(this).hasClass('is_hide')?1:0;
+								if($ifyid==''){
+									$.tip('设置失败请刷新重试！');
+								}
+								var _that=$(this);
+								$.ajax({
+									type:"post",
+									url:"{php echo $this->createWebUrl('article',array('op'=>'classify_edit'))}",
+									async:true,
+									dataType:'json',
+									data:{'id':$ifyid,'is_show':$is_show},
+									success:function(data){
+										if(data.status==1){
+											if(data.result.is_show==1){
+		   	      								_that.addClass('is_show').removeClass('is_hide').text('显示'); 
+											}else{
+		   	      								_that.addClass('is_hide').removeClass('is_show').text('隐藏'); 
+											}
+										}else{
+											$.tip(data.result.message);
+										}
+									}
+								});
+		   	      			})
+		   	      		})
+		   	      		
+		   	      	</script>
+		   	      	
+		   	      	
+		   	      	<script>
+		        $(document).ready(function () {
+		            $("ol.sortable").nestedSortable({
+		                forcePlaceholderSize: true,
+		                handle: "div",
+		                helper: "clone",
+		                items: "li",
+		                opacity: .6,
+		                placeholder: "placeholder",
+		                revert: 250,
+		                tabSize: 25,
+		                tolerance: "pointer",
+		                toleranceElement: "> div",
+		                maxLevels: 2,
+		                isTree: true,
+		                expandOnHover: 700,
+		                startCollapsed: false,
+		                isAllowed: function (placeholder, placeholderParent, currentItem) {
+		                    var hideleaf = "0";
+		                    var pareleaf = "0";
+		                    var hideclass = "";
+		                    $(".mjs-nestedSortable-leaf").each(function () {
+		                        if (!$(this).is(":visible")) {
+		                            hideclass = $(this).attr("class");
+		                            if ($(this).hasClass("file"))
+		                                hideleaf = "1";
+		                            if ($(this).hasClass("sub"))
+		                                hideleaf = "2";
+		                            return false;
+		                        }
+		                    });
+		
+		                    if ($(placeholderParent).hasClass("file")) {
+		                        pareleaf = "1"
+		                    }
+		                    if ($(placeholderParent).hasClass("sub")) {
+		                        pareleaf = "2"
+		                    }
+							//1、pareleaf !== hideleaf  判断两者不同 
+		            		//2、pareleaf !== "2" 父级不能是模块
+		//                  if (pareleaf !== hideleaf && pareleaf !== "2") {
+		                    if ( pareleaf !== "2") {
+		                        return true;
+		                    }
+		                    else
+		                        return false;
+		                }
+		            });
+	
+	        });
+		$('form').submit(function(){
+			var hiered = $('ol.sortable').nestedSortable('toHierarchy', { startDepthCount: 0 });            
+            var first = '{"id":"'+$("ul.sortable li").eq(0).data("ifyid")+'"},';
+            //第一层
+			$.ajax({
+					type:"post",
+					url:"{php echo $this->createWebUrl('classmanage')}",
+					async:true,
+					dataType:'json',
+					data:{'order_by':1,'classify_list':hiered,'title':$('input[name=title]').val()},
+					success:function(data){
+						$.tip(data.result.message);
+					}
+				})
+//         hiered = window.JSON.stringify(hiered);
+//          $('#toJsonOutput').text(hiered);
+			
+			
+			return false;
+		})
+    </script>
+					 <div class="form-group">
+						<label for="inputEmail3" style="padding-top:0px;" class="col-sm-2 control-label">服务项目&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary " onclick="util.ajaxshow('{php echo $this->createWebUrl('edit_class',array('display'=>'edit','id'=>$val['id']))}','项目添加')" ><span class="glyphicon glyphicon-plus"></span>&nbsp; 添加</button></label>
+	                <div class="col-xs-5 col-sm-6">	
+	                	 <div id="toJsonOutput"></div>
+	                	 <!--多级拖放-->
+	                	 <ol class="sortable">
+	                	 	{if is_array($Items) && !empty($Items)}
+	                	 		{php $this->for_ify($Services,$Items)}
+	                	 	{/if}
+	                	 	
+		                	 	
+			            </ol>
+	                	 <div class="left-to-right-ser"></div>
+	                	 <!--一级拖放-->
+	                </div>
+	            </div>
+					
+					
+					<!--<div class="form-group class_0">
+						<label for="inputEmail3" style="padding-top:0px;" class="col-sm-2 control-label">服务项目&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary tianjia2"><span class="glyphicon glyphicon-plus"></span>&nbsp; 添加</button></label>
+                        {if $serveitem == ''}
+						<div class="col-xs-5 col-sm-3">
+							<input type="text" required="required" class="form-control arr" value="" placeholder="请输入服务项目名称"/>
+							<select class="form-control icolor" >
+								<option style="color: #1ed362;" value="#1ed362">基础服务</option>
+								<option style="color: #1ec8d3;" value="#1ec8d3">便民服务</option>
+								<option style="color: #e4c809;" value="#e4c809">特色服务</option>
+								<option style="color: #8C8C8C;" value="#8C8C8C">其他</option>
+							</select>
+						</div>
+                        {/if}
+					</div>-->
+                    {loop $Items $index $class}
+                    <!--<div class="form-group">
+                    	<label class="col-sm-2 control-label"></label>
+                    	<div class="col-xs-5 col-sm-3">
+                    		<input type="text" required="required" class="form-control arr" value="{$class['title']}" placeholder="请输入服务项目名称"/>
+                    		<input type="hidden" required="required" class="form-control arr" value="{$class['id']}" name="class_id" placeholder="请输入服务项目名称"/>
+                    		<select class="form-control icolor" >
+                    			{loop $Services  $ser}
+								<option style="color:{$ser['ccolor']};" {if $class['serve_id'] == $ser['id']}selected{/if} value="{$ser['ccolor']}">{$ser['title']}</option>
+								{/loop}
+							</select>
+                    	</div>
+                    	<div class="col-xs-3 col-sm-1">
+                    		<button type="button" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"></span>&nbsp; 删除</button>
+                    	</div>
+                    </div>-->
+                    {/loop}
+				</div>
+				
+            </div>
+        </div>
+        <style>
+        	.serveitem .form-group:last-child .delete-btn{
+        		/*display: none;*/
+        	}
+        </style>
+        <div class="form-group col-sm-12">
+        		<input class="classs" name="classs" type="hidden" value="" />
+        		<input class="serveitem" name="serveitem" type="hidden" value="" />
+        		<input class="icolor" name="icolor" type="hidden" value="" />
+                <input name="token" type="hidden" value="{$_W['token']}" />
+                <input type="submit" class="btn btn-primary col-lg-1 baocun" name="submit" value="提交" />
+            </div>
+      </form>
+</div>
+<script>
+$(function(){
+	var i = 0;
+	var classs=new Array();
+	var serveitem=new Array();
+	var icolor=new Array();
+	$(".tianjia").click(function(){
+		i++;
+		var html = '<div class="form-group class_'+i+'"><label class="col-sm-2 control-label"></label><div class="col-xs-5 col-sm-3"><input type="text"  class="form-control arr" value="" placeholder="请输入分类名称"/></div><div class="col-xs-3 col-sm-1"><button type="button" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"></span>&nbsp; 删除</button></div></div>';
+		$(".fenlei").append(html);
+	});
+	$(".tianjia2").click(function(){
+		i++;
+		var html = '<div class="form-group class_'+i+'"><label class="col-sm-2 control-label"></label><div class="col-xs-5 col-sm-3"><input type="text"  class="form-control arr" value="" placeholder="请输入服务项目名称"/><select class="form-control icolor" ><option style="color: #1ed362;" {if $icolor_value == '#1ed362'}selected{/if} value="#1ed362">基础服务</option><option style="color: #1ec8d3;"  value="#1ec8d3">便民服务</option><option style="color: #e4c809;"  value="#e4c809">特色服务</option><option style="color: #8C8C8C;"value="#8C8C8C">其他</option></select></div><div class="col-xs-3 col-sm-1"><button type="button" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"></span>&nbsp; 删除</button></div></div>';
+//		var html = '<div class="form-group class_'+i+'"><label class="col-sm-2 control-label"></label><div class="col-xs-5 col-sm-3"><input type="text"  class="form-control arr" value="" placeholder="请输入服务项目名称"/><select class="form-control icolor" ><option style="color: #1ed362;" value="#1ed362">日常便利</option><option style="color: #1ed362;" value="#1ed362">应急服务</option><option style="color: #e4c809;" value="#e4c809">特殊人群</option></select></div><div class="col-xs-3 col-sm-1"><button type="button" class="btn btn-danger delete"><span class="glyphicon glyphicon-trash"></span>&nbsp; 删除</button></div></div>';
+		$(".serveitem").children('div').eq(0).after(html);
+	});
+	$(".baocun").click(function(){
+		$('.fenlei .form-group').find('.arr').each(function(e) {
+            q = $(this).val();
+			classs[e] = q;
+        });
+		$('.classs').val(classs);
+	
+		$('.serveitem .form-group').find('.arr').each(function(e) {
+            sv = $(this).val();
+			if(sv != ""){
+				serveitem[e] = sv;
+			}
+        });
+		$('.serveitem').val(serveitem);
+		
+		$('.serveitem .form-group').find('.icolor').each(function(e) {
+            icv = $(this).val();
+            sv = $(this).siblings('.arr').val();
+			if(sv != ""){
+				icolor[e] = icv;
+			}
+        });
+		$('.icolor').val(icolor);
+	
+	});
+	$("body").on("click", ".delete", function () {
+		$(this).parents(".form-group").remove();
+	});
+});
+</script>
+

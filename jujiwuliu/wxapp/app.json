@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "jujiwuliu/pages/index/index",
+    "jujiwuliu/pages/issuer/index",
+    "jujiwuliu/pages/issuer/index/index",
+    "jujiwuliu/pages/issuer/bind/index",
+    "jujiwuliu/pages/issuer/receipt/apply/index",
+    "jujiwuliu/pages/issuer/publish/list/index",
+    "jujiwuliu/pages/issuer/publish/detail/index",
+    "jujiwuliu/pages/issuer/details/index",
+    "jujiwuliu/pages/issuer/orders/index",
+    "jujiwuliu/pages/common/auth/index",
+    "jujiwuliu/pages/common/information/index",
+    "jujiwuliu/pages/common/user/balance/list/index",
+    "jujiwuliu/pages/common/user/balance/recharge/index",
+    "jujiwuliu/pages/common/user/balance/draw_money/index",
+    "jujiwuliu/pages/common/user/credit/list/index",
+    "jujiwuliu/pages/common/user/personal_data/index",
+    "jujiwuliu/pages/common/map/index",
+    "jujiwuliu/pages/worker/index",
+    "jujiwuliu/pages/worker/index/index",
+    "jujiwuliu/pages/worker/bind/index",
+    "jujiwuliu/pages/worker/details/index",
+    "jujiwuliu/pages/worker/orders/index",
+    "jujiwuliu/pages/common/user/explain/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "巨吉搬运",
+    "navigationBarBackgroundColor": "#353639",
+    "backgroundColor": "#353639"
+  },
+  "networkTimeout": {
+    "connectSocket": 3000
+  },
+  "debug": false,
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您需要先授权位置信息,才能使用此功能哦~"
+    }
+  }
+}

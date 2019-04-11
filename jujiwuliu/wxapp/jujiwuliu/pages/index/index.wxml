@@ -1,0 +1,255 @@
+<block wx:if="{{is_firing_page==1}}">
+    <view class="swiper" >
+     
+      <view class='swiper_time'>
+          <view class='progress_box' bindtap='touchHideLoading'>
+            <!-- 绘制圆环背景 -->
+            <canvas class="progress_bg" canvas-id="canvasProgressbg" />
+            <!-- 绘制加载中圆弧 -->
+            <canvas class="progress_canvas" canvas-id="canvasProgress" /> 
+            <!-- 绘制圆弧中心提示文字 -->
+            <view class="progress_text">
+              <text class='progress_info'> {{progress_txt}}</text>
+            </view>
+          </view>
+      </view>
+      
+      <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" interval='{{interval}}' bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+        <block wx:for="{{setting_set.rolling_diagram?setting_set.rolling_diagram :slide}}" wx:key="{{index}}">
+          <swiper-item >
+            <image class="nav-icon" mode="aspectFill" src="{{item}}"  bindload="imageLoad" bindtap="link_url" data-index="{{index}}"  class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" mode="widthFix" />
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+</block>
+<block wx:if="{{userType == 'issuer' && !is_firing_page}}">
+  <view class='container'>
+    <view class='userinfo'>
+        <view class='info avatar'>
+          <image mode="widthFix" src="{{memberInfo.avatar}}" />
+        </view>
+        <view class='info title'>
+          <view>{{memberInfo.realname}}</view>
+          <view>{{memberInfo.mobile}}</view>
+        </view>
+        <view class='btn-bell'>
+          <!-- <navigator url='../common/information/index'>
+            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+            <text>1</text>
+          </navigator> -->
+          <!--
+          <view >
+            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+            <text>1</text>
+          </view>
+          -->
+        </view>
+    </view>
+    <view class='info_card'>
+      <view class='info_card-title'>我的信息</view>
+      <view class='info_card-ul'>
+        <navigator class='info_card-li' url="../../pages/issuer/publish/list/index">
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_03.png'></image></view>
+          <view class='info_card-info'>
+            <view class='title'>我的发布</view>
+            <view class='des'>{{memberInfo.issuer_num}}次</view>
+          </view>
+        </navigator>
+        <view class='info_card-line'></view>
+        <navigator class='info_card-li' url="../../pages/common/user/balance/list/index">
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-info'>
+            <view class='title'>我的钱包</view>
+            <view class='des'>￥{{memberInfo.credit2}}</view>
+          </view>
+        </navigator>
+        <!-- <navigator class='info_card-li' url="">
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_04.png'></image></view>
+          <view class='info_card-info'>
+            <view class='title'>我的积分</view>
+            <view class='des'>￥{{memberInfo.credit1}}</view>
+          </view>
+        </navigator> -->
+      </view>
+    </view>
+    
+    <view class='list_card'>
+    <navigator class='weui-cell list-item' url="../../pages/common/user/personal_data/index">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
+        <view class='list-text'>个人资料</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      
+      <navigator class='weui-cell list-item' url="../../pages/common/user/credit/list/index">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_02.png'></image>
+        <view class='list-text'>我的积分</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <button class='weui-cell list-item'  open-type='share'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_05.png'></image>
+        <view class='list-text'>邀请注册</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </button>
+      <navigator class='weui-cell list-item' url="../../pages/issuer/receipt/apply/index">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_06.png'></image>
+        <view class='list-text'>开票资料</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <button class='weui-cell list-item' open-type="contact">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_07.png'></image>
+        <view class='list-text'>在线客服</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </button>
+      <navigator class='weui-cell list-item' url="../../pages/common/user/explain/index?type=1">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_08.png'></image>
+        <view class='list-text'>使用说明</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <button class='weui-cell list-item' bindtap='calling'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_06.png'></image>
+        <view class='list-text'>联系客服</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </button>
+      <!-- <view class='weui-cell list-item' bindtap='imagecheck'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_07.png'></image>
+        <view class='list-text'>在线客服</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </view> -->
+
+    </view>
+  </view>
+  <import src="../common/template/footer.wxml"/>
+  <template is="footerWx" data="{{...tabBar}}"/>
+</block>
+<block wx:elif="{{userType == 'worker' && !is_firing_page}}">
+  <view class='container'>
+    <view class='workerinfo'>
+        <view class='info avatar'>
+          <image mode="widthFix" src="{{memberInfo.avatar}}" />
+        </view>
+        <view class='info title'>
+          <view>{{memberInfo.realname}}</view>
+          <view>{{memberInfo.mobile}}</view>
+        </view>
+        <view class='btn-bell'>
+          <!-- <navigator  url='../common/information/index'>
+            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+            <text>1</text>
+          </navigator> -->
+          <view bindtap='setDistance'>
+            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+            <!--<text>1</text>-->
+          </view>
+        </view>
+    </view>
+    <view class='info_card'>
+      <view class='info_card-title'>我的信息</view>
+      <view class='info_card-ul'>
+        <navigator class='worker_card-li' url="../../pages/worker/orders/index">
+          <view class='worker_card-image'><image src='/jujiwuliu/resource/images/carry/icon_01.png'></image></view>
+          <view class='worker_card-info'>
+            <view class='title'>历史订单</view>
+            <view class='des'>{{memberInfo.order_num?memberInfo.order_num:0}}笔订单</view>
+          </view>
+        </navigator>
+
+        <!-- <view class='worker_card-line'></view>
+        <view class='worker_card-li'>
+          <view class='worker_card-image'><image src='/jujiwuliu/resource/images/carry/icon_02.png'></image></view>
+          <view class='worker_card-info'>
+            <view class='title'>我的搬运次数</view>
+            <view class='des'>0次搬运</view>
+          </view>
+        </view> -->
+        <view class='worker_card-line'></view>
+        
+        <!-- <view class='worker_card-line2'></view> -->
+         <navigator class='worker_card-li' url="../../pages/common/user/balance/list/index">
+          <view class='worker_card-image'><image src='/jujiwuliu/resource/images/carry/icon_03.png'></image></view>
+          <view class='worker_card-info'>
+            <view class='title'>我赚取的金额</view>
+            <view class='des'>￥{{memberInfo.credit2}}</view>
+          </view>
+        </navigator>
+        <view class='worker_card-line2'></view>
+        <navigator class='worker_card-li' url="../../pages/common/user/credit/list/index">
+          <view class='worker_card-image'><image src='/jujiwuliu/resource/images/carry/icon_04.png'></image></view>
+          <view class='worker_card-info'>
+            <view class='title'>我的积分</view>
+            <view class='des'>￥{{memberInfo.credit1}}</view>
+          </view>
+        </navigator>
+      </view>
+    </view>
+    <view class='list_card'>
+      <!-- <navigator class='weui-cell list-item' url="../../pages/common/user/credit/list/index">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_04.png'></image>
+        <view class='list-text'>我的积分</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator> -->
+      <button class='weui-cell list-item' open-type='share'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_05.png'></image>
+        <view class='list-text'>邀请注册</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </button>
+      <button class='weui-cell list-item' open-type="contact">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_06.png'></image>
+        <view class='list-text'>在线客服</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </button>
+      <navigator class='weui-cell list-item' url="../../pages/common/user/explain/index?type=2">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_08.png'></image>
+        <view class='list-text'>使用说明</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+      <button class='weui-cell list-item' bindtap='calling'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_06.png'></image>
+        <view class='list-text'>联系客服</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </button>
+    </view>
+  </view>
+  <import src="../common/template/footer.wxml"/>
+  <template is="footerWx" data="{{...tabBar}}"/>
+</block>
+
+<!-- 老首页 -->
+<!-- <block wx:elif="{{userType == 'index' && !is_firing_page}}">
+<view class='container'>
+  <view class='navs'>
+    <view bindtap='issuer' class='nav release'>发布方</view>
+    <view bindtap='worker' class='nav carry'>搬运工</view>
+  </view>
+</view>
+</block> -->
+
+
+<block wx:elif="{{userType == 'index' && !is_firing_page}}">
+<view class='page_container '>
+    <view class='logo'><image src='/jujiwuliu/resource/images/logo.png'></image></view>
+    
+    <view bindtap='worker' class='con_btn worker_btn'>
+         <view class='head'><image src='/jujiwuliu/resource/images/workers_ico.png'></image></view>
+        <view class='text'>搬运工</view>
+        <view class='next_ico'><image src='/jujiwuliu/resource/images/next_ico.png'></image></view>
+    </view>
+    <view bindtap='issuer' class='con_btn release_btn'>
+        <view class='head'><image src='/jujiwuliu/resource/images/release_ico.png'></image></view>
+        <view class='text'>发布方</view>
+        <view class='next_ico'><image src='/jujiwuliu/resource/images/next_ico.png'></image></view>
+    </view>
+</view>
+</block>
+
+
+
+  <!--授权  -->
+<import src="../common/template/model.wxml"/>
+<template is="model_shouquan" data="{{locationModelShow}}"/>
+
+<!-- 距离设置 -->
+<import src="../common/template/distance.wxml" />
+<template is="model_distance" data="{{...distanceData}}" />
+

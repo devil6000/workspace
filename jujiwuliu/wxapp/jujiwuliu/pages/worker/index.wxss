@@ -1,0 +1,166 @@
+/* jujiwuliu/pages/worker/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.userinfo{
+  box-sizing: border-box;
+  width: 100%;
+  background: #0a95e9;
+  display: flex;
+  justify-content: space-between;
+  align-content: space-around;
+  align-items: stretch;
+  padding:30rpx;
+  color: #fff;
+}
+
+.userinfo .info{
+  flex: 1;
+}
+.userinfo .avatar{
+  max-width: 180rpx;
+  width: 180rpx;
+  height: 180rpx;
+  background: #fff;
+  opacity: .2;
+  flex: 2;
+  border-radius: 50%;
+  padding: 10rpx;
+  box-sizing: border-box
+}
+.userinfo .avatar image{
+  width: 100%;
+  /* border:3pt #fff solid; */
+  border-radius: 50%;
+  display: block;
+  height: 100%;
+}
+
+.userinfo .title{
+  text-align: left;
+  margin-left: 20pt;
+  flex: 4;
+   align-self:center;
+}
+
+.userinfo .title view{
+  height: 60rpx;
+  line-height: 60rpx;
+}
+
+.userinfo .btn-bell{
+  float: right;
+  position: relative;
+}
+
+.userinfo .btn-bell image{
+  width: 50rpx;
+  height: 55rpx;
+}
+
+.userinfo .btn-bell text{
+  color: #f66620;
+  width: 30rpx;
+  height: 30rpx;
+  background: #fff;
+  border-radius: 50%;
+  font-size: 20rpx;
+  position: absolute;
+  top: -5rpx;
+  right: -5rpx;
+  text-align: center;
+  line-height: 30rpx;
+}
+
+/* 信息展示卡 */
+.info_card{
+  background: #fff;
+}
+.info_card-title{
+  padding: 0 30rpx;
+  font-size: 32rpx;
+  line-height: 89rpx;
+  border-bottom: 1rpx solid #f4f4f4;
+}
+.info_card-ul{
+  overflow: hidden;
+  position: relative;
+}
+.info_card-li{
+  float: left;
+  padding: 20rpx 30rpx;
+  text-align: center;
+  width: calc((100% - 2px)/3);
+  box-sizing: border-box;
+}
+.info_card-line{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #f5f5f5;
+  width: 1px;
+  left: calc((100% - 2px)/3);
+}
+.info_card-line2{
+   position: absolute;
+    top: 0;
+    bottom: 0;
+    background: #f5f5f5;
+    width: 1px;
+    right: calc((100% - 2px)/3);
+}
+.info_card-image{
+  text-align: center;
+}
+.info_card-image image{
+  width: 80rpx;
+  height: 80rpx;
+}
+.info_card-info{
+}
+.info_card-info .title{
+  font-size: 28rpx;
+  color: #333;
+}
+.info_card-info .des{
+  font-size: 22rpx;
+  color: #999;
+}
+
+/*列表展示卡*/
+.list_card{
+  background:white;
+  margin-top:20rpx;
+  padding-left: 30rpx; 
+}
+.list_card .list-item{
+  border-bottom: 1rpx solid #f4f4f4;
+  height: 85rpx;
+  line-height: 85rpx;
+  padding: 0 30rpx 0 0;
+}
+.list-item-icon{
+  width: 55rpx;
+  height: 55rpx;
+}
+.list_card .list-text{
+  margin-left: 20rpx;
+  font-size: 32rpx;
+}
+
+.list-item-arrow_right{
+  position: absolute;
+  right: 30rpx;
+}
+
+.detail_bottom{
+  background: white;
+  padding: 10pt;
+}
+.detail_bottom button{
+  background: #a7884e;
+  color: white
+}
+.detail_bottom button::after{
+  border: 0;
+}

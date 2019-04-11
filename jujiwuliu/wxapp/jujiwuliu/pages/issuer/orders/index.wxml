@@ -1,0 +1,40 @@
+<!--jujiwuliu/pages/worker/index/index.wxml-->
+<view class='fixed-header'>
+  <view class='top'>
+    <!-- <view class='refresh' bindtap='refresh'><image src='../../../resource/images/refresh.png'></image>刷新订单</view> -->
+    <view class='page-title'>搬运工</view>
+    <view class='message'>
+      <image src='../../../resource/images/home/icon_01.png'></image>
+      <view class='num'>0</view>
+    </view>
+  </view>
+  <view class='tabs'>
+    <!-- <view class='tab-item {{status == 1 ? "active" : ""}}' data-index='1' bindtap='getNav'>接单({{status1}})</view> -->
+    <view class='tab-item {{status == 2 ? "active" : ""}}' data-index='2' bindtap='getNav'>工作中({{status2}})</view>
+    <view class='tab-item {{status == 3 ? "active" : ""}}' data-index='3' bindtap='getNav'>已取消({{status3}})</view>
+    <!-- <view class='tab-item {{status == 4 ? "active" : ""}}' data-index='4' bindtap='getNav'>已完成({{status3}})</view> -->
+  </view>
+</view>
+<view class='container'>
+  <view class='cell-item'>
+    <block wx:if ='{{!list[0]}}'>
+      <view class='not_record'>
+        <view class='not_worker'><image  mode="widthFix" src="../../../resource/images/empty.png" /></view>  
+        <view class='not_worker'>无任何记录</view>     
+      </view> 
+    </block>
+    <view class='cell-list' wx:for="{{list}}" wx:for-item="item" wx:key="{{index}}" bindtap='lookdetails' data-id="{{item.id}}" data-index="{{index}}">
+      <image src='{{siteinfo.attachurl}}{{item.images[0]}}'></image>
+      <view class='cell-list-item'>
+        <view class='cell-list-item-title'><text>{{item.typename}}</text><text>{{item.staticname}}</text> <text><text>{{item.static == 4 ? item.total_price : item.price}}元</text><block wx:if="{{item.static != 4}}">(1{{item.unit}})</block></text></view>
+        <view class='c99'>开工时间：{{item.starttime}}</view>
+        <view><text class='c99'>人数：</text>{{item.nums}}人（还差{{item.gptu}}人） <text class='c99'>性别：</text>{{item.sex}}</view>
+        <view class='date'><image src='../../../resource/images/icon_01.png'></image><text class='line'></text><text class='c99'>{{item.address}}</text></view>
+      </view>
+      <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+    </view>
+  </view>
+</view>
+
+<import src="../../common/template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

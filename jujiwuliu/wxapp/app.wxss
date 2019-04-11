@@ -1,0 +1,206 @@
+@import 'jujiwuliu/resource/style/weui.wxss';
+page{
+  min-height: 100%;
+}
+.container{
+  height: 100%;
+  background: #f4f4f4;
+}
+.page__hd {
+  padding: 40px;
+}
+
+.page__bd {
+  padding-bottom: 40px;
+}
+
+.page__bd_spacing {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.page__ft {
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.page__title {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.page__desc {
+  margin-top: 5px;
+  color: #888;
+  text-align: left;
+  font-size: 14px;
+}
+.we7-bottom-placeholder {
+    width: 100%;
+    height: 134rpx;
+    position: relative;
+    bottom: 0;
+    z-index: -1
+}
+.we7-bottom {
+    display: flex;
+    overflow: hidden;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10rpx 0;
+    border-top: 1px solid #000000;
+    background-color: #fff;
+    z-index: 1000;
+}
+.we7-bottom.active {
+    background-color: #fff;
+}
+.we7-bottom.active navigatorurl {
+    background-color: #fff
+}
+.we7-bottom .we7-bottom-item {
+    flex: 1;
+    padding: 10rpx;
+    text-align: center
+}
+
+.we7-bottom .we7-bottom-item button{
+  padding: 0;
+  background: #fff;
+  line-height:normal;
+  margin: 0;
+}
+.we7-bottom .we7-bottom-item button::after{
+  border: none;
+}
+
+
+.we7-bottom .item-img {
+    width: 50rpx;
+    height: 50rpx;
+    display: inline-block
+}
+.we7-bottom .item-text {
+    display: block;
+    font-size: 12px;
+    line-height:1
+}
+.goHome {
+    position: fixed;
+    bottom: 150rpx;
+    right: 30rpx;
+    width: 50rpx;
+    height: 50rpx;
+    background-color: #1ba9ba;
+    padding: 30rpx;
+    border-radius: 50%
+}
+.goHome>image {
+    width: 100%
+}
+.text-right {
+    text-align: right;
+}
+.weui-navbar__slider{
+  height: 1px;
+  background: #f66620;
+}
+.weui-navbar__title{
+  color: #f66620;
+}
+/* 授权弹窗 */
+.model {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.model .inner {
+  width: 624rpx;
+  height: 600rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  margin: 260rpx auto;
+  overflow: hidden;
+}
+
+.model .inner .title {
+  font-size: 36rpx;
+  color: #000;
+  line-height: 100rpx;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 20rpx;
+}
+
+.model .inner .image {
+  text-align: center;
+  margin-top: 20rpx;
+}
+
+.model .inner image {
+  width: 342rpx;
+  height: 202rpx;
+}
+
+.model .inner .subtitle {
+  margin-top: 50rpx;
+  padding: 0 80rpx;
+  color: #888;
+  font-size: 26rpx;
+  line-height: 40rpx;
+}
+
+.model-btns {
+  border-top: 1rpx solid #ebebeb;
+  height: 100rpx;
+  margin-top: 28rpx;
+  display: flex;
+  text-align: center;
+  font-size: 30rpx;
+  color: #000;
+  line-height: 100rpx;
+}
+
+.model-btns .cancel {
+  width: 50%;
+  position: relative;
+  color: #ccc;
+}
+
+.model-btns .cancel:after {
+  content: " ";
+  position: absolute;
+  top: -1rpx;
+  right: 0;
+  width: 1px;
+  height: 210rpx;
+  border-right: 1px solid #ebebeb;
+  color: #ebebeb;
+  transform-origin: 0 0;
+  transform: scaleY(0.5);
+}
+
+.model-btns .confirm {
+  width: 50%;
+  color: #50b33c;
+}
+
+.model_cell_item {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  margin-top: 10rpx;
+  align-items: center;
+}
+
+.disabled {
+  background: #CCC;
+}

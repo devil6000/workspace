@@ -1,0 +1,69 @@
+{template 'common/header'}
+
+{if $op == 'display'}
+<div class="panel panel-default">
+    <div class="panel-heading">开票管理</div>
+    <div class="panel-body table-responsive">
+        <form action="" method="get" enctype="multipart/form-data">
+            <input type="hidden" name="c" value="{$_GPC['c']}" />
+            <input type="hidden" name="a" value="{$_GPC['a']}" />
+            <input type="hidden" name="op" value="{$_GPC['op']}" />
+            <input type="hidden" name="do" value="{$_GPC['do']}" />
+            <input type="hidden" name="m" value="{$_GPC['m']}" />
+            <div class="form-group">
+                <div class="col-sm-9 col-lg-9 col-xs-12">
+                    <div class="input-group">
+                        <select name="delete" class="select2">
+                            <option value="-1">是否已删除</option>
+                            <option value="0" {if $_GPC['delete'] == 0}selected{/if}>未删除</option>
+                            <option value="1" {if $_GPC['delete'] == 1}selected{/if}>已删除</option>
+                        </select>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="panel panel-default">
+            <div class="panel-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                        <tr>
+                            <th>公司名称</th>
+                            <th>公司税号</th>
+                            <th>电子邮箱</th>
+                            <th>开户行</th>
+                            <th>开户账号</th>
+                            <th>公司地址</th>
+                            <th>公司电话</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $row}
+                    <tr>
+                        <td>{$row['firm_name']}</td>
+                        <td>{$row['firm_identifier']}</td>
+                        <td>{$row['firm_email']}</td>
+                        <td>{$row['firm_bod']}</td>
+                        <td>{$row['firm_oaa']}</td>
+                        <td>{$row['firm_address']}</td>
+                        <td>{$row['firm_tel']}</td>
+                        <td>
+                            {if $row['deleted'] == 0}
+                            <a href="{php echo $this->createWebUrl('receipt', array('op' => 'delete', 'id' => $row['id']))}" class="btn btn-default btn-sm" title="删除" onclick="if(!confirm('确定删除吗?')) return false;"><i class="fa fa-remove"></i>删除</a>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </div>
+</div>
+{/if}
+
+{template 'common/footer'}

@@ -1,0 +1,17 @@
+<div class="form-group key_item">
+    <label class="col-sm-2 control-label">自定义键</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" name="data_key[]" value="{$da[key]}" placeholder="键名" />
+    </div>
+</div>
+<div class="form-group key_item">
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-7">
+        <textarea rows="5" class="form-control" name="data_val[]" placeholder="键名">{$da[value]}</textarea>
+    </div>
+    <div class="col-sm-1" style="padding-left: 0;">
+        <input type="color" name="data_cor[]" value="{$da[color]}" style="width: 32px; height: 32px;" />
+    </div>
+    <a class="btn btn-default" href='javascript:;' onclick="$(this).closest('.key_item').prev().remove();$(this).closest('.key_item').remove()"><i
+            class='fa fa-remove'></i> 删除</a>
+</div>

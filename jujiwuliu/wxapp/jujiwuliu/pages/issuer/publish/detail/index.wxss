@@ -1,0 +1,298 @@
+/* jujiwuliu/pages/issuer/publish/detail/index.wxss */
+page{
+  background: #f4f4f4;
+}
+
+
+.item-list{
+  margin-top: 20rpx;
+  background: #fff;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.item-list>view{
+  padding:0% 50rpx;
+  
+}
+.item-list .item-title{
+  font-size: 1rem;
+  height: 35pt;
+  line-height: 35pt;
+  display: flex;
+  justify-content: space-between;
+}
+.item-list .item-title view{
+  /*font-size:0.9rem;*/
+  font-size: 0.7rem;
+}
+.item-list .item-title view text{
+    font-size: 0.7rem;
+    color: red;
+    margin-left: 5rpx;
+}
+
+
+.item-list .item-content{
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.item-list .item-content image{
+  width: 20%;
+  margin-right: 30rpx;
+}
+
+.btn.btn-draw_money{
+  background: #f66620;
+  color: #fff;
+  border: 1px solid #f66620;
+  margin-bottom: 15pt;
+}
+.btn{
+  width: 90%;
+  height: 35pt;
+  line-height: 35pt;
+  margin: 0 auto;
+  border-radius: 5px;
+  margin-top:15pt; 
+  padding: 0;
+  text-align: center;
+}
+
+.list_card{
+  background:white;
+  margin-top:20rpx;
+  padding-left: 30rpx; 
+}
+.list_card .list-item{
+  border-bottom: 1rpx solid #f4f4f4;
+  height: 85rpx;
+  line-height: 85rpx;
+  padding: 0 30rpx 0 0;
+  background: none;
+  
+}
+.list_card .list-item::after{
+  border: none;
+}
+.list-item-icon{
+  width: 55rpx;
+  height: 55rpx;
+}
+.list_card .list-text{
+  margin-left: 20rpx;
+  /*font-size: 32rpx;*/
+  font-size: 0.7rem;
+}
+/*特殊行*/
+.split_2{
+  display: flex;
+}
+.split_2>view{
+  flex: 1;
+  display: block;
+}
+
+.line-title{
+  color: #666;
+  margin-right: 50rpx;
+  display: inline;
+}
+.line-centent{
+  display: inline;
+  color: #333;
+}
+.red{
+  color: #f66620;
+}
+
+/* 接单人 */
+.item-list .item-content .release-images{
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}
+.item-list .item-content .release-images>view {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+.item-list .item-content .release-image{
+  position: relative;
+  /* width: calc( 25% - 20rpx ) ; */
+  /* height: 150rpx; */
+  margin-top: 24rpx;
+  border-radius: 10rpx;
+  margin-left: 8rpx;
+  margin-right: 8rpx;
+display: flex;
+justify-content: space-around;
+align-items: center;
+  border:1rpx solid  rgba(255, 0, 0, 0.5);
+}
+.item-list .item-content .release-image .mark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 35rpx;
+    line-height: 35rpx;
+    font-size: 25rpx;
+    text-align: center;
+    border-top-left-radius: 10rpx;
+    border-top-right-radius: 10rpx;
+    background: rgba(255, 0, 0, 0.3);
+    color:#fff;
+}
+.item-list .item-content .release-image image{
+    margin: 0;
+  width: 110rpx;
+  height: 110rpx;
+}
+
+
+/* list */
+.modal_receipt_list{
+    position: fixed;
+    width: 80%;
+    top: 10%;
+    left: 10%;
+    z-index: 1001;
+}
+.modal_receipt_list .back{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.5);
+}
+.modal_receipt_list .receipt_body{
+    z-index: 1002;
+    position: relative;
+    background: #fff;
+    padding: 30rpx;
+}
+.receipt_list .list_item{
+    background: #eee;
+    border-radius: 10rpx;
+    margin:30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.receipt_list .list_item .btn_edit view{
+    height: 55rpx;
+    line-height: 55rpx;
+    padding: 0% 10rpx;
+   font-size:36rpx;
+    border-radius:10rpx;
+    border:none;
+    background:#f66620;
+    color:#fff;
+    display:inline-block;
+    margin-left: 10rpx;
+}
+
+
+/* 申请打款 */
+.modal_make_money{
+    position: fixed;
+    width: 80%;
+    top: 10%;
+    left: 10%;
+    z-index: 1001;
+}
+.modal_make_money .back{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.5);
+}
+.modal_make_money .make_money_body{
+    z-index: 1002;
+    position: relative;
+    background: #fff;
+    padding: 30rpx;
+}
+.modal_make_money .make_money_check{
+  display: flex;
+  justify-content: space-around;
+}
+
+.modal_make_money .list_item{
+    border-radius: 10rpx;
+    font-size: 30rpx;
+}
+
+.modal_make_money .make_money_time{
+  margin:50rpx;
+  display: flex;
+  font-size: 30rpx;
+}
+
+.receipt_list .list_item .btn_edit view{
+    height: 55rpx;
+    line-height: 55rpx;
+    padding: 0% 10rpx;
+   font-size:36rpx;
+    border-radius:10rpx;
+    border:none;
+    background:#f66620;
+    color:#fff;
+    display:inline-block;
+    margin-left: 10rpx;
+}
+
+/* 支付选择 */
+.model_window {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 100;
+  top: 0;
+  left: 0;
+}
+.model_window .model_content {
+  padding: 20rpx 0;
+  width: 80%;
+  background: #fff;
+  margin: 40% auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  position: relative;
+}
+.model_content .model_title {
+  padding-left: 10rpx;
+  border-bottom: solid 1px #ccc;
+}
+.model_content .model_body {
+  padding: 20rpx 10rpx 0 10rpx;
+  display: flex;
+  flex-direction: column;
+}
+.fui_item {
+  height: 90rpx;
+  line-height: 90rpx;
+  background: #0a95e9;
+  color: #fff;
+  text-align: center;
+  border-radius: 10rpx;
+  margin-bottom: 10rpx;
+}
+.model_body .disabled {
+  background: #CCC;
+}
+.model_show {
+  display: block;
+}

@@ -1,0 +1,29 @@
+<!--jujiwuliu/pages/worker/bind/index.wxml-->
+<view class='container'>
+  <view class='head'>
+    <view class='head_title'>搬运工绑定</view>
+    <navigator url='' class='head_right'></navigator>
+  </view>
+  <form bindsubmit='bind'>
+    <view class='reg-title'>请填写注册信息</view>
+    <view class='item'>
+      <view class='weui-cell item-list'>
+        <image src='/jujiwuliu/resource/images/reg_01.png'></image>
+        <input type='text' name='realname' class='reg-input' placeholder-class='placeh-input' bindinput='getrealname' placeholder='请输入姓名'></input>
+      </view>
+      <view class='weui-cell item-list'>
+        <image src='/jujiwuliu/resource/images/reg_01.png'></image>
+        <input type='text' name='mobile' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile' placeholder='请输入手机号码'></input>
+      </view>
+      <view class='weui-cell item-list code-cell'>
+        <image src='/jujiwuliu/resource/images/reg_02.png'></image>
+        <input type='text' name='vertify' class='reg-input' placeholder-class='placeh-input' placeholder='验证码'></input>
+        <button class='btn-code' bindtap='getvertify' disabled='{{disabled}}'>{{vertifyname}}</button>
+      </view>
+    </view>
+    <view class='btn_view'>
+      <button form-type="submit" class='btn-subimt'>注册</button>
+    </view>
+  </form>
+</view>
+

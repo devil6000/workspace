@@ -1,0 +1,30 @@
+<template name="footerWx">
+  <view wx:if="{{list}}" class="we7-bottom" style="background-color:{{backgroundColor}};border-color:{{borderStyle}}">
+    <block wx:for="{{list}}" wx:key="{{index}}">
+      <block wx:if="{{item.type}}" >
+      <view class="we7-bottom-item" >
+        <button url="{{item.pagePath}}"  open-type="contact"  hover-class="active" >
+          <image src="{{item.iconPath}}" mode="widthFix" class="item-img"></image>
+          <view class="item-text" style="color: {{color}}">{{item.text}}</view>
+        </button>
+      </view>      
+      </block>
+      <!--navigate 跳转到的页面带返回键 redirect不带返回键（不记录历史记录）-->
+      <block wx:else hover-class="active">
+      <view class="we7-bottom-item" wx:if="{{item.pageUrl == ('/' + thisurl)}}" hover-class="active">
+        <navigator url="{{item.pagePath}}" open-type="redirect" hover-class="active">
+          <image src="{{item.selectedIconPath}}" mode="widthFix" class="item-img"></image>
+          <view class="item-text" style="color: {{selectedColor}};">{{item.text}}</view>
+        </navigator>
+      </view>
+      <view class="we7-bottom-item" wx:else hover-class="active">
+        <navigator url="{{item.pagePath}}" open-type="redirect" hover-class="active">
+          <image src="{{item.iconPath}}" mode="widthFix" class="item-img"></image>
+          <view class="item-text" style="color: {{color}}">{{item.text}}</view>
+        </navigator>
+      </view>
+      </block>
+    </block>
+  </view>
+  <view class="we7-bottom-placeholder"></view>
+</template>

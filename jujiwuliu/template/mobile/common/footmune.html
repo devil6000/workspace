@@ -1,0 +1,16 @@
+<div class="footmune" style="position: unset;display: block;float: left;background: none;">
+</div>
+<div class="footmune">
+	<a  {if $_GPC['do']=='showmap'} class='active' {/if} href="{php echo $this->createMobileUrl('showmap');}">
+		<div><i class="icon-logo"></i></div>
+		<p>首页</p>
+	</a>
+	<a  {if $_GPC['do']=='maplist'} class='active' {/if}href="{php echo $this->createMobileUrl('maplist');}">
+		<div><i class="icon-compass2"></i></div>
+		<p>附近网点</p>
+	</a>
+	<a {if $_GPC['do']=='serveitem'} class='active' {/if} href="{php echo $this->createMobileUrl('serveitem');}">
+		<div><i class="icon-compass2"></i></div>
+		<p>服务项目</p>
+	</a>
+</div>

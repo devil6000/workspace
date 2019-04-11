@@ -1,0 +1,14 @@
+<!--jujiwuliu/pages/common/user/explain/index.wxml-->
+<view class='container'>
+  <view class='content'>
+    <block wx:for="{{content}}" wx:for-index="idy" wx:for-item="cellData">
+      <block ws:if="{{cellData.type == 'view'}}">
+        <view class='content-item'>
+          <block wx:for="{{cellData.child}}" wx:key="text">
+            <block wx:if="{{item.type == 'text'}}"><text>{{item.text}}</text></block>
+          </block>
+        </view>
+        </block>
+    </block>
+  </view>
+</view>

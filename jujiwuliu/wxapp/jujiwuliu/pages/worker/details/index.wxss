@@ -1,0 +1,201 @@
+/* jujiwuliu/pages/worker/details/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.status{
+  background: #353639;
+  color: #fff;
+  line-height: 90rpx;
+  overflow: hidden;
+}
+.status-status{
+  width: 190rpx;
+  text-align: center;
+  background: #0a95e9;
+  font-size: 36rpx;
+  float: left;
+}
+
+.status-date{
+  text-align: center;
+  /*font-size: 32rpx;*/
+  font-size: 0.7rem;
+  float: left;
+  width: calc(100% - 290rpx);
+}
+.work-status{
+   width: 100rpx;
+  text-align: center;
+  background: #0a95e9;
+  font-size: 36rpx;
+  float: left;
+
+}
+.work-status.disabled{
+    background: #ccc;
+}
+
+.info{
+  margin-top: 20rpx;
+  background: #fff;
+  padding-left: 24rpx; 
+}
+.info-cell{
+  line-height: 90rpx;
+  font-size: 28rpx;
+  padding: 0;
+  padding-right: 24rpx;
+  box-sizing: border-box;
+  color: #999;
+}
+.info-title{
+  font-size: 36rpx;
+  color: #333;
+  line-height: 100rpx;
+}
+.info-cell-item{
+  width: 50%;
+  float: left;
+  white-space: nowrap;  
+  text-overflow:ellipsis; 
+  overflow:hidden;
+}
+.info-cell text{
+  color: #0a95e9;
+  overflow: hidden;
+}
+.right{
+  float: right;
+}
+.info-describe{
+  padding: 15rpx 24rpx 15rpx 0;
+  font-size: 24rpx;
+  line-height: 40rpx;
+}
+.btn-submit{
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: #0a95e9;
+  text-align: center;
+  margin-top: 30rpx;
+}
+.btn-cancel{
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: red;
+  text-align: center;
+  margin-top: 30rpx;
+  width: 40%;
+  float: left;
+  margin-left: 5%;
+  margin-bottom: 10px;
+}
+.btn-fulfil{
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: #0a95e9;
+  text-align: center;
+  margin-top: 30rpx;
+  width: 40%;
+  margin-right: 5%;
+  float: right;
+  margin-bottom: 10px;
+}
+.btn-fulfil.wait{
+  background: #ccc;
+}
+
+.lcoation{
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.lcoation image{
+  width: 34rpx;
+  height: 42rpx;
+  margin-right: 20rpx;
+}
+/* 支付选择 */
+.model_window {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: 100;
+  top: 0;
+  left: 0;
+}
+.model_window .model_content {
+  padding: 20rpx 0;
+  width: 80%;
+  background: #fff;
+  margin: 40% auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  position: relative;
+}
+.model_content .model_title {
+  padding-left: 10rpx;
+  border-bottom: solid 1px #ccc;
+}
+.model_content .model_body {
+  padding: 20rpx 10rpx 0 10rpx;
+  display: flex;
+  flex-direction: column;
+}
+.model_content .model_cell {
+  font-size: 0.9rem;
+  line-height: 2rem;
+  padding-left: 30rpx;
+  margin-top: -20rpx;
+}
+.model_cell_item {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  margin-top: 10rpx;
+}
+.fui_item {
+  background: #0a95e9;
+  color: #fff;
+  margin-left: 10rpx;
+  padding-left: 10rpx;
+  width: 80%;
+}
+.model_body .disabled {
+  background: #CCC;
+}
+.model_show {
+  display: block;
+}
+.model_footer {
+  border-top: solid 1px #ccc;
+  padding: 0.6325rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10rpx;
+}
+.model_footer .btn-pay, .model_footer .btn-pay-cancel {
+  color: #fff;
+  font-size: 40rpx;
+  text-align: center;
+  width: 40%;
+}
+.model_footer .btn-pay {
+  background-color: #0a95e9;
+}
+.model_footer .btn-pay-cancel {
+  background-color: red;
+  margin-left: 20rpx;
+}

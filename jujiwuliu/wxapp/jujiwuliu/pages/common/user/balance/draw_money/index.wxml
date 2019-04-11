@@ -1,0 +1,22 @@
+<!--jujiwuliu/pages/common/user/balance/draw_money/index.wxml-->
+<view class='container'>
+  <view class='credit'>
+    <view class='title'>当前余额</view>
+    <view class='num_credit'>{{memberInfo.credit2}}</view>
+  </view>
+
+<form  bindsubmit="draw_money">
+  <view class='item-list'>
+    <view class='item-title'>
+    <view>提现金额</view>
+    <view><input placeholder='请输入提现金额' name='money' /></view>
+    </view>
+    <view class='remark'>您的金额将提现到您的微信钱包余额，请注意查收！</view>
+    <button class='btn btn-draw_money'  formType="submit">提现</button>
+  </view>
+</form>
+
+</view>
+
+  <import src="../../../template/footer.wxml"/>
+  <template is="footerWx" data="{{...tabBar}}"/>

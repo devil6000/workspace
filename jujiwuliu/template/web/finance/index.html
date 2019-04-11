@@ -1,0 +1,242 @@
+﻿{template 'common/header'}
+
+<ul class="nav nav-tabs">
+	<li {if $op=='credit2' }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('finance',array('op' => 'credit2'))}">余额记录</a>
+	</li>
+	<li {if $op=='credit1' }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('finance', array('op' => 'credit1'))}">积分记录</a>
+	</li>
+	<li {if $op=='withdraw' }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('finance', array('op' => 'withdraw'))}">提现记录</a>
+	</li>
+	<!-- <li {if $op=='recharge' }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('finance', array('op' => 'recharge'))}">充值记录</a>
+	</li> -->
+</ul>
+{if  $op=='credit1'|| $op=='credit2' }
+<div class="panel panel-default">
+	<div class="table-responsive panel-body">
+		<form action="" method="get" enctype="multipart/form-data">
+			<input type="hidden" name="c" value="{$_GPC['c']}" />
+			<input type="hidden" name="a" value="{$_GPC['a']}" />
+			<input type="hidden" name="op" value="{$_GPC['op']}" />
+			<input type="hidden" name="do" value="{$_GPC['do']}" />
+			<input type="hidden" name="m" value="{$_GPC['m']}" />
+			<input type="hidden" name="version_id" value="{$_GPC['version_id']}" />
+			<div class="form-group">
+				<label class="col-sm-3 col-md-3 col-lg-2 col-xs-12">
+                	<select	name="type" class="form-control">
+                		<option value="">类型</option>
+						<option {if $_GPC['type']==2}selected{/if} value="2">增加</option>
+						<option {if $_GPC['type']==1}selected{/if} value="1">减少</option>
+					</select>
+					
+                </label>
+				<div class="col-sm-9 col-lg-9 col-xs-12">
+					<input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入昵称/手机号码/姓名搜索" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-7 col-lg-9 col-xs-12">
+					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+		<div class="panel panel-default">
+			<div class="panel-body table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th>用户</th>
+							<th>{if $op=='credit2' }金额{else}积分{/if}</th>
+							<th>剩余{if $op=='credit2' }余额{else}积分{/if}</th>
+							<!-- <th>操作人</th> -->
+							<th>时间</th>
+							<th>备注</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $row}
+						<tr>
+							<td class="dm-hover" style="position: relative;">
+									uid:{$row['uid']}<br>
+									{$row['user']['nickname']}<br>
+								<img src="{if $row['user']['avatar']}{$row['user']['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
+
+							</td>
+							<td {if $row['num']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['num']}</td>
+							<td>{$row['residue']}</td>
+							<!-- <td>operator</td> -->
+							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
+							<td>
+								{$row['remark']}
+							</td>
+							
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	</div>
+</div>
+{/if}
+{if $op=='withdraw' }
+<div class="panel panel-default">
+	<div class="table-responsive panel-body">
+		<form action="" method="get" enctype="multipart/form-data">
+			<input type="hidden" name="c" value="{$_GPC['c']}" />
+			<input type="hidden" name="a" value="{$_GPC['a']}" />
+			<input type="hidden" name="op" value="{$_GPC['op']}" />
+			<input type="hidden" name="do" value="{$_GPC['do']}" />
+			<input type="hidden" name="m" value="{$_GPC['m']}" />
+			<input type="hidden" name="version_id" value="{$_GPC['version_id']}" />
+			<div class="form-group">
+				<label class="col-sm-3 col-md-3 col-lg-2 col-xs-12">
+                	<select	name="type" class="form-control">
+                		<option value="">类型</option>
+						<option {if $_GPC['type']==2}selected{/if} value="2">增加</option>
+						<option {if $_GPC['type']==1}selected{/if} value="1">减少</option>
+					</select>
+					
+                </label>
+				<div class="col-sm-9 col-lg-9 col-xs-12">
+					<input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入昵称/手机号码/姓名搜索" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-7 col-lg-9 col-xs-12">
+					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+		<div class="panel panel-default">
+			<div class="panel-body table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th>用户</th>
+							<th>申请金额</th>
+							<th><span style="color:red;">支付宝信息:</span><br>实名<br>账号</th>
+							<th><span style="color:red;">银行信息:</span><br>姓名<br>卡号<br>开户行</th>
+							<th>申请时间</th>
+							<th>处理时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $row}
+						<tr>
+							<td class="dm-hover" style="position: relative;">
+									uid:{$row['uid']}<br>
+									{$row['user']['nickname']}<br>
+								<img src="{if $row['user']['avatar']}{$row['user']['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
+
+							</td>
+							<td {if $row['num']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['num']}</td>
+							<td>{$row['user']['alipay_account']}<br>{$row['user']['alipay_real']}</td>
+							<td>{$row['user']['bank_cardreal']}<br>{$row['user']['bank_cardid']}<br>{$row['user']['opening_bank']}</td>
+							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
+							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
+							<td>
+								{if $row['status']==0}
+									<a href="{php echo $this->createWebUrl('finance', array('op' =>'dispose','type'=> 'wechat','id' => $row['id']))}" onclick="return confirm('确认立即微信打款吗？');return false;" title="微信打款" class="btn btn-default btn-sm"><i class="icon-remove"></i>微信打款</a>
+									<a href="{php echo $this->createWebUrl('finance', array('op' =>'dispose','type' => 'alipay','id' => $row['id']))}" onclick="return confirm('确认此订单已打款成功了吗？');return false;" title="支付宝打款" class="btn btn-default btn-sm"><i class="icon-remove"></i>已支付宝打款</a>
+									<a href="{php echo $this->createWebUrl('finance', array('op' =>'dispose','type' => 'bank','id' => $row['id']))}" onclick="return confirm('确认此订单已银行卡打款吗？');return false;" title="银行卡打款" class="btn btn-default btn-sm"><i class="icon-remove"></i>银行卡打款</a>
+									<a href="{php echo $this->createWebUrl('finance', array('op' =>'dispose', 'type'=> 'reject','id' => $row['id']))}" onclick="return confirm('确认驳回吗？');return false;" title="驳回" class="btn btn-default btn-sm"><i class="icon-remove"></i>驳回</a>
+								{/if}
+								{if $row['status']==2}
+									<span class="label label-warning">已驳回</span>
+								{/if}
+								{if $row['status']==1}
+									{if $row['pay_type']==1}
+										<span class="label label-danger">微信打款</span>
+									{/if}
+									{if $row['pay_type']==3}
+										<span class="label label-success">支付宝打款</span>
+									{/if}
+									{if $row['pay_type']==4}
+										<span class="label label-info">银行卡打款</span>
+									{/if}
+								{/if}
+								
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	</div>
+</div>
+{/if}
+
+{if $op=='recharge' }
+<div class="panel panel-default">
+	<div class="table-responsive panel-body">
+		<form action="" method="get" enctype="multipart/form-data">
+			<input type="hidden" name="c" value="{$_GPC['c']}" />
+			<input type="hidden" name="a" value="{$_GPC['a']}" />
+			<input type="hidden" name="op" value="{$_GPC['op']}" />
+			<input type="hidden" name="do" value="{$_GPC['do']}" />
+			<input type="hidden" name="m" value="{$_GPC['m']}" />
+			<input type="hidden" name="version_id" value="{$_GPC['version_id']}" />
+			<div class="form-group">
+				<label class="col-sm-3 col-md-3 col-lg-2 col-xs-12">
+                	<select	name="type" class="form-control">
+                		<option value="">类型</option>
+						<option {if $_GPC['type']==2}selected{/if} value="2">增加</option>
+						<option {if $_GPC['type']==1}selected{/if} value="1">减少</option>
+					</select>
+					
+                </label>
+				<div class="col-sm-9 col-lg-9 col-xs-12">
+					<input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入昵称/手机号码/姓名搜索" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-7 col-lg-9 col-xs-12">
+					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+		<div class="panel panel-default">
+			<div class="panel-body table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th>用户</th>
+							<th>充值金额</th>
+							<th>充值时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $row}
+						<tr>
+							<td class="dm-hover" style="position: relative;">
+									uid:{$row['uid']}<br>
+									{$row['user']['nickname']}<br>
+								<img src="{if $row['user']['avatar']}{$row['user']['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
+
+							</td>
+							<td {if $row['num']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['num']}</td>
+							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	</div>
+</div>
+{/if}
+
+
+{template 'common/footer'}

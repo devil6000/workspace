@@ -1,0 +1,69 @@
+  <view class='container'>
+    <view class='userinfo'>
+        <view class='info avatar'>
+          <image mode="widthFix" src="{{memberInfo.avatar}}" />
+        </view>
+        <view class='info title'>
+          <view>{{memberInfo.realname}}</view>
+          <view>{{memberInfo.mobile}}</view>
+        </view>
+        <view class='btn-bell'>
+          <!-- <navigator url='../common/information/index'>
+            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+            <text>1</text>
+          </navigator> -->
+          <view >
+            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
+            <text>1</text>
+          </view>
+        </view>
+    </view>
+
+    <view class='info_card'>
+      <form bindsubmit='submit'>
+        <view class='info_card-title'>支付宝信息</view>
+        <view class='item'>
+            <view class='weui-cell item-list'>
+                <text class='reg-input title'>实名:</text>
+                <input type='text' name='alipay_real' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile' value='{{memberInfo.alipay_real}}'  placeholder='请输入支付宝实名'></input>
+            </view>
+            <view class='weui-cell item-list'>
+                <text class='reg-input title'>账号:</text>
+                <input type='text' name='alipay_account' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile' value='{{memberInfo.alipay_account}}'  placeholder='请输入支付宝zhhao'></input>
+            </view>
+        </view>
+
+        <view class='info_card-title'>银行卡信息</view>
+        <view class='item'>
+            <view class='weui-cell item-list'>
+                <text class='reg-input title'>开户人:</text>
+                <input type='text' name='bank_cardreal' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile' value='{{memberInfo.bank_cardreal}}'  placeholder='请输入开户人姓名'></input>
+            </view>
+        
+        <view class='weui-cell item-list'>
+            <text class='reg-input title'>开户行:</text>
+            <input type='text' name='opening_bank' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile' value='{{memberInfo.opening_bank}}'  placeholder='请输入开户行'></input>
+        </view>
+        <view class='weui-cell item-list'>
+            <text class='reg-input title'>卡号:</text>
+            <input type='text' name='bank_cardid' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile'  value='{{memberInfo.bank_cardid}}'  placeholder='请输入银行卡号'></input>
+        </view>
+        
+        
+        </view>
+        <view class='btn_view'>
+        <button form-type="submit" class='btn-subimt'>确认</button>
+        </view>
+        
+    </form>
+
+    </view>
+</view>
+
+
+  <!--授权  -->
+<import src="/jujiwuliu/pages/common/common/template/model.wxml"/>
+<template is="model_shouquan" data="{{locationModelShow}}"/>
+
+<import src="/jujiwuliu/pages/common/common/template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

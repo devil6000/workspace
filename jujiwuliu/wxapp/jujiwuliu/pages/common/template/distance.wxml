@@ -1,0 +1,19 @@
+<template name="model_distance">
+<view class='model' wx:if="{{modelShowDistance}}">
+  <view class="inner">
+    <view class="title">距离设置</view>
+    <view class="subtitle">
+      <radio-group class="radio-group" bindchange="distanceChange">
+        <label class='model_cell_item' wx:for='{{distanceArr}}' wx:key="{{key}}">
+          <radio value='{{item.value}}' checked="{{item.checked}}" />
+          <text class='fui_item'>{{item.name}}</text>
+        </label>
+      </radio-group>
+    </view>
+        <view class="model-btns">
+          <view bindtap="confirm_distance" class="confirm">确定</view>
+            <view bindtap="hide_distance" class="cancel">取消</view>
+        </view>
+  </view>
+</view>
+</template>

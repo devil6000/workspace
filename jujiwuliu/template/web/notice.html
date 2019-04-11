@@ -1,0 +1,174 @@
+{template 'common/header'}
+
+<ul class="nav nav-tabs">
+    <li {if in_array($op, array('display','post'))}class='active'{/if}>
+        <a href="{php echo $this->createWebUrl('notice')}">消息管理</a>
+    </li>
+    <li {if $op == 'bind'}class='active'{/if}>
+        <a href="{php echo $this->createWebUrl('notice', array('op' => 'bind'))}">消息绑定</a>
+    </li>
+</ul>
+
+{if $op == 'display'}
+<div class="panel panel-default">
+    <div class="panel-heading">消息管理</div>
+    <div class="panel-body table-responsive">
+        <div class="btn-toolbar">
+            <a href="{php echo $this->createWebUrl('notice', array('op' => 'post'))}" class="btn btn-default bnt-sm">新增消息模版</a>
+        </div>
+        <table class="table table-hover">
+            <thead class="navbar-inner">
+            <tr>
+                <th>标题</th>
+                <th>消息ID</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop $list $item}
+            <tr>
+                <td>{$item['title']}</td>
+                <td>{$item['template_id']}</td>
+                <td>
+                    <a href="{php echo $this->createWebUrl('notice', array('op' => 'post', 'id' => $item['id']))}" class="btn btn-default btn-sm" title="编辑"><i class="fa fa-edit"></i></a>
+                    <a href="{php echo $this->createWebUrl('notice', array('op' => 'delete', 'id' => $item['id']))}" class="btn btn-default btn-sm" title="删除" onclick="if(!confirm('确定要删除消息吗?')) return false;"><i class="fa fa-remove"></i></a>
+                </td>
+            </tr>
+            {/loop}
+            </tbody>
+        </table>
+    </div>
+</div>
+{/if}
+
+{if $op == 'post'}
+<div class="panel panel-default">
+    <div class="panel-heading">{if $id}编辑{else}新增{/if}消息</div>
+    <div class="panel-body form-horizontal">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$id}" />
+            <div class="form-group">
+                <label class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-8">
+                    <input type="text" name="title" value="{$item['title']}" class="form-control" placeholder="请输入消息标题" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">模版ID</label>
+                <div class="col-sm-8">
+                    <input type="text" name="template_id" value="{$item['template']}" class="form-control" placeholder="公众平台模版消息编号" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">头部标题</label>
+                <div class="col-sm-7">
+                    <textarea name="first" class="form-control" data-role-required="true" placeholder="{{first.DATA}}" rows="5" aria-required="true">{$item['first']}</textarea>
+                </div>
+                <div class="col-sm-1" style="padding-left: 0;">
+                    <input type="color" name="firstcolor" value="{$item['firstcolor']}" style="width: 32px; height: 32px;" />
+                </div>
+            </div>
+            {loop $data $da}
+            {template 'notice_template'}
+            {/loop}
+            <div id="type-items"></div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" ></label>
+                <div class="col-sm-9 col-xs-12">
+                    <a class="btn btn-default btn-add-type" href="javascript:;" onclick="addType();"><i class="fa fa-plus" title=""></i> 增加一条键</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">尾部描述</label>
+                <div class="col-sm-7">
+                    <textarea type="text" class="form-control" name="remark" data-role-required="true" placeholder="{{remark.DATA}}" rows="5" aria-required="true">{$item['remark']}</textarea>
+                </div>
+                <div class="col-sm-1" style="padding-left: 0;">
+                    <input type="color" name="remarkcolor" value="{$item['remarkcolor']}" style="width: 32px; height: 32px;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <input type="submit" value="提交" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    var kw = 1;
+    function addType() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo $this->createWebUrl('notice', array('op' => 'addTemplate'))}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#type-items").append(html);
+        });
+        kw++;
+    }
+</script>
+{/if}
+{if $op == 'bind'}
+<div class="panel panel-default">
+    <div class="panel-heading">消息绑定</div>
+    <div class="panel-body form-horizontal">
+        <form method="post">
+            <div class="panel-body">发布方消息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发布成提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[issue_ok]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['issue_ok'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发布取消提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[issue_cancel]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['issue_cancel'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="panel-body">接单方消息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">接单成功提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[take_ok]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['take_ok'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">接单取下提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[take_cancel]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['take_cancel'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <input type="submit" value="提交" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/if}
+
+{template 'common/footer'}

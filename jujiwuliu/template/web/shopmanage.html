@@ -1,0 +1,476 @@
+﻿{template '_header'}
+
+<ul class="nav nav-tabs">
+    <li {if $flag == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('shopmanage', array('op' => 'display'))}">网点管理</a></li>
+    <li {if $flag == 'edit'}class="active"{/if}><a href="{php echo $this->createWebUrl('shopmanage', array('op' => 'edit'))}">添加网点</a></li>
+</ul>
+{if $flag == 'edit'}
+<div class="panel panel-default">
+
+   <div class="panel-heading">
+      <h3 class="panel-title">添加网点</h3>    
+   </div>
+
+   <div class="panel-body">
+
+   <form action="" method="post" onsubmit="return check()" class="form-horizontal form" enctype="multipart/form-data">
+
+		<div class="form-group">
+
+            <label for="sname" class="col-sm-2 control-label">网点名称</label>
+
+            <div class="col-sm-10">
+
+              <input type="text" required="required" name="sname" id="sname" class="form-control" value="{$sinfo['sname']}" placeholder="请输入网点在地图上的显示名称"/>
+
+            </div>
+
+        </div>
+		<!--<div class="form-group">
+            <label class="col-sm-2 control-label">网点街景</label>
+            <div class="col-sm-10">
+              php echo tpl_form_field_image('slogo', $sinfo['slogo']);}
+			  <span class="help-block">点击后显示的网点街景。</span>
+            </div>
+        </div>-->
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label">网点logo</label>
+            <div class="col-sm-10">
+              {php echo tpl_form_field_image('micon', $sinfo['micon']);}
+			  <span class="help-block">点击后显示的网点logo，推荐与参数设置中的logo一致。</span>
+            </div>
+        </div>
+
+		<div class="form-group">
+
+            <label for="stel" class="col-sm-2 control-label">联系电话</label>
+
+            <div class="col-sm-10">
+
+              <input type="text" name="stel" id="stel" required="required" class="form-control" value="{$sinfo['stel']}" placeholder="请输入网点联系电话"/>
+			  
+
+            </div>
+
+        </div>
+
+		<div class="form-group">
+
+            <label for="saddress" class="col-sm-2 control-label">网点地址</label>
+
+            <div class="col-sm-10">
+
+              <input type="text" name="saddress" id="saddress" class="form-control" value="{$sinfo['saddress']}" placeholder="请输入网点地址" required="required" />
+
+            </div>
+
+        </div>
+		<div class="form-group">
+            <label for="saddress" class="col-sm-2 control-label">营业时间</label>
+            <div class="col-sm-10">
+              <input type="text" name="business_time" id="business_time" class="form-control" value="{$sinfo['business_time']}" placeholder="请输入营业时间" required="required" />
+            </div>
+        </div>
+        <div class="form-group">
+        	<label class="col-sm-2 control-label">特色产品</label>
+        	<div class="col-sm-10">
+        	<input type="text" name="product" id="product" class="form-control" value="{$sinfo['product']}" />
+        	</div>
+        </div>
+        <!--<div class="form-group">
+
+            <label class="col-sm-2 control-label">网点分类</label>
+
+            <div class="col-sm-10">
+
+                <div class="input-group">
+
+                <select class="form-control" name="sclass">
+                	
+                	<option value="">请选择</option>
+
+                	{loop $class $k $v}
+
+                    <option value='{$v}' {if $v == $sinfo['sclass']}selected{/if}>{$v}&nbsp;&nbsp;</option>
+
+                    {/loop}
+
+                </select>                
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label class="col-sm-2 control-label">网点星级</label>
+
+            <div class="col-sm-10">
+
+                <div class="input-group">
+
+                <select class="form-control" name="slevel">
+
+                    <option value='5' {if $sinfo['slevel'] == 5}selected{/if}>★★★★★</option>
+
+                    <option value='4' {if $sinfo['slevel'] == 4}selected{/if}>★★★★</option>
+
+                    <option value='3' {if $sinfo['slevel'] == 3}selected{/if}>★★★</option>
+
+                    <option value='2' {if $sinfo['slevel'] == 2}selected{/if}>★★</option>
+
+                    <option value='1' {if $sinfo['slevel'] == 1}selected{/if}>★</option>
+
+                </select>                
+
+                </div>
+
+            </div>
+
+        </div>-->
+        
+        <!--<div class="form-group">
+            <label class="col-sm-2 control-label">服务项目</label>
+            <div class="col-sm-10">
+            		{loop $colorarr $index $value}
+            			{php echo $inamearr[$index]}:
+		                {loop $serveitem $k $v}
+		                	{php $icolor_math = $icolor[$k]}
+							{if $icolor_math == $value}
+		                    <label class="radio radio-inline serveitem">
+								<input class="serveitem_checkbox" type="checkbox" name="serveitem[]" value='{$v}' {if strpos($sinfo['serveitem'],$v) !== false }checked{/if} >{$v}&nbsp;&nbsp;</input>
+								<input class="icolor_checkbox" style="display: none;" type="checkbox" name="serveitem[]" value='null' {if strpos($sinfo['serveitem'],$v) === false }checked{/if} ></input>
+							</label>
+							{/if}
+			            {/loop}
+			            <br />
+		            {/loop}
+            </div>
+        </div>-->
+        
+		<div class="form-group">
+            <label class="col-sm-2 control-label">服务项目</label>
+            <div class="col-sm-10">
+            		{loop $Services $index $value}
+            			{php echo $value['title']}:
+		                {loop $Items $k $v}
+		                	{php $icolor_math = $icolor[$k]}
+							{if $v['serve_id'] == $value['id']}
+		                    <label class="radio radio-inline serveitem">
+								<input class="serveitem_checkbox" type="checkbox" name="serveitem[]" value='{$v['id']}'  {if in_array($v['id'],$sinfo['serve_ids']) }checked{/if} >{$v['title']}&nbsp;&nbsp;</input>
+							</label>
+							{/if}
+			            {/loop}
+			            <br />
+		            {/loop}
+            </div>
+        </div>
+		<div class="form-group">
+
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">坐标</label>
+
+            <div class="col-sm-9">
+
+                {php echo tpl_form_field_coordinate('baidumap', $sinfo)}
+
+				<span class="help-block">请在地图中选择正确的坐标位置</span>
+
+            </div>
+
+        </div>
+
+		<!--<div class="form-group">
+
+            <label class="col-sm-2 control-label">是否显示店长信息</label>
+
+            <div class="col-sm-10">
+
+				<label class="radio radio-inline">
+
+				<input type="radio" name="showc" value="0" {if intval($sinfo['showc']) == 0}checked="checked"{/if}>不显示
+
+				</label>
+
+				<label class="radio radio-inline">
+
+					<input type="radio" name="showc" value="1" {if intval($sinfo['showc']) == 1}checked="checked"{/if}>显示
+
+				</label>
+
+            </div>
+
+        </div>
+
+		<div class="form-group">
+
+            <label for="cname" class="col-sm-2 control-label">店长姓名</label>
+
+            <div class="col-sm-10">
+
+              <input type="text" required="required" name="cname" class="form-control" value="{$sinfo['cname']}" placeholder="请输入店长姓名"/>
+
+            </div>
+
+        </div>
+
+		<div class="form-group">
+
+            <label class="col-sm-2 control-label">店长头像</label>
+
+            <div class="col-sm-10">
+
+              {php echo tpl_form_field_image('cthumb', $sinfo['cthumb']);}
+
+			  
+
+            </div>
+
+        </div>
+
+		<div class="form-group">
+
+            <label for="ctel" class="col-sm-2 control-label">店长手机</label>
+
+            <div class="col-sm-10">
+
+              <input type="text" id="submit" name="ctel" id="ctel" class="form-control" value="{$sinfo['ctel']}" placeholder="请输入店长联系电话"/>
+
+            </div>
+
+        </div>
+
+		<div class="form-group">
+
+            <label for="inputEmail3" class="col-sm-2 control-label">店长简介</label>
+
+            <div class="col-sm-10">
+
+              <input type="text" name="cinfo" required="required" class="form-control" value="{$sinfo['cinfo']}" maxlength="26" placeholder="请输入店长简介；例如：清峰科技"/>
+
+			  <span class="help-block">用一句话对店长进行介绍，最好30字以内</span>
+
+            </div>
+
+        </div>-->
+
+		<div class="form-group col-sm-12">
+
+                <input name="token" type="hidden" value="{$_W['token']}" />
+
+                <input type="submit" class="btn btn-primary col-lg-1 pull-right" name="submit" value="提交" />
+
+        </div>
+
+   
+
+   </form>
+
+   </div>
+
+</div>
+
+{else}
+		
+	    <div class="panel panel-default">
+
+        <div class="table-responsive panel-body">
+            <form action="" method="get"  enctype="multipart/form-data">
+            	<input type="hidden" name="c" value="{$_GPC['c']}" />
+	   	      	<input type="hidden" name="a" value="{$_GPC['a']}" />
+	   	      	<input type="hidden" name="op" value="{$_GPC['op']}" />
+	   	      	<input type="hidden" name="do" value="{$_GPC['do']}" />
+	   	      	<input type="hidden" name="m" value="{$_GPC['m']}" />
+	        	<div class="maplist-search">
+					<div class="search-div" >
+						<select class="select_search" name="select_search">
+			        		<option {if empty($_GPC['select_search'])}selected{/if} value="0">选择搜索信息</option>
+			        		<option {if $_GPC['select_search']==1}selected{/if}  value="1">网点名称</option>
+			        		<option {if $_GPC['select_search']==2}selected{/if}  value="2">网点电话</option>
+			        		<option {if $_GPC['select_search']==3}selected{/if}  value="3">服务项目</option>
+			        		<!--<option {if $_GPC['select_search']==4}selected{/if}  value="4">所属分类</option>-->
+			        		{if empty($_W['user']['bankname'])}
+			        		<option {if $_GPC['select_search']==5}selected{/if}  value="5">添加单位</option>
+			        		{/if}
+						</select>
+						<input type="text" class="maplist_search"  name="maplist_search" value="{$_GPC['maplist_search']}" placeholder="输入关键字搜索"/>
+						<button class="search_button">搜索</button>
+					</div>
+				</div>
+			</form>
+            <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+
+                <table class="table table-hover">
+
+                    <thead class="navbar-inner">
+
+                    <thead>
+
+                        <th style="width:16.66%;">网点名称</th>
+
+                        <!--<th style="width:16.66%;">网点街景</th>-->
+                        <th style="width:16.66%;">网点地址</th>
+
+                        <th style="width:16.66%;">网点电话</th>
+
+                        <!--<th style="width:16.66%;">所属分类</th>-->
+                        
+                        {if empty($_W['user']['bankname'])}
+                        
+                        <th style="width:16.66%;">添加单位</th>
+                        
+                        {/if}
+
+                        <th style="width:16.66%;">操作</th>
+
+                    </thead>
+
+                    </thead>
+
+                    <tbody class="add_this">
+
+                    {loop $slist $sinfo}
+
+                    <tr class="loop_slist">
+
+                        <td>{$sinfo['sname']}</td>
+
+                        <td>
+{$sinfo['saddress']}
+                            <!--<img src="{if strstr($sinfo['slogo'], 'http') || strstr($sinfo['slogo'], './source/modules/')}{$sinfo['sthumb']}{else}{$_W['attachurl']}{$sinfo['slogo']}{/if}" onerror="this.src='./resource/images/nopic.jpg';" width="60px;" style="border-radius: 3px;">-->
+                        </td>
+
+                        <td>{$sinfo['stel']}</td>
+
+                        <!--<td>{$sinfo['sclass']}</td>-->
+                        
+                        {if empty($_W['user']['bankname'])}
+                        
+                        <td>{$sinfo['user_name']}{if empty($sinfo['user_name'])}总管理员{/if}</td>
+                        
+                        {/if}
+
+                        <td>
+
+                            <a href="{php echo $this->createWebUrl('shopmanage', array('op' => 'edit','id' => $sinfo['id']))}" title="编辑" class="btn btn-default btn-sm"><i class="fa fa-edit"></i>
+
+						查看编辑</a>					
+
+						<a href="{php echo $this->createWebUrl('shopmanage', array('op' => 'delete','id' => $sinfo['id']))}" onclick="return confirm('确认删除此网点信息吗？');return false;" title="删除" class="btn btn-default btn-sm"><i class="icon-remove"></i>
+
+						删除</a>
+
+                        </td>
+
+                    </tr>
+
+                    {/loop}
+
+                    </tbody>
+
+                </table>
+
+            </form>
+			{$pager}
+        </div>
+
+    </div>
+<script>
+//		function addslist(val){
+//		var add = "";
+//		add += "<tr class='loop_slist'><td>"+val.sname+"</td>";
+//		add += "<td><img src='"
+//		if (val.slogo.indexOf('http') != -1 || val.slogo.indexOf('./source/modules/') != -1){
+//			add += val.sthumb;
+//		}
+//		else{
+//			add += "{$_W['attachurl']}"+val.slogo ;
+//		}
+//		add +=  "'"
+//		add += "onerror=this.src='./resource/images/nopic.jpg';";
+//		add += " width='60px;' style='border-radius: 3px;'></td>";
+//		add += "<td>"+val.stel+"</td>";
+//		add += "<td>"+val.sclass+"</td>"
+//		{if empty($_W['user']['bankname'])}
+//			add += "<td>"
+//          if (val.user_name == null){
+//          	add += "总管理员";
+//          }
+//          else{
+//          	add += val.user_name;
+//          }
+//          add += "</td>";
+//      {/if}
+//      add += "<td><a href='{php echo $this->createWebUrl('shopmanage', array('op' => 'edit','id' => "+val.id+"))}' title='编辑' class='btn btn-default btn-sm'><i class='fa fa-edit'></i>";
+//		add += "查看编辑</a>";
+//		add += "<a href='{php echo $this->createWebUrl('shopmanage', array('op' => 'delete','id' => "+val.id+"))}' onclick='return confirm('确认删除此网点信息吗？');return false;' title='删除' class='btn btn-default btn-sm'><i class='icon-remove'></i>";
+//		add += "删除</a>";
+//		add += "</td></tr>";
+//		$('.add_this').append(add);
+//	}
+//	var slist = {$json_slist};
+//	console.log(slist);
+	$(document).ready(function(){
+//		$(".search_button").click(function(){
+//			var search_class = $(".select_search").val();
+//			var search_word = $(".maplist_search").val();
+////			search_word = search_word.split("");
+////			console.log(search_word);
+////			console.log(search_class);
+//			if(search_word.trim()==''){
+//				return false;
+//			}
+//			$(".loop_slist").remove();
+//			for(var index = 0; index < slist.length; index++){
+////				console.log(slist[index]);
+//				var sv = slist[index];
+//				var echoture = 0;
+//				console.log(sv);
+//				for(var k = 0; k < search_word.length; k++){
+//					var vv = search_word[k];
+//					if(sv.user_name == null){
+//						sv.user_name = "总管理员";
+//					}
+////					console.log(sv[search_class].indexOf(vv));
+//					if(sv[search_class].indexOf(vv) != -1){
+//						echoture = 1;
+//						break;
+//					}
+//				};
+////				console.log(echoture);
+//				if(echoture == 1){
+//					addslist(slist[index]);
+//				}
+//			};
+//		});
+//	});
+
+
+	
+    function check(){
+        var lng = $("input[name='baidumap[lng]']").val();
+        var lat = $("input[name='baidumap[lat]']").val();
+        var slogo = $("input[name='slogo']").val();
+
+        if( !lng || !lat){
+            alert('网点坐标不能为空');
+            return false;
+        }
+        if( !slogo ){
+            alert('网点LOGO不能为空');
+            return false;
+        }
+    }
+$(function(){
+	$('.serveitem').find('.serveitem_checkbox').click(function(){
+		$(this).siblings('.icolor_checkbox').click();
+	});
+});
+    
+
+</script>
+
+
+{/if}

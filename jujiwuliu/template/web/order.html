@@ -1,0 +1,161 @@
+﻿{template 'common/header'}
+
+<ul class="nav nav-tabs">
+	<li {if $op=='display'}class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('order')}">订单管理</a>
+	</li>
+</ul>
+{if $op == 'post'}
+<div class="main form-horizontal">
+	<form action="" method="post">
+		<input type="hidden" name="id" value="{$_GPC['id']}" />
+		<div class="panel panel-info">
+			<div class="panel-heading">会员信息</div>
+			<div class="panel-body"><br />
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">openid</label>
+					<div class="col-xs-12 col-sm-9">
+						<input type="text" class="form-control" readonly="readonly" value="{$item['openid']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">头像</label>
+					<div class="col-xs-12 col-sm-9">
+						<img src="{$item['avatar']}" width="60px">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
+					<div class="col-xs-12 col-sm-9">
+						<input type="text" class="form-control" readonly="readonly" value="{$item['nickname']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">姓名</label>
+					<div class="col-xs-12 col-sm-9">
+						<input type="text" class="form-control" name="realname" value="{$item['realname']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">手机号码</label>
+					<div class="col-xs-12 col-sm-9">
+						<input type="text" class="form-control" name="mobile" value="{$item['mobile']}" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">创建时间</label>
+					<div class="col-xs-12 col-sm-9">
+						<input type="text" class="form-control" readonly="readonly" value="{if $item['createtime'] > 0}{php echo date('Y-m-d H:i:s',$item['createtime'])}{/if}" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input class="btn btn-primary col-lg-1" type="submit" style="margin-right:30px;" value="保存">
+			<a href="javascript:void(0)" onClick="javascript :history.back(-1);" class="btn btn-primary col-lg-1">返回</a>
+		</div>
+	</form>
+</div>
+
+{/if}
+
+{if $op=='display'}
+
+<div class="panel panel-default">
+
+	<div class="table-responsive panel-body">
+		<form action="" method="get" enctype="multipart/form-data">
+			<input type="hidden" name="c" value="{$_GPC['c']}" />
+			<input type="hidden" name="a" value="{$_GPC['a']}" />
+			<input type="hidden" name="op" value="{$_GPC['op']}" />
+			<input type="hidden" name="do" value="{$_GPC['do']}" />
+			<input type="hidden" name="m" value="{$_GPC['m']}" />
+			<input type="hidden" name="version_id" value="{$_GPC['version_id']}" />
+			<div class="form-group">
+				<div class="col-sm-9 col-lg-9 col-xs-12">
+					<input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入昵称/手机号码/姓名搜索" />
+				</div>
+				<div class="col-xs-12 col-sm-2 col-md-2 col-lg-1">
+					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+		<div class="panel panel-default">
+			<div class="panel-body table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th>
+								发布信息<br>
+								<label style="color: red;">(点击查看)</label>
+							</th>
+							<th>单价</th>
+							<th>价格（预计收款）</th>
+							<th>违约金</th>
+							<th>接单时间</th>
+							<th>完成（打款）时间</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $row}
+						<tr>
+							<td style="text-align: center;">
+								<a href="{php echo $this->createWebUrl('release', array('op' => 'display','id' => $row['release']['id']))}">
+									<img src="{php echo tomedia($row['release']['images'][0])}"  style="max-height: 50px;max-width: 50px;"/>
+									<br>
+									{$row['release']['typename']}
+									<br>
+									{$row['release']['staticname']} 
+								</a>
+							</td>
+							
+							<td>{$row['release']['price']}</td>
+							<td>{$row['release']['total_price']}</td>
+							<td>{$row['deposit']}</td>
+							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
+							<td>
+								{if !empty($row['apply_time'])}
+								{php echo date('Y-m-d H:i:s',$row['apply_time'])}
+								{/if}
+							</td>
+							<td>
+								{if $row['status']==0}
+								<label class="label label-info">接单中</label>
+								{elseif $row['status'] == 2}
+								<label class="label label-info">工作中</label>
+								{elseif $row['status'] == 3}
+								<label class="label label-info">已完成</label>
+								{elseif $row['status'] == 4}
+								<label class="label label-info">已取消</label>
+								{/if}
+								{if $row['count_price']==1}
+								<label class="label label-danger">已打款</label>
+								{/if}
+								{if $row['count_price']==-1}
+								<label class="label label-danger">已取消</label>
+								{/if}
+							</td>
+							<td>
+								<!-- <a href="{php echo $this->createWebUrl('order', array('op' => 'post','id' => $row['id']))}" class="btn btn-default btn-sm" title="编辑"><i class="fa fa-edit"></i> 编辑</a> -->
+								{if $row['can_refund_bond'] == 1 && $row['deposit_paystatus'] == 2}
+								<a href="{php echo $this->createWebUrl('order', array('op' => 'refund','id' => $row['id']))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i> 退保证金</a>
+								{/if}
+								{if $row['apply'] == 1 && $row['release']['status'] == 3}
+								<a href="{php echo $this->createWebUrl('order', array('op' => 'payapply','id' => $row['id']))}" class="btn btn-default btn-sm" title="打款"><i class="fa fa-edit"></i> 打款</a>
+								{/if}
+								<a href="{php echo $this->createWebUrl('order', array('op' => 'del','id' => $row['id']))}" class="btn btn-default btn-sm" title="删除" onclick="if(!confirm('确定删除吗?')) return false;"><i class="fa fa-times"> </i></a>
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	</div>
+</div>
+{/if} 
+{template 'common/footer'}

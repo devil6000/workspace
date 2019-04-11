@@ -1,0 +1,29 @@
+<!--jujiwuliu/pages/common/user/credit/index.wxml-->
+<view class='container'>
+  <view class='credit'>
+    <view class='title'>当前积分</view>
+    <view class='num_credit'>{{memberInfo.credit1}}</view>
+  </view>
+
+  <view class='item-list'>
+    <view class='item-title'>积分明细</view>
+    <block wx:if ='{{!laborer}}'>
+        <view class='not_record'>
+          <view class='not_worker'><image  mode="widthFix" src="../../../../../resource/images/empty.png" /></view>  
+          <view class='not_worker'>无任何记录</view>     
+        </view> 
+      </block>
+    <block wx:for-items="{{laborer}}" wx:key="{{index}}">
+    <view class='item-content'>
+      <view class='content-left' >
+        <view class='remarks'>分享邀请成功奖励</view>
+        <view class='establish_time'>2018-07-20 10:20:33</view>
+      </view>
+      <view class='content-right multi'>+1</view>
+    </view>
+    </block>
+  </view>
+</view>
+
+  <import src="../../../template/footer.wxml"/>
+  <template is="footerWx" data="{{...tabBar}}"/>

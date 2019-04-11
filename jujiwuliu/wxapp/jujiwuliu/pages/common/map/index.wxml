@@ -1,0 +1,15 @@
+
+<map showLocation bindcontroltap="controltap" bindmarkertap="markertap" bindregionchange="regionchange" circles="{{circles}}" id="myMap" latitude="{{lat}}" longitude="{{lng}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{scale}}" subkey="{{subkey}}" style="width: 100%;height:100%;"  >
+ 
+      <cover-view class='client'>
+        <cover-view class='client_item left'>
+          <cover-view>客户姓名：{{realname}}</cover-view> 
+          <cover-view>联系电话：{{mobile}}</cover-view>
+          <cover-view>地址：{{address}}</cover-view>
+        </cover-view> 
+        <cover-view class='client_item navigation' bindtap="open_location">
+        导航
+        </cover-view>
+      </cover-view>
+</map>
+    

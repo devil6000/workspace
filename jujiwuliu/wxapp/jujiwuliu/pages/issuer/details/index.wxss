@@ -1,0 +1,110 @@
+/* jujiwuliu/pages/worker/details/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.status{
+  background: #353639;
+  color: #fff;
+  line-height: 90rpx;
+  overflow: hidden;
+}
+.status-status{
+  width: 190rpx;
+  text-align: center;
+  background: #f66620;
+  font-size: 36rpx;
+  float: left;
+}
+.status-date{
+  text-align: center;
+  font-size: 32rpx;
+  float: left;
+  width: calc(100% - 190rpx);
+}
+.info{
+  margin-top: 20rpx;
+  background: #fff;
+  padding-left: 24rpx; 
+}
+.info-cell{
+  line-height: 90rpx;
+  font-size: 28rpx;
+  padding: 0;
+  padding-right: 24rpx;
+  box-sizing: border-box;
+  color: #999;
+}
+.info-title{
+  font-size: 36rpx;
+  color: #333;
+  line-height: 100rpx;
+}
+.info-cell-item{
+  width: 50%;
+  float: left;
+  white-space: nowrap;  
+  text-overflow:ellipsis; 
+  overflow:hidden;
+}
+.info-cell text{
+  color: #f66620;
+  overflow: hidden;
+}
+.right{
+  float: right;
+}
+.info-describe{
+  padding: 15rpx 24rpx 15rpx 0;
+  font-size: 24rpx;
+  line-height: 40rpx;
+}
+.btn-submit{
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: #f66620;
+  text-align: center;
+  margin-top: 30rpx;
+}
+.btn-cancel{
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: red;
+  text-align: center;
+  margin-top: 30rpx;
+  width: 40%;
+  float: left;
+  margin-left: 5%;
+  margin-bottom: 10px;
+}
+.btn-fulfil{
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: #f66620;
+  text-align: center;
+  margin-top: 30rpx;
+  width: 40%;
+  margin-right: 5%;
+  float: right;
+  margin-bottom: 10px;
+}
+.btn-fulfil.wait{
+  background: #ccc;
+}
+
+.lcoation{
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.lcoation image{
+  width: 34rpx;
+  height: 42rpx;
+  margin-right: 20rpx;
+}

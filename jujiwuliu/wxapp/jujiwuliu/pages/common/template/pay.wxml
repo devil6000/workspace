@@ -1,0 +1,34 @@
+<template name="model_pay">
+<view class='model' wx:if="{{modalPayBtns}}">
+  <view class='model_content'>
+    <view class='inner'>
+       <view class="title">接单需要支付保证金</view>
+       <view class="subtitle">
+        保证金：{{bond}}元
+       </view>
+        <view class="subtitle">
+          <radio-group class="radio-group" bindchange="payTypeChange">
+            <label class='model_cell_item'>
+              <radio value='1' />
+              <text class='fui_item'>微信支付</text>
+            </label>
+            <label class='model_cell_item'>
+              <block wx:if="{{!credit_enough}}">
+                <radio value='2' disabled='false' />
+                <text class='fui_item disabled'>余额支付(余额不足以支付)</text>
+              </block>
+              <block wx:else>
+                <radio value='2' />
+                <text class='fui_item'>余额支付</text>
+              </block>
+            </label>
+          </radio-group>
+        </view>
+        <view class="model-btns">
+          <view bindtap="check_pay" class="confirm">支付</view>
+            <view bindtap="hide_paybtns" class="cancel">取消</view>
+        </view>
+    </view>
+  </view>
+</view>
+</template>
