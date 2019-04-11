@@ -22,7 +22,7 @@
   </view>
   <view class=' list-item' >
     <view class='list-text'>
-      <view class='line-title'>开始时间</view>
+      <view class='line-title'>开工时间</view>
       <view class='line-centent'>{{issuer.starttime}}</view>
     </view>
   </view>
@@ -59,7 +59,7 @@
 
 <view class='item-list'>
   <view class='item-title'>
-  <view>货物描述</view>
+  <view>货物描述和用功要求说明</view>
   </view>
   <view  class='item-content'>
     {{issuer.description}}

@@ -42,7 +42,7 @@
           </view>
         </view>
         <view class='weui-cell input-cell'>
-          <view class='weui-label  input-label'>开始时间：</view>
+          <view class='weui-label  input-label'>开工时间：</view>
           <view class='weui-input input-input'>
             <picker mode="multiSelector" value="{{dateTime}}" bindchange="getDateTime" bindcolumnchange="getDateTimeColumn" range="{{dateTimeArray}}">    
           <input hidden='true' name='starttime' value='{{starttime}}'></input>
@@ -126,7 +126,7 @@
 
       </view>
 
-      <view class='cell-title'>货物描述</view>
+      <view class='cell-title'>货物描述和用功要求说明</view>
       <view class='release-textarea'>
         <textarea wx:if="{{isShowText}}" name='description' placeholder='填写货物描述内容'  bindblur='onRemarkInput' bindconfirm='onShowText' focus='{{onFocus}}' value='{{description}}'></textarea>
         <view wx:else class='remarks' bindtap='onShowTextare'>{{description?description:'填写货物描述内容'}}</view> 
@@ -174,7 +174,7 @@
           </view>
         </view>
         <view class='weui-cell input-cell'>
-          <view class='weui-label  input-label'>开始时间：</view>
+          <view class='weui-label  input-label'>开工时间：</view>
           <view class='weui-input input-input'>
             <picker mode="multiSelector" value="{{dateTime}}" bindchange="getDateTime" bindcolumnchange="getDateTimeColumn" range="{{dateTimeArray}}">    
           <input hidden='true' name='starttime' value='{{starttime}}'></input>
@@ -247,7 +247,7 @@
         </view>
 
       </view>
-      <view class='cell-title'>货物描述</view>
+      <view class='cell-title'>货物描述和用功要求说明</view>
       <view class='release-textarea'>
         <textarea wx:if="{{isShowText}}" name='description' placeholder='填写货物描述内容'  bindblur='onRemarkInput' bindconfirm='onShowText' focus='{{onFocus}}' value='{{description}}'></textarea>
         <view wx:else class='remarks' bindtap='onShowTextare'>{{description?description:'填写货物描述内容'}}</view> 

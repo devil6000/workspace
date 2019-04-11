@@ -288,7 +288,7 @@ Page({
         total_price: temporary_light * this.data.count,
         count_price: count_price,
         bond: bond,
-        all_price: count_price + bond,
+        all_price: parseFloat(count_price) + parseFloat(bond),
         static: 1
       })
     }else{
@@ -301,7 +301,7 @@ Page({
         total_price: dock_light * this.data.count,
         count_price: count_price,
         bond: bond,
-        all_price: count_price + bond,
+        all_price: parseFloat(count_price) + parseFloat(bond),
         static: 1
       })
     }
@@ -323,7 +323,7 @@ Page({
           total_price: total_price,
           count_price: count_price,
           bond: bond,
-          all_price: bond + count_price
+          all_price: parseFloat(bond) + parseFloat(count_price)
         })
       }
     }else{
@@ -337,7 +337,7 @@ Page({
         total_price: this.data.prices,
         count_price: count_price,
         bond: bond,
-        all_price: bond + count_price
+        all_price: parseFloat(bond) + parseFloat(count_price)
       })
     }
   },
@@ -374,7 +374,7 @@ Page({
           total_price: total_price,
           count_price: count_price,
           bond: bond,
-          all_price: bond + count_price
+          all_price: parseFloat(bond) +  parseFloat(count_price)
         })
       }else{
         that.setData({
@@ -398,7 +398,7 @@ Page({
         total_price: value,
         count_price: count_price,
         bond: bond,
-        all_price: bond + count_price
+        all_price: parseFloat(bond) + parseFloat(count_price)
       })
     }
   },
@@ -417,7 +417,7 @@ Page({
           nums: value,
           count_price: count_price,
           bond: bond,
-          all_price: count_price + bond
+          all_price: parseFloat(count_price) + parseFloat(bond)
         })
       }else{
         //var count_price = value * that.data.price * that.data.count
@@ -427,7 +427,7 @@ Page({
           nums: value,
           count_price: count_price,
           bond: bond,
-          all_price: bond + count_price
+          all_price: parseFloat(bond) + parseFloat(count_price)
         })
       }
     }
