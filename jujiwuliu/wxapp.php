@@ -1631,7 +1631,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			// var_dump("SELECT *,(t.lat-".$lat.") * (t.lng-".$lng.") as dist FROM ".tablename($this->tabrelease)." as t left join (select rid as o_rid from ".tablename($this->taborder)." where openid = '".$_W['openid']."') as o on t.id=o.o_rid WHERE o.o_rid is null and t.uniacid='".$_W['uniacid']."' and (starttime-".time().")>1800 and t.pay_status=1 ORDER BY dist desc ");
 			//查询开工时间半小时以上的发布信息 秒1800
 //				$list = pdo_fetchall("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid and deleted=0 and id not in(SELECT id FROM ".tablename($this->taborder)." WHERE openid = '".$_W['openid']."') order by id desc", array(':uniacid' => $_W['uniacid']));
-			
+
 		}
 		if($_GPC['status']==2){
 			$list = pdo_fetchall("SELECT b.* FROM ".tablename($this->taborder)." a left join ".tablename($this->tabrelease)." b on a.rid=b.id WHERE b.uniacid=:uniacid and b.deleted=0 and a.openid=:openid and a.status<=2 and a.status>=0 and a.deleted=0 order by a.id desc", array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
@@ -1655,14 +1655,16 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                 }
             }
 
+            /*
             if($_GPC['status']){
                 $count = pdo_fetchcolumn('select count(id) from ' .  tablename($this->taborder) . ' where rid=:rid', array(':rid' => $res['id']));
             }
+            */
 
             //计算距离
             $res['distance']=$this->getDistance($res['lat'],$res['lng'],$lat,$lng);
             if($_GPC['status'] == 1){
-                if($default_distance >= 0){
+                if($default_distance > 0){
                     $distance_value = $this->distance_set[$default_distance];
                     if($res['distance'] > $distance_value){
                         unset($list[$key]);
@@ -1716,7 +1718,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                 continue;
             }
             $distance = $this->getDistance($item['lat'],$item['lng'],$lat,$lng);
-            if($default_distance >= 0){
+            if($default_distance > 0){
                 $distance_value = $this->distance_set[$default_distance];
                 if($distance > $distance_value){
                     unset($data_status1[$key]);
