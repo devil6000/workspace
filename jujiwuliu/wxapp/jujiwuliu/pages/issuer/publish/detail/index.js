@@ -316,7 +316,10 @@ Page({
                                 title: '温馨提示',
                                 content: '操作成功！',
                                 success: function () {
-                                  that.onLoad(that.data.options)
+                                  wx.navigateTo({
+                                    url: '/jujiwuliu/pages/issuer/publish/detail/index?issuer_id=' + that.data.issuer.id
+                                  });
+                                  //that.onLoad(that.data.options)
                                     // that.onShow();
                                     /*
                                     var pages = getCurrentPages();

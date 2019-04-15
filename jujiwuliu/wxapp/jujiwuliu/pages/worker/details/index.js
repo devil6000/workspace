@@ -264,7 +264,7 @@ Page({
           'payData.modalPayBtns': !data.deposit_paystatus,
           /*modalPayBtns: !data.deposit_paystatus,*/
           present: data.distance <= 15 ? true : false,
-          applystatus: data.apply
+          applystatus: data.apply == 1 ? true : false
         })
       },
       fail: function (res) {
@@ -356,9 +356,9 @@ Page({
           content: '提交成功，若发布方3天未审核将自动打款！',
           showCancel: false,
           success:function(res){
-              that.setData({
-                applystatus: true
-              })
+            wx.navigateTo({
+              url: '/jujiwuliu/pages/worker/details/index?id=' + that.options.id,
+            })
           }
         })
       },
@@ -479,6 +479,11 @@ Page({
   },
   bindchange: function (e) {//轮播图无限滚动
     this.setData({ current: e.detail.current })
+  },
+  callPhone: function(){
+    wx.makePhoneCall({
+      phoneNumber: this.data.data.release_mobile
+    })
   },
 
   /**

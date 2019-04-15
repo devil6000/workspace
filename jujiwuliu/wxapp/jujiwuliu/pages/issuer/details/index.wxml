@@ -29,7 +29,9 @@
         <view class='info-cell-item' style='width:calc(100% - 150rpx);float:left;white-space: nowrap;text-overflow:ellipsis;overflow:hidden;'>地点：<text style='color:#666;'>{{data.address}}</text></view>
         <view class='right lcoation'><image src='../../../resource/images/icon_01.png'></image>{{data.distance}}km</view>
     </navigator>
-    
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item' bindtap='callPhone'>联系方式：<text>{{data.jd_mobile}}</text></view>
+    </view>
     </view>
 
 

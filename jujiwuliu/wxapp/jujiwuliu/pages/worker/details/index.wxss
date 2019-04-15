@@ -92,6 +92,9 @@ page{
   margin-left: 5%;
   margin-bottom: 10px;
 }
+.btn-cancel.wait {
+  background: #ccc;
+}
 .btn-fulfil{
   line-height: 100rpx;
   color: #fff;

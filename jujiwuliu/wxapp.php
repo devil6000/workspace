@@ -1708,7 +1708,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		//unset($res);
 		$data['list'] = $list;
 //		$data['status1'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid and deleted=0 and id not in(SELECT id FROM ".tablename($this->taborder)." WHERE openid = '".$_W['openid']."')", array(':uniacid' => $_W['uniacid']));
-		$data_status1 = pdo_fetchall("SELECT lat,lng,id FROM ".tablename($this->tabrelease)." as t left join (select rid as o_rid from ".tablename($this->taborder)." where openid = :openid) as o on t.id=o.o_rid WHERE o.o_rid is null and t.uniacid=:uniacid and t.pay_status=1 and t.deleted=0 and (starttime-".time().")>1800  " , array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
+		$data_status1 = pdo_fetchall("SELECT lat,lng,id FROM ".tablename($this->tabrelease)." as t left join (select rid as o_rid from ".tablename($this->taborder)." where openid = :openid) as o on t.id=o.o_rid WHERE o.o_rid is null and t.uniacid=:uniacid and t.pay_status=1 and t.deleted=0 and (starttime-".time().")>10" , array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
 		foreach ($data_status1 as $key => $item){
             $count = pdo_fetchcolumn('select count(id) from ' .  tablename($this->taborder) . ' where rid=:rid and status<>4', array(':rid' => $item['id']));
             if(!empty($count) && $count >= $res['nums']){
@@ -1719,7 +1719,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             if($default_distance >= 0){
                 $distance_value = $this->distance_set[$default_distance];
                 if($distance > $distance_value){
-                    unset($list[$key]);
+                    unset($data_status1[$key]);
                     continue;
                 }
             }
@@ -1755,11 +1755,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		// var_dump($id);die;
 		if(!empty($item)){
             $deposit = $item['total_price'] * $setting['security'] / 100;   //保证金
-			$or_prim=array(':uniacid' => $_W['uniacid'], ':rid' => $item['id']);
-			//if(empty($rid)){
-				$or_prim[':openid']=$_W['openid'];
-				$or_condition=' and openid =:openid ';
-			//}
+            $or_prim=array(':uniacid' => $_W['uniacid'], ':rid' => $item['id']);
+            if(empty($id)){
+                $or_prim[':openid']=$_W['openid'];
+                $or_condition=' and openid =:openid ';
+            }else{
+                $or_prim[':id']=$id;
+                $or_condition=' and id =:id ';
+            }
+
 			$order = pdo_fetch("SELECT * FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and deleted=0 and rid=:rid".$or_condition,$or_prim);
 			if(!empty($order)){
 				$item['orderid'] = $order['id'];
@@ -1790,8 +1794,19 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 				$distance=json_decode($distance,true);
 	 			$item['distance']=$distance['result']['rows'][0]['elements'][0]['distance']?rand((($distance['result']['rows'][0]['elements'][0]['distance'])/1000),2):$item['distance'];
 			}
-			
-			//计算抽成后价格与金额
+
+			//获取发布方手机号
+            $phone = pdo_fetchcolumn('select mobile from ' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $item['openid']));
+			$item['release_mobile'] = $phone;
+			//获取接单方手机号
+            if(empty($order)){
+                $jd_openid = $_W['openid'];
+            }else{
+                $jd_openid = $order['openid'];
+            }
+            $jd_phone = pdo_fetchcolumn('select mobile from ' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $jd_openid));
+			$item['jd_mobile'] = $jd_phone;
+            //计算抽成后价格与金额
 			
 			//$item['price']=$item['price']-$item['price']*$setting['pumping']/100;
 			//$item['total_price']=$item['total_price']-$item['total_price']*$setting['pumping']/100;

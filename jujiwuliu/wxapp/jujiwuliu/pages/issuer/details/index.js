@@ -212,6 +212,11 @@ Page({
   bindchange: function (e) {//轮播图无限滚动
     this.setData({ current: e.detail.current })
   },
+  callPhone: function(){
+    wx.makePhoneCall({
+      phoneNumber: this.data.data.jd_mobile,
+    })
+  },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作

@@ -35,6 +35,9 @@
         <view class='info-cell-item' style='width:calc(100% - 150rpx);float:left;white-space: nowrap;text-overflow:ellipsis;overflow:hidden;'>地点：<text style='color:#666;'>{{data.address}}</text></view>
         <view class='right lcoation'><image src='../../../resource/images/icon_01.png'></image>{{data.distance}}km</view>
     </navigator>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item' bindtap='callPhone'>联系方式：<text>{{data.release_mobile}}</text></view>
+    </view>
     
     </view>
 
@@ -73,7 +76,12 @@
   </block>
   -->
   <block wx:if="{{data.orderid && data.order_status != 4}}">
-    <view class='btn-cancel' bindtap='cancelOrder'>取消订单</view>
+    <block wx:if="{{data.order_status == 0}}">
+      <view class='btn-cancel' bindtap='cancelOrder'>取消订单</view>
+    </block>
+    <block wx:else>
+      <view class='btn-cancel wait'>取消订单</view>
+    </block>
     <block wx:if="{{data.deposit_paystatus == 0}}">
       <view class='btn-fulfil' bindtap='payDeposit'>支付保证金</view>
     </block>
