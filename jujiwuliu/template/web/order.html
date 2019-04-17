@@ -86,15 +86,14 @@
 				<table class="table table-hover">
 					<thead class="navbar-inner">
 						<tr>
-							<th>
-								发布信息<br>
-								<label style="color: red;">(点击查看)</label>
-							</th>
-							<th>单价</th>
-							<th>价格（预计收款）</th>
-							<th>违约金</th>
+							<th style="width: 50px;">接单人</th>
+							<th>订单号</th>
 							<th>接单时间</th>
-							<th>完成（打款）时间</th>
+							<th>订单金额</th>
+							<th>平台抽成{$setting['pumping']}%</th>
+							<th>保证金{$setting['security']}%</th>
+							<th>人数</th>
+							<th>预计工费</th>
 							<th>状态</th>
 							<th>操作</th>
 						</tr>
@@ -102,44 +101,20 @@
 					<tbody>
 						{loop $list $row}
 						<tr>
-							<td style="text-align: center;">
-								<a href="{php echo $this->createWebUrl('release', array('op' => 'display','id' => $row['release']['id']))}">
-									<img src="{php echo tomedia($row['release']['images'][0])}"  style="max-height: 50px;max-width: 50px;"/>
-									<br>
-									{$row['release']['typename']}
-									<br>
-									{$row['release']['staticname']} 
-								</a>
+							<td>
+								{$row['member']['nickname']}
+								<br />
+								<img src="{$row['member']['avatar']}" height="50" width="50" />
 							</td>
-							
-							<td>{$row['release']['price']}</td>
-							<td>{$row['release']['total_price']}</td>
+							<td>{$row['release']['ordersn']}</td>
+							<td>{$row['createtime']}</td>
+							<td>{$row['release']['money']}</td>
+							<td>{$row['release']['pumping']}</td>
 							<td>{$row['deposit']}</td>
-							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
+							<td>{$row['release']['num']}/{$row['release']['nums']}</td>
+							<td>{$row['release']['total_price']}</td>
+							<td>{$row['status']}</td>
 							<td>
-								{if !empty($row['apply_time'])}
-								{php echo date('Y-m-d H:i:s',$row['apply_time'])}
-								{/if}
-							</td>
-							<td>
-								{if $row['status']==0}
-								<label class="label label-info">接单中</label>
-								{elseif $row['status'] == 2}
-								<label class="label label-info">工作中</label>
-								{elseif $row['status'] == 3}
-								<label class="label label-info">已完成</label>
-								{elseif $row['status'] == 4}
-								<label class="label label-info">已取消</label>
-								{/if}
-								{if $row['count_price']==1}
-								<label class="label label-danger">已打款</label>
-								{/if}
-								{if $row['count_price']==-1}
-								<label class="label label-danger">已取消</label>
-								{/if}
-							</td>
-							<td>
-								<!-- <a href="{php echo $this->createWebUrl('order', array('op' => 'post','id' => $row['id']))}" class="btn btn-default btn-sm" title="编辑"><i class="fa fa-edit"></i> 编辑</a> -->
 								{if $row['can_refund_bond'] == 1 && $row['deposit_paystatus'] == 2}
 								<a href="{php echo $this->createWebUrl('order', array('op' => 'refund','id' => $row['id']))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i> 退保证金</a>
 								{/if}

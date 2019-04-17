@@ -193,7 +193,7 @@ Page({
     //发布方确认打款
     
     app.util.request({
-      url: 'entry/wxapp/setapply',
+      url: 'entry/wxapp/setreleaseapply',
       data: { id: that.data.data.orderid},
       method: "POST",
       success: function (res) {
@@ -206,6 +206,26 @@ Page({
       fail: function (res) {
         console.log(res)
         return false;
+      }
+    })
+  },
+  //确认打款，修改订单为完成状态
+  fulfulPay: function(){
+    var that = this;
+    wx.showModal({
+      title: '温馨提示',
+      content: '确认要打款？',
+      success: function(res){
+        if(res.confirm){
+          app.util.request({
+            url: 'entry/wxapp/releasePay',
+            data: {id: that.data.data.orderid},
+            method: "POST",
+            success: function(res){
+              wx.onLoad(that.data.options);
+            }
+          })
+        }
       }
     })
   },

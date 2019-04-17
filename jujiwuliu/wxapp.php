@@ -1605,6 +1605,60 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         }
     }
 
+    /**
+     * 发布方申请结算
+     */
+    public function doPageSetreleaseapply(){
+        global $_W,$_GPC;
+        $id = intval($_GPC['id']);
+        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and apply=0 and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+        if(empty($order)){
+            return $this->result(1, '没有找到可结算订单');
+        }
+        $ref = pdo_update($this->taborder, array('apply' => 1, 'apply_time'=>time(), 'status' => 2), array('id' => $id, 'uniacid' => $_W['uniacid']));
+        if($ref){
+            return $this->result(0,'');
+        }else{
+            return $this->result(1,'结算失败');
+        }
+    }
+
+    /**
+     * 发布方确认打款
+     */
+    public function doPageReleasePay(){
+        global $_W,$_GPC;
+        $id = intval($_GPC['id']);
+        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and apply=1 and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+        if(empty($order)){
+            return $this->result(1, '没有找到可结算订单');
+        }
+
+        $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id and uniacid=:uniacid', array(':id' => $order['rid'], ':uniacid' => $_W['uniacid']));
+
+        $member = mc_openid2uid($release['openid']);
+
+        $log=array(
+            $member,
+            '发布方确认打款',
+            'jujiwuliu',
+            '',
+            '',
+            4,
+            $release['ordersn']
+        );
+
+        $uid=mc_openid2uid($order['openid']);
+
+        $i = $this->credit_update($uid, 'credit2', $release['total_count'], $log);
+        if($i){
+            pdo_update($this->taborder, array('status' => 3), array('id' => $id, 'uniacid' => $_W['uniacid']));
+            return $this->result(0,'');
+        }else{
+            return $this->result(1, '确认打款失败');
+        }
+    }
+
 	//发布方所有方法结束
 	
 	//下面是搬运工所有方法
@@ -1977,7 +2031,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             $setting=$this->seeting;
 
             //押金
-            $deposit = $release['count_price'] * $setting['security'] / 100;
+            $deposit = ($release['count_price'] / $release['nums']) * $setting['security'] / 100;
 
             $depositsn = $this->createNO('order','depositsn','JU');
 			$data = array(
@@ -2214,28 +2268,18 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             //计算抽成后价格与金额
 
             $release['price']=$release['price']-$release['price']*$seeting['pumping']/100;
-            $release['total_price']=$release['total_price']-$release['total_price']*$seeting['pumping']/100;
+            //$release['total_price']=$release['total_price']-$release['total_price']*$seeting['pumping']/100;
             $release['count_price']=$release['count_price']-$release['count_price']*$seeting['pumping']/100;
 
-            pdo_begin();
-            $upord1 = pdo_update($this->taborder, array('status' => 1), array('id' => $id, 'uniacid' => $_W['uniacid'], 'openid' => $_W['openid']));
-            $upord2 = pdo_update($this->tabrelease, array('status' => 1), array('id' => $order['rid'], 'uniacid' => $_W['uniacid']));
-            if($upord1 && $upord2){
-                pdo_commit();
-
-                $release['static'] = 1;
-                $release['staticname'] = $this->static_set[$release['static']];
-
-                //开工信息提醒
-
-                $this->result($errno,$message,$release);
+            if($release['status'] == 1){
+                //已有人开工
+                $upord1 = pdo_update($this->taborder, array('status' => 1), array('id' => $id, 'uniacid' => $_W['uniacid'], 'openid' => $_W['openid']));
+                if($upord1){
+                    $this->result($errno,$message,$release);
+                }else{
+                    $this->result(1,"开工时间或地点不正确");
+                }
             }else{
-                pdo_rollback();
-                $this->result(1,"开工时间或地点不正确");
-            }
-
-            /*
-            if($release['distance'] < 15 && ($release['starttime'] <= time())){
                 pdo_begin();
                 $upord1 = pdo_update($this->taborder, array('status' => 1), array('id' => $id, 'uniacid' => $_W['uniacid'], 'openid' => $_W['openid']));
                 $upord2 = pdo_update($this->tabrelease, array('status' => 1), array('id' => $order['rid'], 'uniacid' => $_W['uniacid']));
@@ -2244,15 +2288,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
                     $release['static'] = 1;
                     $release['staticname'] = $this->static_set[$release['static']];
+
+                    //开工信息提醒
+
                     $this->result($errno,$message,$release);
                 }else{
                     pdo_rollback();
                     $this->result(1,"开工时间或地点不正确");
                 }
-            }else{
-                $this->result(1,"开工时间或地点不正确");
             }
-            */
         }
     }
 

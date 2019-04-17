@@ -4,31 +4,40 @@ global $_W, $_GPC;
 
 $op = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 
+$setting=pdo_fetch("SELECT * FROM ".tablename('jujiwuliu_setting')." WHERE uniacid=:uniacid ", array(':uniacid' => $_W['uniacid']));
+
 if($op=='display'){
     $rid=$_GPC['r_id'];
     $keyword = $_GPC['keyword'];
     $condition = 'uniacid=' . $_W['uniacid'] . ' and deleted=0';
     if(!empty($keyword)){
-        $condition.=' and (id ='.$keyword.')';
+        $openid = pdo_fetchcolumn('select openid from ' . tablename('jujiwuliu_members') . ' where (mobile like :keyword or realname like :keyword or nickname like :keyword) and uniacid=:uniacid', array(':keyword' => '%' . $keyword . '%', ':uniacid' => $_W['uniacid']));
+        $condition.= " and openid='" . $openid . "'";
     }
     if(!empty($rid)){
         $condition.=' and (rid ='.$rid.')';
     }
     $pindex = max(1,intval($_GPC['page']));
     $psize = 20;
-    $total = pdo_fetchcolumn('select count(*) from '.tablename($this->taborder).' where uniacid ='.$_W['uniacid'].' '.$condition.'  and deleted=0  ');
-    $list = pdo_fetchall('select * from '.tablename($this->taborder).' where '.$condition.' order by id desc LIMIT '.($pindex-1)*$psize.','.$psize);
+    $total = pdo_fetchcolumn('select count(*) from '.tablename($this->taborder).' where ' . $condition);
+    $list = pdo_fetchall('select * from '.tablename($this->taborder).' where '.$condition.' order by rid desc LIMIT '.($pindex-1)*$psize.','.$psize);
+    $nums = array();    //保存数量临时变量
     foreach($list as & $res){
-        $res['release'] = pdo_fetch('select * from '.tablename($this->tabrelease).' where uniacid='.$_W['uniacid'].' and id="'.$res['rid'].'"  and deleted=0 ');
-        
-        $res['release']['typename'] = $this->type_set[$res['release']['type']];
-        $res['release']['unit'] = $this->unit_set[$res['release']['type']];	
-        $res['release']['staticname'] = $this->static_set[$res['release']['static']];
-        $res['release']['sex'] = $this->sex_set[$res['release']['sex']];
-        $res['release']['statusname'] =  $this->status_set[$res['release']['status']];
-
-        $res['release']['images']=unserialize($res['release']['images']);
+        $res['createtime'] = date('m/d/y', $res['createtime']);
+        $res['member'] = pdo_fetch('select * from ' . tablename($this->tabmember) . ' where openid=:openid and uniacid=:uniacid', array(':openid' => $res['openid'], ':uniacid' => $_W['uniacid']));
+        $release = pdo_fetch('select * from '.tablename($this->tabrelease).' where uniacid='.$_W['uniacid'].' and id="'.$res['rid'].'"  and deleted=0 ');
+        if(!empty($release)){
+            $nums[$res['rid']] += 1;    //人数累加
+            $res['release']['ordersn'] = $release['ordersn'];
+            $res['release']['nums'] = $release['nums'];
+            $res['release']['num'] = intval($nums[$res['rid']]);
+            $res['release']['money'] = round(floatval($release['count_price']) / intval($release['nums']),2);
+            $res['release']['pumping'] = round(floatval($release['count_price']) / intval($release['nums'] * $setting['pumping'] / 100),2);
+            $res['release']['total_price'] = $release['total_price'];
+        }
+        $res['status'] = $this->order_status_set($res['status']);
     }
+    unset($res);
 
     $pager = pagination($total, $pindex, $psize);
 }

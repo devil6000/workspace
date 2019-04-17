@@ -72,6 +72,7 @@ class jujiwuliuModuleSite extends WeModuleSite {
 		$this->static_set = array('1' => '轻度活', '2' => '中度活', '3' => '重度活', '4' => '一口价');
 		$this->sex_set = array('0' => '不限', '1' => '男', '2' => '女');
 		$this->status_set = array('0' => '发布中', '1' => '工作中', '2' => '已完成', '4' => '已取消');
+		$this->order_status_set = array('0' => '接单中', '1' => '工作中', '2' => '', '3' => '已完成', '4' => '已取消');
 		
 //		$refund= $this->refund('PU20181125103540849649',0.01,'后台处理退款！');//退款方法
 		
@@ -407,7 +408,8 @@ class jujiwuliuModuleSite extends WeModuleSite {
 				$res['unit'] = $this->unit_set[$res['type']];	
 				$res['staticname'] = $this->static_set[$res['static']];
 				$res['sex'] = $this->sex_set[$res['sex']];
-				$res['starttime'] = !empty($res['starttime']) ? date('Y-m-d H:i:s', $res['starttime']) : '';
+				$res['createtime'] = date('m/d/y', $res['createtime']);
+				$res['starttime'] = !empty($res['starttime']) ? date('m/d/y', $res['starttime']) : '';
 				$res['statusname'] =  $this->status_set[$res['status']];
 				$res['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and deleted=0", array(':uniacid' => $_W['uniacid'], ':rid' => $res['id']));
 				$res['gptu'] = $res['nums']  - $res['yet'];
