@@ -71,8 +71,8 @@ class jujiwuliuModuleSite extends WeModuleSite {
 		$this->unit_set = array('0' => '吨', '1' => '天');		
 		$this->static_set = array('1' => '轻度活', '2' => '中度活', '3' => '重度活', '4' => '一口价');
 		$this->sex_set = array('0' => '不限', '1' => '男', '2' => '女');
-		$this->status_set = array('0' => '发布中', '1' => '工作中', '2' => '已完成', '4' => '已取消');
-		$this->order_status_set = array('0' => '接单中', '1' => '工作中', '2' => '', '3' => '已完成', '4' => '已取消');
+		$this->status_set = array('0' => '发布中', '1' => '工作中', '3' => '已完成', '4' => '已取消');
+		$this->order_status_set = array('0' => '接单中', '1' => '工作中', '2' => '已完工', '3' => '已完成', '4' => '已取消');
 		
 //		$refund= $this->refund('PU20181125103540849649',0.01,'后台处理退款！');//退款方法
 		
@@ -501,19 +501,43 @@ class jujiwuliuModuleSite extends WeModuleSite {
         }
 
         if($op == 'detail'){
+            $setting=pdo_fetch("SELECT * FROM ".tablename('jujiwuliu_setting')." WHERE uniacid=:uniacid ", array(':uniacid' => $_W['uniacid']));
             $id = intval($_GPC['id']);
             $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id and uniacid=:uniacid' . $condition, array(':id' => $id, ':uniacid' => $_W['uniacid']));
-            $release['type_str'] = $this->type_set[$release['type']];
-            $release['static_str'] = $this->static_set[$release['static']];
+            if(empty($release)){
+                message('信息不存在或已删除', referer(), 'error');
+                exit;
+            }
+            $release_member = pdo_fetch('select * from ' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $release['openid']));
+            $release['nickname'] = $release_member['nickname'];
+            $release['avatar'] = $release_member['avatar'];
+            if($release['static'] == '4') {
+                $release['release_str'] = '一口价 + 保证金';
+            }else{
+                if($release['type'] == '0'){
+                    $release['release_str'] = '单价 * 吨数 + 保证金';
+                }else{
+                    $release['release_str'] = '单价 * 天数 + 保证金';
+                }
+            }
+            $release['money'] = $release['count_price'] + $release['cancel_refund_money'];
+            $release['createtime'] = date('Y/m/d', $release['createtime']);
+            $release['starttime'] = date('m/d/y', $release['starttime']);
+            $release['status'] = $this->status_set[$release['status']];
             $release['unit_str'] = $this->unit_set[$release['type']];
-
-
 
             $list = pdo_fetchall('select * from ' . tablename($this->taborder) . ' where rid=:id and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
             if($list){
+                $total = 0;
                 foreach ($list as $key => $item){
                     $user = pdo_fetch('select * from ' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $item['openid']));
-                    $item['user'] = $user;
+                    $item['nickname'] = $user['nickname'];
+                    $item['createtime'] = date('m/d/y', $item['createtime']);
+                    $item['avatar'] = $user['avatar'];
+                    $item['pumping'] = round(floatval($release['count_price']) / intval($release['nums']) * $setting['pumping'] / 100,2);
+                    $total += 1;
+                    $item['num'] += $total;
+                    $item['status_str'] = $this->order_status_set[$item['status']];
                     $list[$key] = $item;
                 }
             }

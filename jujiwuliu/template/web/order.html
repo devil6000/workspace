@@ -115,6 +115,7 @@
 							<td>{$row['release']['total_price']}</td>
 							<td>{$row['status']}</td>
 							<td>
+								<a href="{php echo $this->createWebUrl('release', array('op' => 'detail', 'id' => $row['rid']))}" class="btn btn-default btn-sm" title="查看订单"><i class="fa fa-edit"></i> 查看订单</a>
 								{if $row['can_refund_bond'] == 1 && $row['deposit_paystatus'] == 2}
 								<a href="{php echo $this->createWebUrl('order', array('op' => 'refund','id' => $row['id']))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i> 退保证金</a>
 								{/if}

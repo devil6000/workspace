@@ -32,10 +32,10 @@ if($op=='display'){
             $res['release']['nums'] = $release['nums'];
             $res['release']['num'] = intval($nums[$res['rid']]);
             $res['release']['money'] = round(floatval($release['count_price']) / intval($release['nums']),2);
-            $res['release']['pumping'] = round(floatval($release['count_price']) / intval($release['nums'] * $setting['pumping'] / 100),2);
+            $res['release']['pumping'] = round(floatval($release['count_price']) / intval($release['nums']) * $setting['pumping'] / 100,2);
             $res['release']['total_price'] = $release['total_price'];
         }
-        $res['status'] = $this->order_status_set($res['status']);
+        $res['status'] = $this->order_status_set[$res['status']];
     }
     unset($res);
 

@@ -1836,7 +1836,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$item['sex'] = $this->sex_set[$item['sex']];
 			$item['starttime'] = !empty($item['starttime']) ? date('Y-m-d H:i:s', $item['starttime']) : '';
 			$item['statusname'] =  $this->status_set[$item['status']];
-			$item['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and deleted=0", array(':uniacid' => $_W['uniacid'], ':rid' => $item['id']));
+			$item['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and status<>4 and deleted=0", array(':uniacid' => $_W['uniacid'], ':rid' => $item['id']));
 			$item['gptu'] = $item['nums']  - $item['yet'];
 			$item['deposit_paystatus'] = empty($order) ? 1 : $order['deposit_paystatus'];
 			$item['credit_enough'] = ($this->user['credit2'] - $deposit) >= 0 ? 1 : 0;
@@ -2366,6 +2366,12 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         if(empty($order)){
             return $this->result(1, '订单保证金已支付！');
         }
+        $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id and uniacid=:uniacid', array(':id' => $order['rid'], ':uniacid' => $_W['uniacid']));
+        $count = pdo_fetchcolumn('select count(id) from ' . tablename($this->taborder) . ' where rid=:rid and status<>4', array(':rid' => $release['id']));
+        if($release['nums'] >= intval($count)){
+            return $this->result(1,'单子已被接，请选择其它单子');
+        }
+
         $credit_enough = ($this->user['credit2'] - $order['deposit']) >= 0 ? 1 : 0;
 
         $depositsn = $this->createNO('order','depositsn','JU');

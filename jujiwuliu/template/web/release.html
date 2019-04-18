@@ -152,114 +152,119 @@
 {/if}
 
 {if $op == 'detail'}
-	<div class="panel panel-default">
-		<div class="panel-heading">发布信息</div>
-		<div class="panel-body">
-			<div class="main form-horizontal">
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-8">
-						<div class="form-control-static">{$release['type_str']} {$release['static_str']}</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">
-						{if $release['unit'] == 0}
-							数量
-						{else}
-							天数
-						{/if}
-					</label>
-					<div class="col-sm-8"><div class="form-control-static">{$release['count']} {$release['unit_str']}</div></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">开始时间</label>
-					<div class="col-sm-8"><div class="form-control-static">{php echo date('Y-m-d H:i:s', $release['starttime'])}</div></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">用工地点</label>
-					<div class="col-sm-8"><div class="form-control-static">{$release['address']}</div></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">需要人数</label>
-					<div class="col-sm-8"><div class="form-control-static">{$release['nums']}</div></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">状态</label>
-					<div class="col-sm-8">
-						<div class="form-control-static">
-							{if $release['status'] == 0}
-								接单中
-							{elseif $release['status'] == 1}
-								开工
-							{elseif $release['status'] == 3}
-								完成
-							{elseif $release['status'] == 4}
-								取消
-							{/if}
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="panel panel-default">
+	<div class="panel-heading">订单详情</div>
+	<div class="panel-body">
+		<div class="alert alert-info" role="alert">
+			订单号：{$release['ordersn']}&nbsp;&nbsp;&nbsp;&nbsp;发布时间：{$release['createtime']}
 		</div>
-		<div class="panel-heading">接单信息</div>
-		<div class="panel-body table-responsive">
-			<table class="table table-hover">
-				<thead class="navbar-inner">
-					<tr>
-						<th>会员信息</th>
-						<th>接单时间</th>
-						<th>保证金(元)</th>
-						<th>支付状态</th>
-						<th>订单状态</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-				{loop $list $row}
+		<div class="panel-body"></div>
+		<div class="table-responsive">
+			<table class="table">
+			<tr>
+				<td>发布人</td>
+				<td>
+					<table class="table">
+						<thead>
+						<tr>
+							<th>发布人</th>
+							<th>
+								计算方式
+								<br />
+								(一口价/吨数/天数)
+							</th>
+							<th>单价</th>
+							<th>数量(吨，天)</th>
+							<th>保证金{$setting['security']}%</th>
+							<th>人数</th>
+							<th>支付总额</th>
+							<th>开工时间</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>{$release['nickname']}<br /><img src="{$release['avatar']}" style="width:50px; height: 50px;"></td>
+							<td>{$release['release_str']}</td>
+							<td>
+								{if $release['static'] == 4}
+									{$release['count_price']}元/一口价
+								{else}
+									{$release['price']}元/{$release['unit_str']}
+								{/if}
+							</td>
+							<td>{$release['count']}{$release['unit_str']}</td>
+							<td>{$release['cancel_refund_money']}元</td>
+							<td>{$release['nums']}</td>
+							<td>{$release['money']}</td>
+							<td>{$release['starttime']}</td>
+							<td>{$release['status']}</td>
+							<td>
+								{if $release['can_refund_bond'] >0 && $release['apply_refund_bond'] == 1}
+								<a href="{php echo $this->createWebUrl('release', array('op' => 'refund', 'id' => $release['id'], 'type' => 'bond'))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i>退保证金</a>
+								{/if}
+								{if $release['apply_refund'] == 1}
+								<a href="{php echo $this->createWebUrl('release', array('op' => 'refund', 'id' => $release['id'], 'type' => 'money'))}" class="btn btn-default btn-sm" title="退款"><i class="fa fa-edit"></i>退款</a>
+								{/if}
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<div class="panel-body"></div>
+		<div class="table-responsive">
+			<table class="table">
 				<tr>
+					<td>接单人</td>
 					<td>
-						{if $row['user']['avatar']}
-						<img src="{$row['user']['avatar']}" style="width: 30px; height: 30px;" />&nbsp;
-						{/if}
-						{$row['user']['nickname']}
-					</td>
-					<td>{php echo date('Y-m-d H:i:s', $row['createtime'])}</td>
-					<td>{$row['deposit']}</td>
-					<td>
-						{if $row['deposit_paystatus'] == 0}
-							未支付
-						{elseif $row['deposit_paystatus'] == 1}
-							已支付
-						{elseif $row['deposit_paystatus'] == 2}
-							退款申请中
-						{elseif $row['deposit_paystatus'] == 3}
-							已退款
-						{/if}
-					</td>
-					<td>
-						{if $row['status'] == 0}
-							待开工
-						{elseif $row['status'] == 1}
-							已开工
-						{elseif $row['status'] == 3}
-							已完成
-						{elseif $row['status'] == 4}
-							已取消
-						{/if}
-					</td>
-					<td>
-						{if $row['apply'] == 1 && $release['status'] == 3}
-						<a href="{php echo $this->createWebUrl('order', array('op' => 'payapply','id' => $row['id']))}" class="btn btn-default btn-sm" title="结算打款"><i class="fa fa-edit"></i> 结算打款</a>
-						{/if}
-						{if $row['can_refund_bond'] == 1 && $row['deposit_paystatus'] == 2}
-						<a href="{php echo $this->createWebUrl('order', array('op' => 'refund','id' => $row['id']))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i> 退保证金</a>
-						{/if}
+						<table class="table">
+							<thead>
+							<tr>
+								<th>接单人</th>
+								<th>接单时间</th>
+								<th>计算方式</th>
+								<th>订单金额</th>
+								<th>平台抽成</th>
+								<th>保证金</th>
+								<th>人数</th>
+								<th>预计工费</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							{loop $list $row}
+							<tr>
+								<td>{$row['nickname']}<br /><img src="{$row['avatar']}" style="width: 50px; height: 50px;"></td>
+								<td>{$row['createtime']}</td>
+								<td>(总价-抽成)/人数</td>
+								<td>{$release['count_price']}元</td>
+								<td>{$row['pumping']}元</td>
+								<td>{$row['deposit']}元</td>
+								<td>{$row['num']}/{$release['nums']}</td>
+								<td>{$release['total_price']}</td>
+								<td>{$row['status_str']}</td>
+								<td>
+									{if $row['can_refund_bond'] == 1 && $row['deposit_paystatus'] == 2}
+									<a href="{php echo $this->createWebUrl('order', array('op' => 'refund','id' => $row['id']))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i> 退保证金</a>
+									{/if}
+									{if $row['apply'] == 1 && $release['status'] == 3}
+									<a href="{php echo $this->createWebUrl('order', array('op' => 'payapply','id' => $row['id']))}" class="btn btn-default btn-sm" title="打款"><i class="fa fa-edit"></i> 打款</a>
+									{/if}
+								</td>
+							</tr>
+							{/loop}
+							</tbody>
+						</table>
 					</td>
 				</tr>
-				{/loop}
-				</tbody>
 			</table>
 		</div>
 	</div>
+</div>
 {/if}
 {template 'common/footer'}
