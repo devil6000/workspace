@@ -210,7 +210,7 @@ Page({
     })
   },
   //确认打款，修改订单为完成状态
-  fulfulPay: function(){
+  fulfilPay: function(){
     var that = this;
     wx.showModal({
       title: '温馨提示',
@@ -222,7 +222,7 @@ Page({
             data: {id: that.data.data.orderid},
             method: "POST",
             success: function(res){
-              wx.onLoad(that.data.options);
+              that.onLoad(that.data.options);
             }
           })
         }

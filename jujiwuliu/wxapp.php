@@ -381,6 +381,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			}
 	
 		}
+        $reg=mc_fetch($uid,array($credittype));
+
 		$clerk_type = intval($log[5]) ? intval($log[5]) : 1;
 		$ordersn=strval($log[6]) ? strval($log[6]) : '';
 		$data = array(
@@ -394,11 +396,12 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			'clerk_id' => intval($log[3]),
 			'store_id' => intval($log[4]),
 			'clerk_type' => $clerk_type,
+            'residue'=>$reg[$credittype],
 			'ordersn' => $ordersn,
 			'remark' => $log[1],
 		);
 		pdo_insert($this->tabcreditlog,$data);
-		pdo_update($this->tabmember,array('credit1'=>($intolucer[$credittype]+$creditval)),array('id'=>$introducer_id,'uniacid'=>$_W['uniacid']));
+		pdo_update($this->tabmember,array('credit1'=>$reg[$credittype]),array('uid'=>$uid,'uniacid'=>$_W['uniacid']));
 		
 		return true;
 	}
@@ -1650,9 +1653,9 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         $uid=mc_openid2uid($order['openid']);
 
-        $i = $this->credit_update($uid, 'credit2', $release['total_count'], $log);
+        $i = $this->credit_update($uid, 'credit2', $release['total_price'], $log);
         if($i){
-            pdo_update($this->taborder, array('status' => 3), array('id' => $id, 'uniacid' => $_W['uniacid']));
+            pdo_update($this->taborder, array('status' => 3,'apply' => 2), array('id' => $id, 'uniacid' => $_W['uniacid']));
             return $this->result(0,'');
         }else{
             return $this->result(1, '确认打款失败');
@@ -2205,7 +2208,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $message = 'success';
         $id = intval($_GPC['id']);
 
-        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid and status=4 and deposit_paystatus=1 and can_refund_bond=1', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid and status in (3,4) and deposit_paystatus=1 and can_refund_bond=1', array(':id' => $id, ':uniacid' => $_W['uniacid']));
         if(empty($order)){
             return $this->result(1,'订单已申请退款或不存在');
         }
@@ -2309,20 +2312,23 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $errno = 0;
         $message = 'success';
         $rid = $_GPC['rid'];
-
-        $order = pdo_fetchall('select * from ' . tablename($this->taborder) . ' where rid=:id and uniacid=:uniacid and status=2', array(':id' => $rid, ':uniacid' => $_W['uniacid']));
-        if(empty($order)){
-            return $this->result(1,'未找到可完成订单');
+        //获取所有接单
+        $orders = pdo_fetchall('select * from ' . tablename($this->taborder) . ' where rid=:id and uniacid=:uniacid and status<>4', array(':id' => $rid, ':uniacid' => $_W['uniacid']));
+        if($orders){
+            $count = 0;
+            foreach ($orders  as $order){
+                if($order['status'] == 0 || $order['status'] == 1){
+                    $count += 1;
+                }
+            }
+            if($count){
+                return $this->result(1,'还有未完成的接单，无法完成订单');
+            }
         }
-
-        foreach ($order as $item){
-            pdo_update($this->taborder, array('status' => 3), array('id' => $item['id']));
-        }
-
-        //$release = pdo_fetch("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid and id=:id and deleted=0", array(':uniacid' => $_W['uniacid'], ':id' => $rid));
+        //将所有已申请结算，未完成的接单完成掉
+        pdo_update($this->taborder, array('status' =>3), array('rid' => $rid,'status' => 2));
         pdo_update($this->tabrelease, array('status' => 3), array('id' => $rid));
-        return $this->result(0,'完成');
-
+        return $this->result($errno,$message);
     }
 
     /**

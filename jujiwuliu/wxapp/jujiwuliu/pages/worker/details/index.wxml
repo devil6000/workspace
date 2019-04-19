@@ -108,6 +108,11 @@
       <block wx:elif="{{data.order_status == 2}}">
         <view class='btn-fulfil wait' bindtap=''>待发布方确认</view>
       </block>
+      <block wx:elif="{{data.order_status == 3}}">
+        <block wx:if="{{data.deposit_paystatus == 1 && data.can_refund_bond == 1 && data.deposit_paystatus == 1}}">
+          <view class='btn-fulfil' bindtap='applyrefundbond'>申请保证金退款</view>
+        </block>
+      </block>
     </block>
   </block>
   <block wx:elif="{{data.orderid && data.order_status == 4}}">
