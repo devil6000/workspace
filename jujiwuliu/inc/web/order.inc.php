@@ -82,7 +82,10 @@ if($op == 'refund'){
         4,
         $order['depositsn']
     );
-    $i = $this->credit_update($order['openid'], 'credit2', $order['deposit'], $log, true);
+
+    $uid = mc_openid2uid($order['openid']);
+
+    $i = $this->credit_update($uid, 'credit2', $order['deposit'], $log, true);
     if($i){
         pdo_update($this->taborder, array('deposit_paystatus' => 3), array('id' => $id));
         message('退保证金成功！', referer(), 'success');
@@ -100,16 +103,19 @@ if($op == 'payapply'){
 
     $log=array(
         1,
-        '发布方确认打款',
+        '系统确认打款',
         $this->module['name'],
         '',
         '',
         4,
         $release['ordersn']
     );
+
+    $uid = mc_openid2uid($order['openid']);
+
     $setting = pdo_fetch("SELECT * FROM ".tablename($this->tabsetting)." WHERE uniacid=:uniacid ", array(':uniacid' => $_W['uniacid']));
     $price = $release['total_price'] - $release['total_price'] * $setting['pumping'] / 100;
-    $i = $this->credit_update($order['openid'], 'credit2', $price, $log, true);
+    $i = $this->credit_update($uid, 'credit2', $price, $log, true);
     if($i){
         pdo_update($this->taborder, array('apply' => 2), array('id' => $id));
 

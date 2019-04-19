@@ -1969,6 +1969,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         $release = pdo_fetch("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid and id=:id and deleted=0 and pay_status=1", array(':uniacid' => $_W['uniacid'], ':id' => $info['rid']));
 
+        //判断是否已经被接单
+        $count = pdo_fetchcolumn('select count(id) from ' . tablename($this->taborder) . ' where rid=:id and status<>4', array(':id' => $release['id']));
+        if(!empty($count) && $count >= $release['nums']){
+            $uid = mc_openid2uid($_W['openid']);
+            $this->credit_update($uid,'credit2', $info['fee'], array(0,'系统退还保证金','jujiwuliu','','',4,$info['ordersn']), true);
+            return $this->result(1,'单子已被接，无法接单');
+        }
+
+
         $member = pdo_fetch("SELECT id FROM ".tablename($this->tabmember)." WHERE uniacid=:uniacid and openid=:openid ", array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
 
         $data = array(

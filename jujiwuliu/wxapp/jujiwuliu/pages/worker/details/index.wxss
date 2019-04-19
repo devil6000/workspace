@@ -80,6 +80,9 @@ page{
   text-align: center;
   margin-top: 30rpx;
 }
+.btn-submit.wait {
+  background: #ccc;
+}
 .btn-cancel{
   line-height: 100rpx;
   color: #fff;

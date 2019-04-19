@@ -79,9 +79,6 @@
     <block wx:if="{{data.order_status == 0}}">
       <view class='btn-cancel' bindtap='cancelOrder'>取消订单</view>
     </block>
-    <block wx:else>
-      <view class='btn-cancel wait'>取消订单</view>
-    </block>
     <block wx:if="{{data.deposit_paystatus == 0}}">
       <view class='btn-fulfil' bindtap='payDeposit'>支付保证金</view>
     </block>
@@ -92,25 +89,22 @@
       <block wx:elif="{{data.order_status == 1}}">
         <block wx:if="{{data.apply == 0 && !data.advance_payment}}">
           <block wx:if="{{!applystatus}}">
-            <view class='btn-fulfil' bindtap='fulfilOrder'>申请结算</view>
-          </block>
-          <block wx:else>
-            <view class='btn-fulfil wait' bindtap=''>申请结算</view>
+            <view class='btn-submit' bindtap='fulfilOrder'>申请结算</view>
           </block>
         </block>
         <block wx:elif="{{data.advance_payment}}">
-          <view class='btn-fulfil wait' bindtap=''>3天后打款</view>
+          <view class='btn-submit wait' bindtap=''>3天后打款</view>
         </block>
         <block wx:else>
-          <view class='btn-fulfil wait' bindtap=''>待发布方确认</view>
+          <view class='btn-submit wait' bindtap=''>待发布方确认</view>
         </block>
       </block>
       <block wx:elif="{{data.order_status == 2}}">
-        <view class='btn-fulfil wait' bindtap=''>待发布方确认</view>
+        <view class='btn-submit wait' bindtap=''>待发布方确认</view>
       </block>
       <block wx:elif="{{data.order_status == 3}}">
         <block wx:if="{{data.deposit_paystatus == 1 && data.can_refund_bond == 1 && data.deposit_paystatus == 1}}">
-          <view class='btn-fulfil' bindtap='applyrefundbond'>申请保证金退款</view>
+          <view class='btn-submit' bindtap='applyrefundbond'>申请保证金退款</view>
         </block>
       </block>
     </block>
