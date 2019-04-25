@@ -1178,6 +1178,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
 		$release=pdo_get($this->tabrelease,array('uniacid'=>$_W['uniacid'],'count_price'=>$_GPC['count_price'],'id'=>$id));
 		if($_GPC['static'] == 4){
+		    $_GPC['price'] = $_GPC['count_price'];
 		    /*
             if($_GPC['nums'] * $_GPC['price'] != $_GPC['count_price']){
                 $errno = 1;
@@ -1205,7 +1206,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			'createtime' => time(), 
 			'type' => $_GPC['type'], 
 			'static' => $_GPC['static'], 
-			'price' => $_GPC['price'], 
+			'price' => $_GPC['price'],
 			'images' => serialize(explode(',', $_GPC['images'])), 
 			'total_price' => $total_price,
 			'count_price' => $_GPC['count_price'], 

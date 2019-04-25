@@ -1176,7 +1176,7 @@ Page({
     var user_info = wx.getStorageSync('user_info');
 
     return {
-      title: '自定义转发标题',
+      title: '巨吉搬运',
       path: '/jujiwuliu/pages/index/index?introducer=' + app.util.base64_encode(user_info.id),
       // imageUrl:'https://wx.qlogo.cn/mmopen/vi_32/IYXncFLbvfZdjygNiaNyyoQn6yOI8icXZJEYTdibjhfkJKaIUlwTgLe9NZeFsRuJ1Mia7E2wRZXsiaEvy1C00Abiad6Q/132',
     }
