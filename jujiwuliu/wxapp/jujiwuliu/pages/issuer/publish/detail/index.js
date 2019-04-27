@@ -84,6 +84,34 @@ Page({
                 wx.redirectTo({
                   url: '../list/index',
                 })
+              }else{
+                wx.showModal({
+                  title: '温馨提示',
+                  content: res.data.message,
+                  showCancel: false
+                })
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+  //申请退还多余金额
+  apply_surplus: function(){
+    var that = this;
+    var issuer_id = this.data.options.issuer_id;
+    wx.showModal({
+      title: '温馨提示',
+      content: '确定申请退款多余金额',
+      success: function(res){
+        if(res.confirm){
+          app.util.request({
+            url: 'entry/wxapp/apply_surplus',
+            data: {rid: issuer_id},
+            success: function(res){
+              if(res.data.errno == 0){
+                that.onShow()
               }
             }
           })

@@ -123,22 +123,20 @@
 
 <!-- <view class='btn btn-draw_money' wx:if="{{issuer.accepts.length<=0}}" >更改价格</view> -->
 <block wx:if="{{issuer.status != 4}}">
-<!--<block wx:if="{{close_order_show}}">-->
-<block wx:if="{{issuer.status == 0}}">
-<!--<view class='btn btn-draw_money'  bindtap='make_money_model_show'>一键打款</view>-->
-<!--
-<block we:if="{{issuer.pay_status == 99}}">
-<view class='btn btn-draw_money' bindtap='pay_status'>支付</view>
-</block>
--->
-<view class='btn btn-draw_money' bindtap='cancel_ord'>取消发布</view>
-</block>
-<block wx:elif="{{issuer.status == 1}}">
-<view class='btn btn-draw_money'  bindtap='close_order'>完成订单</view>
-</block>
-<block wx:elif="{{issuer.status == 3 && issuer.can_refund_bond == 1 && apply_bond_status == 0}}">
-  <view class='btn btn-draw_money' bindtap='apply_bond'>申请退还保证金</view>
-</block>
+  <block wx:if="{{issuer.status == 0}}">
+  <view class='btn btn-draw_money' bindtap='cancel_ord'>取消发布</view>
+  </block>
+  <block wx:elif="{{issuer.status == 1}}">
+  <view class='btn btn-draw_money'  bindtap='close_order'>完成订单</view>
+  </block>
+  <block wx:elif="{{issuer.status == 3}}">
+    <block wx:if="{{issuer.can_refund_bond == 1 && apply_bond_status == 0}}">
+      <view class='btn btn-draw_money' bindtap='apply_bond'>申请退还保证金</view>
+    </block>
+    <block wx:if="{{issuer.apply_surplus == 1}}">
+      <view class='btn btn-draw_money' bindtap='apply_surplus'>申请剩余金额退款</view>
+    </block>
+  </block>
 </block>
 <block wx:else>
   <block wx:if="{{apply_money_status == 0}}">

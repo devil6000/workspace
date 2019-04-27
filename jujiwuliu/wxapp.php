@@ -1420,6 +1420,14 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$data['starttime'] = !empty($data['starttime']) ? date('Y-m-d H:i:s', $data['starttime']) : '';
 			$data['statusname'] =  $this->status_set[$data['status']];
 
+			//判断是否有剩余金额
+            $data['apply_surplus'] = 0; //默认不用申请
+            if($data['status'] == 3 && $data['refund_money'] == 0 && $data['surplus_status'] == 0){
+                $hasMoneyNum = pdo_fetchcolumn("select count(id) from " . tablename($this->taborder) . " where status<>4 and rid=:id", array(':id' => $data['id']));
+                if($hasMoneyNum < $data['nums']){
+                    $data['apply_surplus'] = 1;
+                }
+            }
 
 			//判断是否支付
             if(empty($data['pay_status'])){
@@ -1567,6 +1575,24 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		}
 		return $this->result(0, '操作成功!', $data);
 	}
+
+    /**
+     * 申请退还多余金额
+     */
+    public function apply_surplus(){
+        global $_W,$_GPC;
+        $id = intval($_GPC['rid']);
+        $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id and uniacid=:uniacid and status=4 and apply_refund=0', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+        if(empty($release)){
+            return $this->result(1,'没有找到需要退款的订单');
+        }
+        $count = pdo_fetchcolumn("select count(id) from " . tablename($this->taborder) . " where status<>4 and rid=:id", array(':id' => $release['id']));
+        if($release['surplus_status'] == 0 && $release['status'] == 3 && ($count < $release['nums'])){
+            pdo_update($this->tabrelease, array('surplus_status' => 1), array('id' => $release['id']));
+            return $this->result(0);
+        }
+        return $this->result(1,'没有找到需要退款的订单');
+    }
 
     /**
      * 申请退款
@@ -2263,7 +2289,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
             //开工时间
             if($release['starttime'] > time()){
-                //return $this->result(1,"未到开工时间");
+                return $this->result(1,"未到开工时间");
             }
 
             $release['orderid'] = $order['id'];

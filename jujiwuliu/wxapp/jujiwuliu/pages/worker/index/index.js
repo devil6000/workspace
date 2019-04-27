@@ -269,9 +269,10 @@ Page({
   onShareAppMessage: function () {
     //转发事件 带上用户id （加密） 
     var user_info = wx.getStorageSync('user_info');
+    var setting = wx.getStorageSync('setting_set');
 
     return {
-      title: '巨吉搬运',
+      title: setting.data.share_title,
       path: '/jujiwuliu/pages/index/index?introducer=' + app.util.base64_encode(user_info.id),
       // imageUrl:'https://wx.qlogo.cn/mmopen/vi_32/IYXncFLbvfZdjygNiaNyyoQn6yOI8icXZJEYTdibjhfkJKaIUlwTgLe9NZeFsRuJ1Mia7E2wRZXsiaEvy1C00Abiad6Q/132',
     }

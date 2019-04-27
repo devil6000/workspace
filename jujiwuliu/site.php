@@ -455,6 +455,8 @@ class jujiwuliuModuleSite extends WeModuleSite {
                 $condition = ' and apply_refund=1';
             }elseif ($type == 'bond'){
                 $condition = ' and apply_refund_bond=1 and can_refund_bond=1';
+            }elseif($type == 'surplus'){
+                $condition = ' and surplus_status=1 and status = 3';
             }
 
             $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id and uniacid=:uniacid' . $condition, array(':id' => $id, ':uniacid' => $_W['uniacid']));
@@ -494,6 +496,23 @@ class jujiwuliuModuleSite extends WeModuleSite {
                 if($i){
                     $update = array('apply_refund_bond' => 2);
                     pdo_update($this->tabrelease, $update, array('id' => $id, 'uniacid' => $_W['uniacid']));
+                }
+            }elseif($type == 'surplus'){
+                $log=array(
+                    1,
+                    '发布方申请退余款',
+                    $this->module['name'],
+                    '',
+                    '',
+                    4,
+                    $release['ordersn']
+                );
+                $count = pdo_fetchcolumn("select count(id) from " . tablename($this->taborder) . " where status<>4 and rid=:id", array(':id' => $release['id']));
+                $num = $release['nums'] - $count;
+                $price = round($release['count_price'] * $num / $release['nums'],2);
+                $i = $this->credit_update($uid, 'credit2', $price, $log, true);
+                if($i){
+                   pdo_update($this->tabrelease, array('surplus_status' => 2,'refund_money' => $price), array('id' => $id, 'uniacid' => $_W['uniacid']));
                 }
             }
 

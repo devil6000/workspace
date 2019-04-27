@@ -28,7 +28,7 @@
         </view>
         <view class='release-cate {{static == 4 ? "release-cate-active" : ""}}' data-index="4" bindtap="getStatis">
           <view><image src='{{static == 4 ? "/jujiwuliu/resource/images/img_04_1.png" : "/jujiwuliu/resource/images/img_04.png"}}'></image></view>
-          <view  class='catename'>一口价/人</view>
+          <view  class='catename'>一口价</view>
           <view  class='cateprice'>
           <input type='text' name='pices' class='release-cate-input' bindinput='getPices' value='{{prices}}'></input>
           </view>
@@ -160,7 +160,7 @@
         </view>
         <view class='release-cate {{static == 4 ? "release-cate-active" : ""}}' data-index="4" bindtap="getStatis">
           <view><image src='{{static == 4 ? "/jujiwuliu/resource/images/img_04_1.png" : "/jujiwuliu/resource/images/img_04.png"}}'></image></view>
-          <view  class='catename'>一口价/人</view>
+          <view  class='catename'>一口价</view>
           <view  class='cateprice'>
           <input type='text' name='pices' class='release-cate-input' bindinput='getPices' value='{{prices}}'></input>
           </view>
