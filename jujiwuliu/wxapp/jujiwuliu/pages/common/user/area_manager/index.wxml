@@ -1,0 +1,44 @@
+<!--jujiwuliu/pages/common/user/area_manager/index.wxml-->
+<view class='container'>
+
+  
+  <view class="input-box">
+    <form report-submit='true' bindsubmit='submit'>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>姓名</text>
+        <input type='text' placeholder='请输入姓名' bindinput='getRealname' class='input' value='{{areaManager.relanme}}'></input>
+      </view>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>电话</text>
+        <input type='number' placeholder='请输入电话' bindinput='getMobile' class='input' value='{{areaManager.mobile}}'></input>
+      </view>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>年龄</text>
+        <input type='number' placeholder='请输入年龄' bindinput='getAgo' class='input' value="{{areaManager.age}}"></input>
+      </view>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>性别</text>
+        <picker bindchange='sexPickerChange' value="{{sexIndex}}" range="{{sexArray}}" class='input'>
+          <view>{{sexArray[sexIndex]}}</view>
+        </picker>
+      </view>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>身份证号</text>
+        <input type='text' placeholder='请输入身份证号' bindinput='getIdCard' class='input' value='{{areaManager.id_card}}'></input>
+      </view>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>负责地区</text>
+        <picker bindchange='provinceChange' value="{{provincesIndex}}" range="{{provinces}}" class="input">
+          <view>{{objectProvinces[provincesIndex].fullname}}</view>
+        </picker>
+        <picker bindchange="cityChange" value="{{citysIndex}}" range="{{citys}}" class="input">
+          <view>{{objectCitys[citysIndex].fullname}}</view>
+        </picker>
+        <picker bindchange='districtChange' value='{{districtsIndex}}' range='{{districts}}' class='input'>
+          <view>{{objectDistricts[districtsIndex].fullname}}</view>
+        </picker>
+      </view>
+      <button class='submit' form-type='submit'>提交</button>
+    </form>
+  </view>
+</view>

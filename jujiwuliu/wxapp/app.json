@@ -22,7 +22,9 @@
     "jujiwuliu/pages/worker/bind/index",
     "jujiwuliu/pages/worker/details/index",
     "jujiwuliu/pages/worker/orders/index",
-    "jujiwuliu/pages/common/user/explain/index"
+    "jujiwuliu/pages/common/user/explain/index",
+    "jujiwuliu/pages/common/user/area_manager/index",
+    "jujiwuliu/pages/common/user/area_manager/apply"
   ],
   "window": {
     "navigationBarTextStyle": "white",

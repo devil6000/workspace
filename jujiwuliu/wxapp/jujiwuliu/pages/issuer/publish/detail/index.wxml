@@ -133,9 +133,6 @@
     <block wx:if="{{issuer.can_refund_bond == 1 && apply_bond_status == 0}}">
       <view class='btn btn-draw_money' bindtap='apply_bond'>申请退还保证金</view>
     </block>
-    <block wx:if="{{issuer.apply_surplus == 1}}">
-      <view class='btn btn-draw_money' bindtap='apply_surplus'>申请剩余金额退款</view>
-    </block>
   </block>
 </block>
 <block wx:else>

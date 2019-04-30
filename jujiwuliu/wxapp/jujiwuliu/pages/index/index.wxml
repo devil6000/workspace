@@ -76,7 +76,13 @@
     </view>
     
     <view class='list_card'>
-    <navigator class='weui-cell list-item' url="../../pages/common/user/personal_data/index">
+      <navigator class='weui-cell list-item' url="../../pages/common/user/area_manager/index">
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
+        <view class='list-text'>区域选择</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
+
+      <navigator class='weui-cell list-item' url="../../pages/common/user/personal_data/index">
         <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
         <view class='list-text'>个人资料</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>

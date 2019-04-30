@@ -97,28 +97,6 @@ Page({
       }
     })
   },
-  //申请退还多余金额
-  apply_surplus: function(){
-    var that = this;
-    var issuer_id = this.data.options.issuer_id;
-    wx.showModal({
-      title: '温馨提示',
-      content: '确定申请退款多余金额',
-      success: function(res){
-        if(res.confirm){
-          app.util.request({
-            url: 'entry/wxapp/apply_surplus',
-            data: {rid: issuer_id},
-            success: function(res){
-              if(res.data.errno == 0){
-                that.onShow()
-              }
-            }
-          })
-        }
-      }
-    })
-  },
   //提交打款结束
   //  点击日期组件确定事件
   getDateTime: function (e) {

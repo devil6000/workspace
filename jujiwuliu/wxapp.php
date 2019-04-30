@@ -21,6 +21,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 	public $tabfirm= 'jujiwuliu_firm';//开票信息
     public $tabformid = 'jujiwuliu_formid'; //小程序formID
     public $tabbond = 'jujiwuliu_bond'; //接单方保证金支付临时表
+    public $tabareamanager = 'jujiwuliu_area_manager';  //代理区域表
 	
 	
 	public $map_apikey="LNYBZ-JK5K4-XLOUZ-DFA76-53Y66-ZFFEL";//腾讯地图apikey
@@ -1577,7 +1578,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 	}
 
     /**
-     * 申请退还多余金额
+     * 申请退还多余金额不用
      */
     public function apply_surplus(){
         global $_W,$_GPC;
@@ -2360,10 +2361,34 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             if($count){
                 return $this->result(1,'还有未完成的接单，无法完成订单');
             }
+
+            //判断是否有多余的金额需要退还
+            if($count == 0){
+                $count = count($orders);
+                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $rid));
+                if($count < $release){
+                    $surplus = $release['nums'] - $count;
+                    if($surplus < 0){
+                        $surplus = 0;
+                    }
+                    $refund_money = round($release['count_price'] * $surplus / $release['nums'],2);
+                    $uid = mc_openid2uid($_W['openid']);
+                    $log = array(1,'退还多余金额','jujiwuliu','','',4,$release['ordersn']);
+                    $result = $this->credit_update($uid,'credit2',$refund_money, $log);
+                    if(is_error($result)){
+                        return $this->result(1,$result['message']);
+                    }
+                    $update['refund_money'] = $surplus;
+                    $update['refund_money'] = $refund_money;
+                }
+            }
         }
+
+        $update['status'] = 3;
+        
         //将所有已申请结算，未完成的接单完成掉
         pdo_update($this->taborder, array('status' =>3), array('rid' => $rid,'status' => 2));
-        pdo_update($this->tabrelease, array('status' => 3), array('id' => $rid));
+        pdo_update($this->tabrelease, $update, array('id' => $rid));
         return $this->result($errno,$message);
     }
 
@@ -2427,4 +2452,49 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
     }
 	//搬运工方法结束
+
+    //提交地区负责人
+    public function doPageSetAreaManager(){
+        global $_W,$_GPC;
+        $openid = $_W['openid'];
+        $formid = $_GPC['formid'];
+        $realname = $_GPC['realname'];
+        $mobile = $_GPC['mobile'];
+        $ago = $_GPC['ago'];
+        $sex = $_GPC['sex'];
+        $idcard = $_GPC['idcard'];
+        $address = $_GPC['address'];
+        //保存formid
+        $this->saveFormId($openid, $formid);
+
+        $insert = array(
+            'uniacid' => $_W['uniacid'],
+            'openid' => $openid,
+            'realname' => $realname,
+            'mobile' => $mobile,
+            'ago' => $ago,
+            'sex' => $sex,
+            'id_card' => $idcard,
+            'area' => $address,
+            'status' => 0
+        );
+
+        pdo_insert($this->tabareamanager, $insert);
+
+        return $this->result(0,'');
+    }
+
+    public function doPageGetAreaManagerArea(){
+        global $_W,$_GPC;
+        $province = $_GPC['province'];
+        $city = $_GPC['city'];
+        $district = $_GPC['district'];
+
+        $address = $province . ' ' . $city . ' ' . $district;
+        $info = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where area=:area and uniacid=:uniacid", array(':area' => $address, ':uniacid' => $_W['uniacid']));
+        if(!empty($info)){
+            return $this->result(1, '地区已被代理，请选择其它地区');
+        }
+        return $this->result(0);
+    }
 }

@@ -138,9 +138,6 @@
 								{if $row['can_refund_bond'] > 0 && $row['apply_refund_bond'] == 1}
 								<a href="{php echo $this->createWebUrl('release', array('op' => 'refund', 'id' => $row['id'], 'type' => 'bond'))}" class="btn btn-default btn-sm" title="退保证金"><i class="fa fa-edit"></i>退保证金</a>
 								{/if}
-								{if $row['surplus_status'] == 1}
-								<a href="{php echo $this->createWebUrl('release', array('op' => 'refund', 'id' => $row['id'], 'type' => 'surplus'))}" class="btn btn-default btn-sm" title="退余款"><i class="fa fa-edit"></i>退余款</a>
-								{/if}
 								<a href="{php echo $this->createWebUrl('release', array('op' => 'del','id' => $row['id']))}" class="btn btn-default btn-sm" title="删除" onclick="if(!confirm('确定删除吗?')) return false;"><i class="fa fa-times"> </i></a>
 							</td>
 						</tr>
