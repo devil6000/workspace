@@ -39,13 +39,14 @@ Page({
     
     app.util.request({
       url: 'entry/wxapp/getAreaManaager',
-      data: {},
       method: 'GET',
       success: function(res){
         var data = res.data.data;
-        that.setData({
-          areaManager: data
-        })  
+        if(data){
+          wx.navigateTo({
+            url: '/jujiwuliu/pages/common/user/area_manager/apply',
+          })
+        }
       }
     });
 
@@ -185,21 +186,6 @@ Page({
     this.setData({
       mobile: e.detail.value
     })
-
-    var that = this;
-    var exp = /^((1[1-9]{2})+\d{8})$/;
-    var mobile = e.detail.value;
-    if(exp.test(mobile)){
-      that.setData({
-        mobile: mobile  
-      })
-    }else{
-      wx.showModal({
-        title: '温馨提示',
-        content: '手机号格式不正确',
-        showCancel: false
-      })
-    }
   },
   getAgo: function(e){
     this.setData({
@@ -278,9 +264,11 @@ Page({
       },
       method: "POST",
       success: function(res){
-        wx.navigateTo({
-          url: '/jujiwuliu/pages/common/area_manager/apply',
-        })
+        if(res.status == 0){
+          wx.navigateTo({
+            url: '/jujiwuliu/pages/common/user/area_manager/apply',
+          })
+        }
       }
     })
   },

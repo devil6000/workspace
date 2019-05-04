@@ -1,0 +1,67 @@
+{template 'common/header'}
+{if $op == 'display'}
+<div class="panel panel-default">
+    <div class="table-responsive panel-body">
+        <form action="" method="get" enctype="multipart/form-data">
+            <input type="hidden" name="c" value="{$_GPC['c']}" />
+            <input type="hidden" name="a" value="{$_GPC['a']}" />
+            <input type="hidden" name="op" value="{$_GPC['op']}" />
+            <input type="hidden" name="do" value="{$_GPC['do']}" />
+            <input type="hidden" name="m" value="{$_GPC['m']}" />
+            <div class="form-group">
+                <div class="col-sm-4"><input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入姓名" /></div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="status">
+                        <option value="-1">请选择</option>
+                        <option value="0" {if $status == 0}selected{/if}>待审核</option>
+                        <option value="1" {if $status == 1}selected{/if}>已审核</option>
+                        <option value="2" {if $status == 2}selected{/if}>未通过</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                </div>
+            </div>
+        </form>
+        <div class="panel panel-default">
+            <div class="panel-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>姓名</th>
+                        <th>手机号</th>
+                        <th>地区</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $row}
+                    <tr>
+                        <td>{$row['realname']}</td>
+                        <td>{$row['mobile']}</td>
+                        <td>{$row['area']}</td>
+                        <td>
+                            {if $row['status'] == 1}
+                                已审核
+                            {elseif $row['status'] == 2}
+                                未通过
+                            {else}
+                                待审核
+                            {/if}
+                        </td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('area', array('op' => 'delete', 'id' => $row['id']))}" class="btn btn-default btn-sm" title="删除"><i class="fa fa-edit"></i>删除</a>
+                            <a rel="tooltip" onclick="util.ajaxshow('{php echo $this->createWebUrl('area', array('op' => 'apply', 'id' => $row['id']))}','审核')" href="#" class="btn btn-default btn-sm" title="审核"><i class="fa fa-edit"></i>审核</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </div>
+</div>
+{/if}
+{template 'common/footer'}

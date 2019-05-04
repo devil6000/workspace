@@ -1,20 +1,18 @@
 <!--jujiwuliu/pages/common/user/area_manager/index.wxml-->
 <view class='container'>
-
-  
   <view class="input-box">
     <form report-submit='true' bindsubmit='submit'>
       <view class='fui-cell'>
         <text class='fui-cell-label'>姓名</text>
-        <input type='text' placeholder='请输入姓名' bindinput='getRealname' class='input' value='{{areaManager.relanme}}'></input>
+        <input type='text' placeholder='请输入姓名' bindinput='getRealname' class='input' value=''></input>
       </view>
       <view class='fui-cell'>
         <text class='fui-cell-label'>电话</text>
-        <input type='number' placeholder='请输入电话' bindinput='getMobile' class='input' value='{{areaManager.mobile}}'></input>
+        <input type='number' placeholder='请输入电话' bindinput='getMobile' class='input' value=''></input>
       </view>
       <view class='fui-cell'>
         <text class='fui-cell-label'>年龄</text>
-        <input type='number' placeholder='请输入年龄' bindinput='getAgo' class='input' value="{{areaManager.age}}"></input>
+        <input type='number' placeholder='请输入年龄' bindinput='getAgo' class='input' value=""></input>
       </view>
       <view class='fui-cell'>
         <text class='fui-cell-label'>性别</text>
@@ -24,7 +22,7 @@
       </view>
       <view class='fui-cell'>
         <text class='fui-cell-label'>身份证号</text>
-        <input type='text' placeholder='请输入身份证号' bindinput='getIdCard' class='input' value='{{areaManager.id_card}}'></input>
+        <input type='text' placeholder='请输入身份证号' bindinput='getIdCard' class='input' value=''></input>
       </view>
       <view class='fui-cell'>
         <text class='fui-cell-label'>负责地区</text>

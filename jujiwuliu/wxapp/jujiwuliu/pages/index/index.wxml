@@ -65,23 +65,29 @@
             <view class='des'>￥{{memberInfo.credit2}}</view>
           </view>
         </navigator>
-        <!-- <navigator class='info_card-li' url="">
-          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_04.png'></image></view>
+      </view>
+    </view>
+
+    <view class='info_card'>
+      <view class='info_card-title'>搬运家园</view>
+      <view class='info_card-ul'>
+        <navigator class='info_card-li' url='../../pages/common/user/area_manager/index'>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
           <view class='info_card-info'>
-            <view class='title'>我的积分</view>
-            <view class='des'>￥{{memberInfo.credit1}}</view>
+            <view class='title'>诚招区域负责人</view>
           </view>
-        </navigator> -->
+        </navigator>
+        <view class='info_card-line'></view>
+        <navigator class='info_card-li' url='../../pages/common/user/area_manager/list'>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-info'>
+            <view class='title'>查看区域负责人</view>
+          </view>
+        </navigator>
       </view>
     </view>
     
     <view class='list_card'>
-      <navigator class='weui-cell list-item' url="../../pages/common/user/area_manager/index">
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
-        <view class='list-text'>区域选择</view>
-        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
-      </navigator>
-
       <navigator class='weui-cell list-item' url="../../pages/common/user/personal_data/index">
         <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
         <view class='list-text'>个人资料</view>
@@ -189,6 +195,26 @@
         </navigator>
       </view>
     </view>
+
+    <view class='info_card'>
+      <view class='info_card-title'>搬运家园</view>
+      <view class='info_card-ul'>
+        <navigator class='info_card-li' url='../../pages/common/user/area_manager/index'>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-info'>
+            <view class='title'>诚招区域负责人</view>
+          </view>
+        </navigator>
+        <view class='info_card-line'></view>
+        <navigator class='info_card-li' url='../../pages/common/user/area_manager/list'>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-info'>
+            <view class='title'>查看区域负责人</view>
+          </view>
+        </navigator>
+      </view>
+    </view>
+
     <view class='list_card'>
       <!-- <navigator class='weui-cell list-item' url="../../pages/common/user/credit/list/index">
         <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_04.png'></image>

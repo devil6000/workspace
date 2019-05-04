@@ -22,7 +22,7 @@ form {
   align-items: center;
   border-bottom: solid 1px #f4f4f4;
   width: 100%;
-  height: 30px;
+  height: 90rpx;
 }
 .fui-cell::after {
   border-bottom: none;
@@ -36,4 +36,15 @@ form {
   font-size: 28rpx;
   margin-left: 28rpx;
   flex: 1;
+}
+
+.submit {
+  line-height: 100rpx;
+  color: #fff;
+  font-size: 40rpx;
+  background: #f66620;
+  text-align: center;
+  margin-top: 30rpx;
+  width: 100%;
+  margin-bottom: 10px;
 }

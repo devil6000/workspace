@@ -2453,6 +2453,13 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     }
 	//搬运工方法结束
 
+    public function doPageGetAreaManaager(){
+        global $_W,$_GPC;
+        $openid = $_W['openid'];
+        $item = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where openid=:openid", array(':openid' => $openid));
+        return $this->result(0,'',$item);
+    }
+
     //提交地区负责人
     public function doPageSetAreaManager(){
         global $_W,$_GPC;
@@ -2476,6 +2483,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             'sex' => $sex,
             'id_card' => $idcard,
             'area' => $address,
+            'createtime' => time(),
             'status' => 0
         );
 
@@ -2496,5 +2504,13 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             return $this->result(1, '地区已被代理，请选择其它地区');
         }
         return $this->result(0);
+    }
+
+    public function doPageGetAreaManagerList(){
+        global $_W,$_GPC;
+        $page = max(1,intval($_GPC['page']));
+        $pageSize = 16;
+        $list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where uniacid=:uniacid and status=1 order by id desc limit " . ($page - 1) * $pageSize . ',' . $pageSize, array(':uniacid' => $_W['uniacid']));
+        return $this->result(0,'',$list);
     }
 }
