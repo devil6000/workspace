@@ -93,7 +93,11 @@
         <view class='list-text'>个人资料</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </navigator>
-      
+      <navigator class='weui-cell list-item' url='../../pages/common/advises/list'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
+        <view class='list-text'>投诉建议</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
       <navigator class='weui-cell list-item' url="../../pages/common/user/credit/list/index">
         <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_02.png'></image>
         <view class='list-text'>我的积分</view>
@@ -120,7 +124,7 @@
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </navigator>
       <button class='weui-cell list-item' bindtap='calling'>
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_06.png'></image>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_07.png'></image>
         <view class='list-text'>联系客服</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </button>
@@ -221,23 +225,30 @@
         <view class='list-text'>我的积分</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </navigator> -->
+      <navigator class='weui-cell list-item' url='../../pages/common/advises/list'>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
+        <view class='list-text'>投诉建议</view>
+        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
+      </navigator>
       <button class='weui-cell list-item' open-type='share'>
         <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_05.png'></image>
         <view class='list-text'>邀请注册</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </button>
+      <!--
       <button class='weui-cell list-item' open-type="contact">
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_06.png'></image>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_06.png'></image>
         <view class='list-text'>在线客服</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </button>
+      -->
       <navigator class='weui-cell list-item' url="../../pages/common/user/explain/index?type=2">
         <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_08.png'></image>
         <view class='list-text'>使用说明</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </navigator>
       <button class='weui-cell list-item' bindtap='calling'>
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_06.png'></image>
+        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_07.png'></image>
         <view class='list-text'>联系客服</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </button>

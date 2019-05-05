@@ -22,6 +22,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public $tabformid = 'jujiwuliu_formid'; //小程序formID
     public $tabbond = 'jujiwuliu_bond'; //接单方保证金支付临时表
     public $tabareamanager = 'jujiwuliu_area_manager';  //代理区域表
+    public $tabadvises = 'jujiwuliu_advises'; //投诉建议
+    public $tabadvisesreply = 'jujiwuliu_advises_reply'; //投诉建议解答
 	
 	
 	public $map_apikey="LNYBZ-JK5K4-XLOUZ-DFA76-53Y66-ZFFEL";//腾讯地图apikey
@@ -2512,5 +2514,71 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $pageSize = 16;
         $list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where uniacid=:uniacid and status=1 order by id desc limit " . ($page - 1) * $pageSize . ',' . $pageSize, array(':uniacid' => $_W['uniacid']));
         return $this->result(0,'',$list);
+    }
+
+    /**
+     * 保存投诉建议
+     */
+    public function doPageSaveAdvises(){
+        global $_W,$_GPC;
+        //$formId = $_GPC['formid'];
+        //$this->saveFormId($_W['openid'], $formId);  //保存formid
+        $data = array(
+            'model' => intval($_GPC['model']),
+            'uniacid' => $_W['uniacid'],
+            'openid' => $_W['openid'],
+            'title' => $_GPC['title'],
+            'content' => $_GPC['content'],
+            'images' => $_GPC['images'],
+            'createtime' => time(),
+            'is_show' => 0
+        );
+
+        $id = pdo_insert($this->tabadvises, $data);
+        if($id){
+            return $this->result(0,'');
+        }else{
+            return $this->result(1, '提交投诉建议失败');
+        }
+    }
+
+    /**
+     * 获取投诉建议列表
+     */
+    public function doPageGetAdvisesList(){
+        global $_W,$_GPC;
+        $pageIndex = max(1,intval($_GPC['page']));
+        $pageSize = 15;
+
+        $list = pdo_fetchall("select * from " . tablename($this->tabadvises) . " where uniacid=:uniacid and is_show=0 order by createtime desc limit " . ($pageIndex - 1) * $pageSize . "," . $pageSize, array(':uniacid' => $_W['uniacid']));
+        if(!empty($list)){
+            foreach ($list as &$item){
+                $item['createtime'] = date('Y-m-d H:i:s', $item['createtime']);
+                if($item['openid'] == $_W['openid']){
+                    //获取到已回覆并没有查看的投诉建议
+                    $reply = pdo_fetchcolumn("select id from " . tablename($this->tabadvisesreply) . " where advisies_id=:aid and uniacid=:uniacid and browse=0", array(':aid' => $item['id'], ':uniacid' => $_W['uniacid']));
+                    $item['reply'] = empty($reply) ? 0 : 1; //是否已回覆，并没有查看，0没有回复或已查看
+                }
+            }
+            unset($item);
+        }
+
+        return $this->result(0,'',$list);
+    }
+
+    public function doPageGetAdvisesDetail(){
+        global $_W,$_GPC;
+        $id = intval($_GPC['id']);
+        $item = pdo_fetch("select * from " . tablename($this->tabadvises) . " where id=:id", array(':id' => $id));
+        if(empty($item)){
+            return $this->result(1,'没有找到投诉建议');
+        }
+        $item['images'] = explode(',', $item['images']);
+        $reply = pdo_fetch("select * from " . tablename($this->tabadvisesreply) . " where advises_id=:aid", array(':aid' => $item['id']));
+        if(!empty($reply)){
+            $item['reply_content'] = $reply['content'];
+        }
+
+        return $this->result(0,'',$item);
     }
 }

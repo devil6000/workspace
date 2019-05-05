@@ -1,0 +1,48 @@
+<!--jujiwuliu/pages/common/advises/index.wxml-->
+<view class='container'>
+  <view class='header'>
+    <text>投诉建议</text>
+  </view>
+
+  <form report-submit='true' bindsubmit='submit' class='form'>
+    <view class='input-box'>
+      <view class='form-group'>
+        <text class='label'>类型</text>
+        <view class='input'>
+          <radio-group class='radio-group' bindchange="modelChange">
+            <label class='radio' wx:for="{{model}}" wx:key="idx" wx:for-index="idx" wx:for-item="item">
+              <radio value='{{idx}}' />{{item}}
+            </label>
+          </radio-group>
+        </view>
+      </view>
+      <view class='form-group'>
+        <text class="label">主题</text>
+        <view class='input'><input type='text' placeholder='请输入投诉建议主题' placeholder-class='placeholder' bindinput='getTitle' /></view>
+      </view>
+      <view class='form-group large'>
+        <view class='input'>
+          <textarea class='textarea' placeholder='请输入投诉建议' placeholder-class='placeholder' fixed='true' bindinput='getContent'></textarea>
+        </view>
+      </view>
+      <view class='form-group large images'>
+        <view class='input'>
+          <block wx:for="{{images}}" wx:key="index" wx:for-index="idx" >
+            <view class='image-box'>
+              <image src='{{siteinfo.attachurl}}{{item}}' />
+              <view class='image-remove' bindtap='removeImage' data-index="{{idx}}">x</view>
+            </view>
+          </block>
+          <view class='image-box' bindtap='addImage'>
+            <image src='/jujiwuliu/resource/images/add.png' />
+          </view>
+        </view>
+      </view>
+      <view class='form-group'>
+        <view class='input'>
+          <button type='primary' form-type='submit' class='button' >提交</button>
+        </view>
+      </view>
+    </view>
+  </form>
+</view>

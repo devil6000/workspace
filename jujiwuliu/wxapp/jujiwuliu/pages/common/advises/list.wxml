@@ -1,0 +1,31 @@
+<!--jujiwuliu/pages/common/advises/list.wxml-->
+<view class='container'>
+  <view class='container-body'>
+    <view class='container-header'>
+      <navigator class='button' url='/jujiwuliu/pages/common/advises/index'>
+        <view class='button-text'>提建议</view>
+      </navigator>
+    </view>
+    <view class='list-group'>
+      <block wx:if="{{list}}">
+        <block wx:for="{{list}}" wx:key="index" wx:for-item="item">
+          <navigator class='list-item' url='/jujiwuliu/pages/common/advises/detail?id={{item.id}}'>
+            <view class='label'>{{model[item.model]}}</view>
+            <view class='title'>{{item.title}}</view>
+            <view class='reply'></view>
+          </navigator>
+        </block>
+      </block>
+      <block wx:else>
+        <view class='item-empty'>
+          <view class='empty-icon'><image  mode="widthFix" src="/jujiwuliu/resource/images/empty.png" /></view>
+          <view class='empty-text'>无任何纪录</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
+
+  <import src="../template/footer.wxml"/>
+  <template is="footerWx" data="{{...tabBar}}"/>
+

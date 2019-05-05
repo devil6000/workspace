@@ -25,7 +25,10 @@
     "jujiwuliu/pages/common/user/explain/index",
     "jujiwuliu/pages/common/user/area_manager/index",
     "jujiwuliu/pages/common/user/area_manager/apply",
-    "jujiwuliu/pages/common/user/area_manager/list"
+    "jujiwuliu/pages/common/user/area_manager/list",
+    "jujiwuliu/pages/common/advises/index",
+    "jujiwuliu/pages/common/advises/detail",
+    "jujiwuliu/pages/common/advises/list"
   ],
   "window": {
     "navigationBarTextStyle": "white",
