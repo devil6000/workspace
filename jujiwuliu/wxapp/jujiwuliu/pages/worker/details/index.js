@@ -52,9 +52,10 @@ Page({
 
   takeOrder: function(e){
     var that = this
+    var formid = e.detail.formId;
     app.util.request({
       url: 'entry/wxapp/getworkerpay',
-      data: { formid: e.detail.formid, id: that.data.data.id},
+      data: { formid: formid, id: that.data.data.id},
       method: 'POST',
       success: function(res){
         var data = res.data.data
@@ -199,11 +200,12 @@ Page({
       'payData.modalPayBtns': !1
     })
   },
-  applyrefundbond: function(){
+  applyrefundbond: function(e){
     var that = this
+    var formid = e.detail.formId;
     app.util.request({
       url: 'entry/wxapp/refundWorkerBond',
-      data: { id: that.data.data.orderid},
+      data: { id: that.data.data.orderid, formid: formId},
       method: 'POST',
       success: function(res){
         wx.showModal({
@@ -341,13 +343,14 @@ Page({
       imgheights: imgheights,
     })
   },
-  fulfilOrder:function(){
+  fulfilOrder:function(e){
     var that = this
     var cachedata = wx.getStorageSync('getLocation');
+    var formid = e.detail.formId;
     //获取用户数据
     app.util.request({
       url: 'entry/wxapp/setapply',
-      data: { id: that.data.data.orderid, lat: cachedata.data.lat, lng: cachedata.data.lng},
+      data: { id: that.data.data.orderid, lat: cachedata.data.lat, lng: cachedata.data.lng, formid: formid},
       method: "POST",
       success: function (res) {
         console.log(res);
@@ -372,7 +375,7 @@ Page({
       }
     })
   },
-  cancelOrder:function(){
+  cancelOrder:function(e){
     var that = this
     var timestamp = Date.parse(new Date())
     timestamp = timestamp / 1000  
@@ -382,6 +385,7 @@ Page({
     if(overtime && (diff >= (overtime * 60))){
       msg = '订单已超过有效期，取消订单将扣除保证金'
     }
+    var formid = e.detail.formId;
     wx.showModal({
       title: '温馨提示',
       content: msg,
@@ -390,7 +394,7 @@ Page({
           //直接取消
           app.util.request({
             url: 'entry/wxapp/cancelorder',
-            data: { id: that.data.data.orderid},
+            data: { id: that.data.data.orderid,formid: formid},
             method: "POST",
             success: function (res) {
               var page_opt = getCurrentPages();
@@ -412,9 +416,10 @@ Page({
       }
     })
   },
-  startOperation: function(){
+  startOperation: function(e){
     var that = this
     var cachedata = wx.getStorageSync('getLocation');
+    var formid = e.detail.formId;
     wx.showModal({
       title: '温馨提示',
       content: '是否正式开工',
@@ -422,7 +427,7 @@ Page({
         if(res.confirm){
           app.util.request({
             url: 'entry/wxapp/startoperation',
-            data: { id: that.data.data.orderid, lat: cachedata.data.lat, lng: cachedata.data.lng },
+            data: { id: that.data.data.orderid, lat: cachedata.data.lat, lng: cachedata.data.lng, formid: formid },
             method: "POST",
             success: function (res) {
               var page_opt = getCurrentPages();

@@ -22,6 +22,12 @@ Page({
     })
   },
 
+  getMobile: function(e){
+    this.setData({
+      mobile: e.detail.value
+    })
+  },
+
   //获取投诉建议主题
   getTitle: function(e){
     this.setData({
@@ -96,6 +102,16 @@ Page({
       })
       return false;
     }
+    var mobile = that.data.mobile;
+    var exp = /^((1[1-9]{2})+\d{8})$/;
+    if(!exp.test(mobile)){
+      wx.showToast({
+        title: '联系方式格式不正确',
+        mask: false,
+        duration: 1000
+      })
+      return false;
+    }
     var title = that.data.title;
     if(title == undefined || title == ''){
       wx.showToast({
@@ -112,6 +128,7 @@ Page({
         formid: e.detail.formId,
         model: model,
         title: title,
+        mobile: mobile,
         content: that.data.content,
         images: that.data.images
       },

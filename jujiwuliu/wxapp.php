@@ -94,6 +94,11 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
      */
     public function saveFormId($openid, $formid){
         global $_W;
+
+        if($formid == 'undefined' || $formid == 'the formId is a mock one'){
+            return false;
+        }
+
         $insert = array(
             'uniacid' => $_W['uniacid'],
             'openid'  => $openid,
@@ -112,17 +117,19 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
      */
     public function getFormId($openid){
         global $_W;
-        $condition = 'uniacid=:uniacid and openid=:openid and TIMESTAMPDIFF(DAY,createtime,now()) < 7 and isuserd=0';
+        $condition = 'uniacid=:uniacid and openid=:openid and TIMESTAMPDIFF(DAY,from_unixtime(createtime),now()) < 7 and isuserd=0';
         $params = array(':uniacid' => $_W['uniacid'], ':openid' => $openid);
         $info = pdo_fetch('select * from ' . tablename($this->tabformid) . ' where ' . $condition . ' order by createtime asc limit 1', $params);
+        if(!empty($info)){
+            if($info['formid'] == 'undefined' || $info['formid'] == 'the formId is a mock one' || empty($info['formid'])){
+                $this->updateFormId($info['openid'], $info['id']);
+                $info = $this->getFormId($openid);
+            }
+        }
         return $info;
     }
 
-    public function updateFormId($openid, $id)
-    {
-        global $_W;
-        //$condition = 'uniacid=:uniacid and openid=:openid and TIMESTAMPDIFF(DAY,createtime,now()) >= 7 and isuserd=0';
-        //$params = array(':uniacid' => $_W['uniacid'], ':openid' => $openid);
+    public function updateFormId($openid, $id) {
         pdo_update($this->tabformid, array('isuserd' => 1), array('id' => $id, 'openid' => $openid));
     }
 
@@ -130,31 +137,6 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public function doWssGetMsg(){
 		echo 1;die;
 	}
-
-	// $data = array(
-	// 	'first' => array(
-	// 		'value' => "订单提交成功！",
-	// 		'color' => '#ff510'
-	// 	),
-	// 	'keyword1' => array(
-	// 		'value' => '1008',
-	// 		'color' => '#ff510'
-	// 	),
-	// 	'keyword2' => array(
-	// 		'value' => '黄焖鸡米饭',
-	// 		'color' => '#ff510'
-	// 	),
-	// 	'keyword3' => array(
-	// 		'value' => '388元',
-	// 		'color' => '#ff510'
-	// 	),
-	// 	'remark' => array(
-	// 		'value' => "欢迎您再次订购" ,
-	// 		'color' => '#ff510'
-	// 	),
-	// );
-	// $result = $account_api->sendTplNotice('oPUOlw7yvucjUrZhzG6gd8VdILa4', 'vJcJSes4vaVYv7sVEvOsRCGpZz8R3I4U1ODBbXcEBq8', $data);
-
 
 	public function sendTplNotice($touser, $template_id, $postdata, $url = '', $form_id = '', $topcolor = '#FF683F') {
 		$account_api = WeAccount::create();
@@ -404,7 +386,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			'remark' => $log[1],
 		);
 		pdo_insert($this->tabcreditlog,$data);
-		pdo_update($this->tabmember,array('credit1'=>$reg[$credittype]),array('uid'=>$uid,'uniacid'=>$_W['uniacid']));
+		pdo_update($this->tabmember,array($credittype=>$reg[$credittype]),array('uid'=>$uid,'uniacid'=>$_W['uniacid']));
 		
 		return true;
 	}
@@ -1251,37 +1233,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$data['all_money'] = $data['count_price'] + $data['cancel_refund_money'];
 
 			$formId = $_GPC['formid'];
-
-			//发布信息
-            /*
-             $data = array(
-             	'first' => array(
-             		'value' => "发布提交成功！",
-             		'color' => '#ff510'
-             	),
-             	'keyword1' => array(
-             		'value' => '1008',
-             		'color' => '#ff510'
-             	),
-             	'keyword2' => array(
-             		'value' => '黄焖鸡米饭',
-             		'color' => '#ff510'
-             	),
-             	'keyword3' => array(
-             		'value' => '388元',
-             		'color' => '#ff510'
-             	),
-             	'remark' => array(
-             		'value' => "欢迎您再次订购" ,
-             		'color' => '#ff510'
-             	),
-             );
-            $result = $this->sendTplNotice($_W['openid'], 'rRSTq3Uuz8Dt-rtClwp0NqB8-HT-wrvAvV25ay1e9fU', $data, $formId);
-            if(is_error($result)){
-                return $this->result($result['errno'], $result['message']);
-            }
-            */
-
+			$this->saveFormId($_W['openid'], $formId);
 			return $this->result($errno, $message, $data);
 		}else{
 			return $this->result(1, '发布失败！', $data);
@@ -1644,6 +1596,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public function doPageSetreleaseapply(){
         global $_W,$_GPC;
         $id = intval($_GPC['id']);
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
         $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and apply=0 and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
         if(empty($order)){
             return $this->result(1, '没有找到可结算订单');
@@ -1662,6 +1616,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public function doPageReleasePay(){
         global $_W,$_GPC;
         $id = intval($_GPC['id']);
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
         $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and apply=1 and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
         if(empty($order)){
             return $this->result(1, '没有找到可结算订单');
@@ -1690,6 +1646,26 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         }else{
             return $this->result(1, '确认打款失败');
         }
+    }
+
+    /**
+     * 人未到场
+     */
+    public function doPageNotPresent(){
+        global $_W,$_GPC;
+        $id = intval($_GPC['id']);
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
+        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+        if(!empty($order)){
+            $update = array(
+                'status' => 4,
+                'can_refund_bond' => 0
+            );
+            pdo_update($this->taborder, $update, array('id' => $id));
+        }
+
+        return $this->result(0);
     }
 
 	//发布方所有方法结束
@@ -2037,6 +2013,12 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         pdo_update($this->tabbond, array('status' => 1), array('id' => $info['id']));
 
+        $formidInfo = $this->getFormId($_W['openid']);
+        if(!empty($formidInfo)){
+            $this->sendMessage($release['id'],$_W['openid'],'',$formidInfo['formid'],'take_ok');
+            $this->updateFormId($formidInfo['openid'],$formidInfo['id']);
+        }
+
         return $this->result(0, '接单成功');
     }
 	
@@ -2170,6 +2152,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		$id = $_GPC['id'];
         $lat=$_GPC['lat'];
         $lng=$_GPC['lng'];
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
 
 		$order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid and status=1 and apply=0 and openid=:openid', array(':id' => $id, ':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
         if(empty($order)){
@@ -2215,9 +2199,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $message = 'success';
         $id = $_GPC['id'];
         $formId = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formId);
         $setting = $this->seeting;
 
-        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+        $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid and openid=:openid', array(':id' => $id, ':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
         if(empty($order)){
             return $this->result(1,'订单已取消或不存在');
         }
@@ -2230,7 +2215,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         $upord = pdo_update($this->taborder, $update, array('uniacid' => $_W['uniacid'], 'id' => $id));
         if($upord){
-            $result = $this->sendMessage($order['rid'], $order['openid'], '', $formId, 'take_cancel');
+            $formIdInfo = $this->getFormId($_W['openid']);
+            if(!empty($formIdInfo)){
+                $result = $this->sendMessage($order['rid'], $_W['openid'], '', $formIdInfo['formid'], 'take_cancel');
+            }
             return $this->result($errno,$message);
         }else{
             return $this->result(1, '取消订单失败！');
@@ -2246,6 +2234,9 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $errno = 0;
         $message = 'success';
         $id = intval($_GPC['id']);
+
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
 
         $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid and status in (3,4) and deposit_paystatus=1 and can_refund_bond=1', array(':id' => $id, ':uniacid' => $_W['uniacid']));
         if(empty($order)){
@@ -2274,6 +2265,9 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $lat=$_GPC['lat'];
         $lng=$_GPC['lng'];
         $seeting=$this->seeting;
+
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
 
         $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid and status=0 and openid=:openid', array(':id' => $id, ':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
         if(empty($order)){
@@ -2330,8 +2324,6 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
                     $release['static'] = 1;
                     $release['staticname'] = $this->static_set[$release['static']];
-
-                    //开工信息提醒
 
                     $this->result($errno,$message,$release);
                 }else{
@@ -2521,8 +2513,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
      */
     public function doPageSaveAdvises(){
         global $_W,$_GPC;
-        //$formId = $_GPC['formid'];
-        //$this->saveFormId($_W['openid'], $formId);  //保存formid
+        $formId = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formId);  //保存formid
         $data = array(
             'model' => intval($_GPC['model']),
             'uniacid' => $_W['uniacid'],
@@ -2531,6 +2523,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             'content' => $_GPC['content'],
             'images' => $_GPC['images'],
             'createtime' => time(),
+            'mobile' => $_GPC['mobile'],
             'is_show' => 0
         );
 
@@ -2574,7 +2567,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             return $this->result(1,'没有找到投诉建议');
         }
         $item['images'] = explode(',', $item['images']);
-        $reply = pdo_fetch("select * from " . tablename($this->tabadvisesreply) . " where advises_id=:aid", array(':aid' => $item['id']));
+        $reply = pdo_fetch("select * from " . tablename($this->tabadvisesreply) . " where advisies_id=:aid", array(':aid' => $item['id']));
         if(!empty($reply)){
             $item['reply_content'] = $reply['content'];
         }

@@ -1,1 +1,61 @@
 /* jujiwuliu/pages/common/user/area_manager/list.wxss */
+page {
+  background-color: #f4f4f4;
+}
+
+.container-body {
+  width: 100%;
+}
+
+.list-group {
+  background-color: #ffffff;
+  padding: 20rpx 20rpx;
+  width: calc(100% - 40rpx);
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  display: flex;
+  flex-direction: column;
+  border-bottom: solid 1px #dfdfdf;
+}
+
+
+.list-item .line {
+  display: flex;
+  height: 90rpx;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30rpx;
+}
+
+.list-item .line .label {
+  width: 120rpx;
+}
+
+.list-item .line .info {
+  flex: 1;
+  padding-left: 10rpx;
+}
+
+.list-group .item-empty {
+  width: calc(100% - 30rpx);
+  height: 300rpx;
+  padding: 0 15rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-group .item-empty .empty-icon {
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.list-group .item-empty .empty-icon image {
+  width: 100rpx;
+  height: 100rpx;
+}
+

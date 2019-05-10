@@ -512,7 +512,7 @@ Page({
   },
   submit: function(e){
     var that = this;
-    wx.setStorageSync("formId", e.detail.formId)
+    var formid = e.detail.formId;
     if(that.data.static == 4){
       if (!that.data.prices){
         wx.showToast({
@@ -563,7 +563,7 @@ Page({
     app.util.request({
       url: 'entry/wxapp/getrelease',
       data: {
-        formid:e.detail.formId,
+        formid: formid,
         order_id:that.data.order_id,
         type: that.data.type,
         static: that.data.static,

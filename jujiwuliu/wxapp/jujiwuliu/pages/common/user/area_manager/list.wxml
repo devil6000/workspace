@@ -1,2 +1,34 @@
 <!--jujiwuliu/pages/common/user/area_manager/list.wxml-->
-<text>jujiwuliu/pages/common/user/area_manager/list.wxml</text>
+<view class='container'>
+  <view class='container-body'>
+    <view class='list-group'>
+      <block wx:if="{{list}}">
+        <block wx:for="{{list}}" wx:key="index" wx:for-item="item">
+          <view class='list-item'>
+            <view class='line'>
+              <text class='label'>姓名</text>
+              <text class='info'>{{item.realname}}</text>
+            </view>
+            <view class='line'>
+              <text class='label'>手机号</text>
+              <text class='info'>{{item.mobile}}</text>
+            </view>
+            <view class='line'>
+              <text class='label'>负责地区</text>
+              <text class='info'>{{item.area}}</text>
+            </view>
+          </view>
+        </block>
+      </block>
+      <block wx:else>
+        <view class='item-empty'>
+          <view class='empty-icon'><image  mode="widthFix" src="/jujiwuliu/resource/images/empty.png" /></view>
+          <view class='empty-text'>无任何纪录</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
+
+<import src="../../template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

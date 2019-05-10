@@ -47,13 +47,22 @@
       </block>
     </block>
   </block>
-    <block wx:if="{{data.orderid && data.status!=4 && data.status!=3 }}"> 
-      <view class='btn-cancel' bindtap='cancelOrder'>申诉</view>
+    <block wx:if="{{data.orderid && data.status!=4 && data.status!=3 }}">
+      <form report-submit='true' bindsubmit='cancelOrder'>
+        <button class='btn-cancel' form-type='submit'>人未到场</button>
+      </form> 
+      <!--<view class='btn-cancel' bindtap='cancelOrder'>人未到场</view>-->
       <block wx:if="{{!data.apply}}">
-        <view class='btn-fulfil' bindtap='fulfilOrder'>结算</view>
+        <form report-submit='true' bindsubmit='fulfilOrder'>
+          <button class='btn-fulfil' form-type='submit'>结算</button>
+        </form>
+        <!--<view class='btn-fulfil' bindtap='fulfilOrder'>结算</view>-->
       </block>
       <block wx:elif="{{data.apply == 1}}">
-        <view class="btn-fulfil" bindtap='fulfilPay'>确认打款</view>
+        <form report-submit='true' bindsubmit='fulfilPay'>
+          <button class='btn-fulfil' form-type='submit'>确认打款</button>
+        </form>
+        <!--<view class="btn-fulfil" bindtap='fulfilPay'>确认打款</view>-->
       </block>
       <block wx:else>
         <view class="btn-fulfil wait">已打款</view>

@@ -17,6 +17,10 @@
         </view>
       </view>
       <view class='form-group'>
+        <text class="label">联系方式</text>
+        <view class='input'><input type='number' placeholder='请输入联系方式' placeholder-class='placeholder' bindinput='getMobile' /></view>
+      </view>
+      <view class='form-group'>
         <text class="label">主题</text>
         <view class='input'><input type='text' placeholder='请输入投诉建议主题' placeholder-class='placeholder' bindinput='getTitle' /></view>
       </view>

@@ -188,13 +188,13 @@ Page({
       imgheights: imgheights,
     })
   },
-  fulfilOrder:function(){
+  fulfilOrder:function(e){
     var that = this
     //发布方确认打款
-    
+    var formid = e.detail.formId;
     app.util.request({
       url: 'entry/wxapp/setreleaseapply',
-      data: { id: that.data.data.orderid},
+      data: { id: that.data.data.orderid, formid: formid},
       method: "POST",
       success: function (res) {
         console.log(res);
@@ -210,8 +210,9 @@ Page({
     })
   },
   //确认打款，修改订单为完成状态
-  fulfilPay: function(){
+  fulfilPay: function(e){
     var that = this;
+    var formid = e.detail.formId;
     wx.showModal({
       title: '温馨提示',
       content: '确认要打款？',
@@ -219,10 +220,31 @@ Page({
         if(res.confirm){
           app.util.request({
             url: 'entry/wxapp/releasePay',
-            data: {id: that.data.data.orderid},
+            data: { id: that.data.data.orderid, formid: formid},
             method: "POST",
             success: function(res){
               that.onLoad(that.data.options);
+            }
+          })
+        }
+      }
+    })
+  },
+  //人未到场，取消接单，并不退保证金
+  cancelOrder: function(e){
+    var that = this;
+    var formid = e.detail.formId;
+    wx.showModal({
+      title: '温馨提示',
+      content: '确认人未到场',
+      success: function(res){
+        if(res.confirm){
+          app.util.request({
+            url: 'entry/wxapp/notPresent',
+            data: {id: that.data.data.orderid, formid: formid},
+            method: 'POST',
+            success: function(res){
+              that.onLoad(that.data.options)
             }
           })
         }

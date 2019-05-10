@@ -7,7 +7,7 @@
  */
 
 error_reporting(0);
-require '../../../../framework/bootstrap.inc.php';
+require '../../../framework/bootstrap.inc.php';
 global $_W;
 global $_GPC;
 ignore_user_abort();
