@@ -17,6 +17,10 @@ if($op=='display'){
     if(!empty($rid)){
         $condition.=' and (rid ='.$rid.')';
     }
+    $status = isset($_GPC['status']) ?  intval($_GPC['status']) : -1;
+    if($status > -1){
+        $condition .=  ' and status=' . $status;
+    }
     $pindex = max(1,intval($_GPC['page']));
     $psize = 20;
     $total = pdo_fetchcolumn('select count(*) from '.tablename($this->taborder).' where ' . $condition);

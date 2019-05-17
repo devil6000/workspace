@@ -95,7 +95,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public function saveFormId($openid, $formid){
         global $_W;
 
-        if($formid == 'undefined' || $formid == 'the formId is a mock one'){
+        if($formid == 'undefined' || $formid == 'the formId is a mock one' || empty($formid)){
             return false;
         }
 
@@ -1102,6 +1102,12 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
 		return $this->result($errno,$message, $data);
 	}
+	//获取所有地区
+    public function doPageGetAllArea(){
+	    $data = file_get_contents('https://apis.map.qq.com/ws/district/v1/list?key=' . $this->map_apikey);
+	    $data = json_decode($data);
+	    return $this->result(0,'success',$data);
+    }
 
 	//获取可指定人员名单
 	public function doPageGetAppoint(){
@@ -2461,10 +2467,11 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $formid = $_GPC['formid'];
         $realname = $_GPC['realname'];
         $mobile = $_GPC['mobile'];
-        $ago = $_GPC['ago'];
+        $ago = (empty($_GPC['ago']) || $_GPC['ago'] == 'undefined') ? 0 : $_GPC['ago'];
         $sex = $_GPC['sex'];
-        $idcard = $_GPC['idcard'];
+        $idcard = (empty($_GPC['idcard']) || $_GPC['idcard'] == 'undefined') ? '' : $_GPC['idcard'];
         $address = $_GPC['address'];
+        $weixinhao = (empty($_GPC['weixinhao']) || $_GPC['weixinhao'] == 'undefined') ? '' : $_GPC['weixinhao'];
         //保存formid
         $this->saveFormId($openid, $formid);
 
@@ -2478,6 +2485,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             'id_card' => $idcard,
             'area' => $address,
             'createtime' => time(),
+            'weixinhao' => $weixinhao,
+            'license' => (empty($_GPC['image']) || $_GPC['images'] == 'undefined') ? '' : $_GPC['images'],
             'status' => 0
         );
 
@@ -2491,9 +2500,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $province = $_GPC['province'];
         $city = $_GPC['city'];
         $district = $_GPC['district'];
+        $area = $_GPC['area'];
 
-        $address = $province . ' ' . $city . ' ' . $district;
-        $info = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where area=:area and uniacid=:uniacid", array(':area' => $address, ':uniacid' => $_W['uniacid']));
+        $address = $province . ' ' . $city . ' ' . $district . ' ' . $area;
+        $info = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where area like :area and uniacid=:uniacid", array(':area' => $address, ':uniacid' => $_W['uniacid']));
         if(!empty($info)){
             return $this->result(1, '地区已被代理，请选择其它地区');
         }
@@ -2503,9 +2513,26 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public function doPageGetAreaManagerList(){
         global $_W,$_GPC;
         $page = max(1,intval($_GPC['page']));
+        //$formid = $_GPC['formid'];
+        //$this->saveFormId($_W['openid'], $formid);
+        $area = $_GPC['area'];
         $pageSize = 16;
-        $list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where uniacid=:uniacid and status=1 order by id desc limit " . ($page - 1) * $pageSize . ',' . $pageSize, array(':uniacid' => $_W['uniacid']));
-        return $this->result(0,'',$list);
+
+        $conditions = " uniacid=:uniacid and status=1";
+        $params[':uniacid'] = $_W['uniacid'];
+
+        if(!empty($area)){
+            $conditions .= " and area not like :area";
+            $params[':area'] = $area;
+        }
+
+        if(!empty($area)){
+            $cur = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where uniacid=:uniacid and status=1 and area like :area", array(':uniacid' => $_W['uniacid'], ':area' => $area));
+        }
+        $list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where " . $conditions . " order by id desc limit " . ($page - 1) * $pageSize . "," . $pageSize, $params);
+        $data['curArea'] = empty($cur) ? false : $cur;
+        $data['list'] = $list;
+        return $this->result(0,'',$data);
     }
 
     /**

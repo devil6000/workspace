@@ -1,8 +1,14 @@
 ﻿{template 'common/header'}
 
 <ul class="nav nav-tabs">
-	<li {if $op=='display'}class="active" {/if}>
-		<a href="{php echo $this->createWebUrl('order')}">订单管理</a>
+	<li {if $op=='display' && $status == -1}class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('order', array('status' => -1))}">订单管理</a>
+	</li>
+	<li {if $op=='display' && $status == 0}class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('order', array('status' => 0))}">接单中</a>
+	</li>
+	<li {if $op=='display' && $status == 3}class="active" {/if}>
+	<a href="{php echo $this->createWebUrl('order', array('status' => 3))}">已完成</a>
 	</li>
 </ul>
 {if $op == 'post'}

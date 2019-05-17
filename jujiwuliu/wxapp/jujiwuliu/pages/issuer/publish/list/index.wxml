@@ -34,7 +34,7 @@
                             <view>{{labor.staticname}}</view>
                             <view>
                               <view class='red'>{{labor.price}}元</view>
-                              <view class='gray'>(1{{labor.unit}})</view>
+                              <view class='gray' ><block wx:if="{{labor.static != 4}}">(1{{labor.unit}})</block></view>
                             </view>
                           </view>
                           <view class='detail'>

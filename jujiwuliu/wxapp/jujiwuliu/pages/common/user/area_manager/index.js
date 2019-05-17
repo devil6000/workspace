@@ -6,6 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    siteinfo: app.siteInfo,
     tabBar: [],
     sexArray: ['保密','男','女'],
     sexIndex: 0,
@@ -15,6 +16,8 @@ Page({
     citysIndex: 0,
     districts: [],
     districtsIndex: 0,
+    areas: [],
+    areasIndex: 0,
     areaManager: {}
   },
 
@@ -42,11 +45,9 @@ Page({
       method: 'GET',
       success: function(res){
         var data = res.data.data;
-        if(data){
-          wx.navigateTo({
-            url: '/jujiwuliu/pages/common/user/area_manager/apply',
-          })
-        }
+        that.setData({
+          areaManager: data
+        })
       }
     });
 
@@ -127,6 +128,11 @@ Page({
                 areasIndex = idx;
               }
             }
+            if(type == 4){
+              if(pro.fullname == address_component.street){
+                areasIndex = idx;
+              }
+            }
           }
         })
 
@@ -143,6 +149,14 @@ Page({
             districts: areas,
             objectDistricts: res.data.data.result[0],
             districtsIndex: areasIndex
+          })
+          that.get_citys(areasIndex ? res.data.data.result[0][areasIndex].id : res.data.data.result[0][0].id, 4, address_component ? address_component : 0);
+        }
+        if(type == 4){
+          that.setData({
+            areas: areas,
+            objectAreas: res.data.data.result[0],
+            areasIndex: areasIndex
           })
         }
       }
@@ -170,7 +184,16 @@ Page({
     that.setData({
       districtsIndex: e.detail.value
     })
+    that.get_citys(that.data.objectCitys[e.detail.value].id, 4, 0);
   },
+
+  areaChange: function(e){
+    var that = this;
+    that.setData({
+      areasIndex: e.detail.value
+    })
+  },
+
   sexPickerChange: function(e){
     var that = this;
     that.setData({
@@ -197,11 +220,16 @@ Page({
       id_card: e.detail.value
     })
   },
+  getWeixinhao: function(e){
+    this.setData({
+      weixinhao: e.detail.value
+    })
+  },
   submit: function(e){
     var that = this;
 
     //判断手机号是否正确
-    var exp = /^((1[1-9]{2})+\d{8})$/;
+    var exp = /^((1[1-9]{1})+\d{9})$/;
     if(!exp.test(that.data.mobile)){
       wx.showModal({
         title: '温馨提示',
@@ -218,7 +246,8 @@ Page({
       data: {
         province: that.data.objectProvinces[that.data.provincesIndex].name,
         city: that.data.objectCitys[that.data.citysIndex].name,
-        district: that.data.objectDistricts[that.data.districtsIndex].name
+        district: that.data.objectDistricts[that.data.districtsIndex].name,
+        area: that.data.objectAreas[that.data.areasIndex].name
       },
       method: "POST",
       success: function(res){
@@ -260,16 +289,70 @@ Page({
         ago: that.data.ago,
         sex: that.data.sexIndex,
         idcard: that.data.id_card,
-        address: that.data.objectProvinces[that.data.provincesIndex].name + ' ' + that.data.objectCitys[that.data.citysIndex].name + ' ' + that.data.objectDistricts[that.data.districtsIndex].name
+        weixinhao: that.data.weixinhao,
+        image: that.data.images,
+        address: that.data.objectProvinces[that.data.provincesIndex].name + ' ' + that.data.objectCitys[that.data.citysIndex].name + ' ' + that.data.objectDistricts[that.data.districtsIndex].name + ' ' + that.data.objectAreas[that.data.areasIndex].name
       },
       method: "POST",
       success: function(res){
-        if(res.status == 0){
-          wx.navigateTo({
-            url: '/jujiwuliu/pages/common/user/area_manager/apply',
-          })
+        if(res.data.errno == 0){
+          that.onShow();
         }
       }
+    })
+  },
+
+  bindChooiceProduct: function(){
+    var that = this;
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album','camera'],
+      success: function(res) {
+        var tempFilePaths = res.tempFilePaths;
+        wx.showToast({
+          title: '正在上传...',
+          icon: 'loading',
+          mask: true,
+          duration: 1000
+        })
+
+        that.setData({
+          images: []
+        })
+
+        tempFilePaths.forEach(function(file_path,index){
+          wx.uploadFile({
+            url: app.util.getUrl('entry/wxapp/imgupload'),
+            filePath: file_path,
+            name: 'file',
+            formData: {
+              file: file_path
+            },
+            header: {
+              "Content-Type": "multipart/form-data"
+            },
+            success: function(res){
+              var info = JSON.parse(res.data);
+              if(info.errno == 0){
+                info = info.data;
+                var inf_imgs = that.data.images;
+                inf_imgs.push(info.file_name);
+                that.setData({
+                  images: inf_imgs
+                })
+              }else{
+                wx.showModal({
+                  title: '获取失败',
+                  content: info.message,
+                  showCancel: false
+                })
+                return false;
+              }
+            }
+          })
+        })
+      },
     })
   },
 

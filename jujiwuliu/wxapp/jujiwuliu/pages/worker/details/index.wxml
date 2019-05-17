@@ -28,16 +28,18 @@
       <view class='info-cell-item'>性别：<text>{{data.sex}}</text></view>
     </view>
     <view class='weui-cell info-cell'>
-      <view class='info-cell-item'>价格：<text style='color: #f4430c;'>{{data.static == 4 ? data.total_price : data.price}}元</text><block wx:if="{{data.static != 4}}">(1{{data.unit}})</block></view>
+      <view class='info-cell-item'>人均：<text style='color: #f4430c;'>{{data.static == 4 ? data.total_price : data.price}}元</text><block wx:if="{{data.static != 4}}">(1{{data.unit}})</block></view>
       <view class='info-cell-item'>{{data.unit}}数：<text>{{data.count}}{{data.unit}}</text></view>
     </view>
     <navigator  class='weui-cell info-cell' style='display:block;overflow: hidden;' url="../../../pages/common/map/index?id={{data.id}}&lng={{data.lng}}">
         <view class='info-cell-item' style='width:calc(100% - 150rpx);float:left;white-space: nowrap;text-overflow:ellipsis;overflow:hidden;'>地点：<text style='color:#666;'>{{data.address}}</text></view>
         <view class='right lcoation'><image src='../../../resource/images/icon_01.png'></image>{{data.distance}}km</view>
     </navigator>
-    <view class='weui-cell info-cell'>
-      <view class='info-cell-item' bindtap='callPhone'>联系方式：<text>{{data.release_mobile}}</text></view>
-    </view>
+    <block wx:if="{{data.orderid}}">
+      <view class='weui-cell info-cell'>
+        <view class='info-cell-item' bindtap='callPhone'>联系方式：<text>{{data.release_mobile}}</text></view>
+      </view>
+    </block>
     
     </view>
 

@@ -393,13 +393,18 @@ class jujiwuliuModuleSite extends WeModuleSite {
 			if(!empty($keyword)){
 				$condition.=' and (nickname like "%'.$keyword.'%" or mobile like "%'.$keyword.'%" or realname like "%'.$keyword.'%")';
 			}
+			$status = isset($_GPC['status']) ? intval($_GPC['status']) : -1;
+			if($status > -1){
+			    $condition .= ' and status=' . $status;
+            }
+
 			$pindex = max(1,intval($_GPC['page']));
 			$psize = 20;
 
 			$type=$_GPC["type"];//获取类型（进行中、已完成、已取消）
 	
-			$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabrelease).' where uniacid ='.$_W['uniacid'].' and pay_status=1  and deleted=0 '.$condition);
-			$list = pdo_fetchall("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid  and pay_status=1 and deleted=0 order by createtime desc LIMIT " . (($pindex - 1) * $psize) . ',' . $psize, array(':uniacid' => $_W['uniacid']));
+			$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabrelease).' where uniacid ='.$_W['uniacid'].' and pay_status=1  and deleted=0' . $condition);
+			$list = pdo_fetchall("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid  and pay_status=1 and deleted=0" . $condition . " order by createtime desc LIMIT " . (($pindex - 1) * $psize) . ',' . $psize, array(':uniacid' => $_W['uniacid']));
 			foreach($list as & $res){
 				$res['member'] = pdo_fetch('select * from '.tablename($this->tabmember).' where uniacid='.$_W['uniacid'].' and openid="'.$res['openid'].'"');
 

@@ -1,8 +1,14 @@
 ﻿{template 'common/header'}
 
 <ul class="nav nav-tabs">
-	<li {if $op=='display' }class="active" {/if}>
-		<a href="{php echo $this->createWebUrl('release')}">发布列表</a>
+	<li {if $op=='display' && $status == -1 }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('release', array('status' => -1))}">发布列表</a>
+	</li>
+	<li {if $op=='display' && $status == 0 }class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('release', array('status' => 0))}">发布中</a>
+	</li>
+	<li {if $op=='display' && $status == 3 }class="active" {/if}>
+	<a href="{php echo $this->createWebUrl('release', array('status' => 3))}">已完成</a>
 	</li>
 	{if $op == 'post'}
 	<li class="active">

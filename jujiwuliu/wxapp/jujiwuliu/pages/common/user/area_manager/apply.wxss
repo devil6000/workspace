@@ -37,3 +37,25 @@ page {
   margin-left: 28rpx;
   flex: 1;
 }
+
+.fui-cell.lagre {
+  height: 200rpx;
+}
+
+.fui-cell.lagre .input {
+  flex: 1;
+  font-size: 0;
+}
+
+.fui-cell.lagre .images {
+  position: relative;
+  width: 110rpx;
+  height: 110rpx;
+}
+
+.fui-cell.lagre .images image {
+  width: 110rpx;
+  height: 110rpx;
+  overflow: hidden;
+  display: inline-block;
+}
