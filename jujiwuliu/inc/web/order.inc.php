@@ -24,10 +24,14 @@ if($op=='display'){
     $pindex = max(1,intval($_GPC['page']));
     $psize = 20;
     $total = pdo_fetchcolumn('select count(*) from '.tablename($this->taborder).' where ' . $condition);
-    $list = pdo_fetchall('select * from '.tablename($this->taborder).' where '.$condition.' order by rid desc LIMIT '.($pindex-1)*$psize.','.$psize);
+    $sql = 'select * from '.tablename($this->taborder).' where '.$condition.' order by rid desc';
+    if(empty($_GPC['export'])){
+        $sql .= ' LIMIT '.($pindex-1)*$psize.','.$psize;
+    }
+    $list = pdo_fetchall($sql);
     $nums = array();    //保存数量临时变量
     foreach($list as & $res){
-        $res['createtime'] = date('m/d/y', $res['createtime']);
+        $res['createtime'] = date('m/d/y H:i', $res['createtime']);
         $res['member'] = pdo_fetch('select * from ' . tablename($this->tabmember) . ' where openid=:openid and uniacid=:uniacid', array(':openid' => $res['openid'], ':uniacid' => $_W['uniacid']));
         $release = pdo_fetch('select * from '.tablename($this->tabrelease).' where uniacid='.$_W['uniacid'].' and id="'.$res['rid'].'"  and deleted=0 ');
         if(!empty($release)){
@@ -44,6 +48,24 @@ if($op=='display'){
     unset($res);
 
     $pager = pagination($total, $pindex, $psize);
+
+    if($_GPC['export'] == 1){
+        require IA_ROOT . '/addons/jujiwuliu/excel.php';
+        $excel = new Excel();
+        $excel->export(array(), array(
+            'title' => '接单信息',
+            'columns' => array(
+                array('title' => '接单号', 'field' => 'ordersn', 'width' => 20),
+                array('title' => '接单人', 'field' => 'nickname', 'width' => 20),
+                array('title' => '金额', 'field' => 'money', 'width' => 12),
+                array('title' => '抽成', 'field' => 'pumping', 'width' => 12),
+                array('title' => '保证金', 'field' => 'deposit', 'width' => 12),
+                array('title' => '人数', 'field' => 'num', 'width' => 12),
+                array('title' => '预计公费', 'field' => 'total_price', 'width' => 12),
+                array('title' => '状态', 'field' => 'status_str', 'width' => 12)
+            )
+        ));
+    }
 }
 
 if($op=='post'){

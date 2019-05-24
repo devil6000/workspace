@@ -32,6 +32,14 @@ Page({
             });
             return false;
         }
+        if(e.detail.value.money < 2){
+          wx.showModal({
+            title: '温馨提示',
+            content: '至少提现2元',
+            showCancel: false
+          })
+          return false;
+        }
 
         app.util.request({//获取会员信息
             url: 'entry/wxapp/post_withdraw',

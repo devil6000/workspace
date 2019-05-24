@@ -10,6 +10,8 @@ Page({
     tabBar: [],
     sexArray: ['保密','男','女'],
     sexIndex: 0,
+    staticArray: ['个人','企业'],
+    staticIndex: 0,
     provinces: [],
     provincesIndex: 0,
     citys: [],
@@ -18,13 +20,35 @@ Page({
     districtsIndex: 0,
     areas: [],
     areasIndex: 0,
-    areaManager: {}
+    areaManager: {},
+    //是否采用衔接滑动
+    circular: true,
+    //是否显示画板指示点
+    indicatorDots: true,
+    //选中点的颜色
+    indicatorcolor: "#000",//被css冲突了
+    //是否竖直
+    vertical: false,
+    //是否自动切换
+    autoplay: true,
+    //滑动动画时长毫秒
+    duration: 1000,
+    //所有图片的高度
+    imgheights: [500],//不填写则默认获取图片高度（比较耗资源）
+    //图片宽度
+    imgwidth: 750,
+    //默认
+    current: 0,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var setting = wx.getStorageSync('setting_set');
+    this.setData({
+      setting: setting.data
+    })
   },
 
   /**
@@ -193,7 +217,11 @@ Page({
       areasIndex: e.detail.value
     })
   },
-
+  staticPickerChange: function(e){
+    this.setData({
+      staticIndex: e.detail.value
+    })
+  },
   sexPickerChange: function(e){
     var that = this;
     that.setData({
@@ -271,10 +299,19 @@ Page({
       return
     }
 
-    if(that.data.id_card == ''){
+    if(that.data.staticIndex == 0 && that.data.id_card == ''){
       wx.showModal({
         title: '温馨提示',
         content: '身份证号不能为空',
+        showCancel: false
+      })
+      return
+    }
+
+    if(thiat.data.staticIndex == 1 && (that.data.images == undefined || that.data.images.length == 0 )){
+      wx.showModal({
+        title: '温馨提示',
+        content: '营业执照不能为空',
         showCancel: false
       })
       return
@@ -291,6 +328,7 @@ Page({
         idcard: that.data.id_card,
         weixinhao: that.data.weixinhao,
         image: that.data.images,
+        static: that.data.staticIndex,
         address: that.data.objectProvinces[that.data.provincesIndex].name + ' ' + that.data.objectCitys[that.data.citysIndex].name + ' ' + that.data.objectDistricts[that.data.districtsIndex].name + ' ' + that.data.objectAreas[that.data.areasIndex].name
       },
       method: "POST",
@@ -356,6 +394,23 @@ Page({
     })
   },
 
+  imageLoad: function (e) {//轮播图高度自适应
+    //获取图片真实宽度
+    var imgwidth = e.detail.width,
+      imgheight = e.detail.height,
+      //宽高比
+      ratio = imgwidth / imgheight;
+    //计算的高度值
+
+    var viewHeight = this.data.imgwidth / ratio;
+    var imgheight = viewHeight
+    var imgheights = this.data.imgheights
+    //把每一张图片的高度记录到数组里
+    imgheights.push(imgheight)
+    this.setData({
+      imgheights: imgheights,
+    })
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

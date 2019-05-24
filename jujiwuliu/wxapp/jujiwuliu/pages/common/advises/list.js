@@ -6,7 +6,26 @@ Page({
    * 页面的初始数据
    */
   data: {
+    siteinfo: app.siteInfo,
     model: ['投诉','建议'],
+    //是否采用衔接滑动
+    circular: true,
+    //是否显示画板指示点
+    indicatorDots: true,
+    //选中点的颜色
+    indicatorcolor: "#000",//被css冲突了
+    //是否竖直
+    vertical: false,
+    //是否自动切换
+    autoplay: true,
+    //滑动动画时长毫秒
+    duration: 1000,
+    //所有图片的高度
+    imgheights: [500],//不填写则默认获取图片高度（比较耗资源）
+    //图片宽度
+    imgwidth: 750,
+    //默认
+    current: 0,
   },
 
   on_loadlist: function () {
@@ -46,6 +65,24 @@ Page({
     })
   },
 
+  imageLoad: function (e) {//轮播图高度自适应
+    //获取图片真实宽度
+    var imgwidth = e.detail.width,
+      imgheight = e.detail.height,
+      //宽高比
+      ratio = imgwidth / imgheight;
+    //计算的高度值
+
+    var viewHeight = this.data.imgwidth / ratio;
+    var imgheight = viewHeight
+    var imgheights = this.data.imgheights
+    //把每一张图片的高度记录到数组里
+    imgheights.push(imgheight)
+    this.setData({
+      imgheights: imgheights,
+    })
+  },
+
   onReachBottom: function(){
     this.on_loadlist()
   },
@@ -56,6 +93,10 @@ Page({
   onLoad: function (options) {
     var that = this;
     app.util.footer(that);
+    var setting = wx.getStorageSync('setting_set');
+    that.setData({
+      setting: setting.data
+    })
     that.on_loadlist();
   },
 

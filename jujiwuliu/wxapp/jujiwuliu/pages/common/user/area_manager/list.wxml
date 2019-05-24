@@ -1,5 +1,14 @@
 <!--jujiwuliu/pages/common/user/area_manager/list.wxml-->
 <view class='container'>
+  <block wx:if="{{setting.rolling_areas}}">
+    <view class="swiper">
+        <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+          <swiper-item wx:for="{{setting.rolling_areas}}" wx:key="{{index}}">
+            <image class="nav-icon" mode="scaleToFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" class="itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+          </swiper-item>
+        </swiper>
+    </view>
+  </block>
   <block wx:if="{{userType == 'issuer'}}">
     <view class='container-header orange'>
       <view class='search-line'>

@@ -15,9 +15,28 @@ if($op=='display'){
 	}
 	$pindex = max(1,intval($_GPC['page']));
 	$psize = 20;
-	$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabmember).' where uniacid ='.$_W['uniacid'].' '.$condition);
-	$list = pdo_fetchall('select * from '.tablename($this->tabmember).' where uniacid='.$_W['uniacid'].' '.$condition.' order by id desc LIMIT '.($pindex-1)*$psize.','.$psize);
+	$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabmember).' where uniacid ='.$_W['uniacid'].$condition);
+	$sql = 'select * from '.tablename($this->tabmember).' where uniacid='.$_W['uniacid'].$condition.' order by id desc';
+	if(empty($_GPC['export'])){
+	    $sql .= ' limit ' . ($pindex-1) * $psize . ',' . $psize;
+    }
+	$list = pdo_fetchall($sql);
 	$pager = pagination($total, $pindex, $psize);
+	if($_GPC['export'] == 1){
+	    set_time_limit(0);
+        require_once IA_ROOT . '/addons/jujiwuliu/excel.php';
+        $excel = new Excel();
+        $excel->export($list, array(
+            'title' => '会员信息',
+            'columns' => array(
+                array('title' => 'id', 'field' => 'id', 'width' => 12),
+                array('title' => '昵称', 'field' => 'nickname', 'width' => 20),
+                array('title' => '真实姓名', 'field' => 'realname', 'width' => 20),
+                array('title' => '余额', 'field' => 'credit2', 'width' => 12),
+                array('title' => '积分', 'field' => 'credit1', 'width' => 12)
+            )
+        ));
+    }
 }
 
 if($op=='post'){

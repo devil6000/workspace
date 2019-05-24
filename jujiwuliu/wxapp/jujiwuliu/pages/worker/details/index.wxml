@@ -3,7 +3,7 @@
   <view class="swiper">
       <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
         <swiper-item wx:for="{{slide}}" wx:key="{{index}}">
-          <image class="nav-icon" mode="aspectFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad"   class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+          <image class="nav-icon" mode="aspectFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" binderror='imageError'   class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
         </swiper-item>
       </swiper>
   </view>

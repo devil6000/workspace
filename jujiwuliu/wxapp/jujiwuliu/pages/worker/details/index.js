@@ -10,9 +10,9 @@ Page({
     data: {},
     //图片
     slide: {
-      0:'../../../resource/images/banner.png',
-      1: '../../../resource/images/banner.png',
-      2: '../../../resource/images/banner.png',
+      0: '../../../resource/images/banyungong.png',
+      1: '../../../resource/images/banyungong.png',
+      2: '../../../resource/images/banyungong.png',
     },
     //是否采用衔接滑动
     circular: true,
@@ -205,7 +205,7 @@ Page({
     var formid = e.detail.formId;
     app.util.request({
       url: 'entry/wxapp/refundWorkerBond',
-      data: { id: that.data.data.orderid, formid: formId},
+      data: { id: that.data.data.orderid, formid: formid},
       method: 'POST',
       success: function(res){
         wx.showModal({

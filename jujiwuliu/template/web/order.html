@@ -8,7 +8,10 @@
 		<a href="{php echo $this->createWebUrl('order', array('status' => 0))}">接单中</a>
 	</li>
 	<li {if $op=='display' && $status == 3}class="active" {/if}>
-	<a href="{php echo $this->createWebUrl('order', array('status' => 3))}">已完成</a>
+		<a href="{php echo $this->createWebUrl('order', array('status' => 3))}">已完成</a>
+	</li>
+	<li {if $op=='display' && $status == 4}class="active" {/if}>
+		<a href="{php echo $this->createWebUrl('order', array('status' => 4))}">已取消</a>
 	</li>
 </ul>
 {if $op == 'post'}
@@ -81,9 +84,10 @@
 				<div class="col-sm-9 col-lg-9 col-xs-12">
 					<input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入昵称/手机号码/姓名搜索" />
 				</div>
-				<div class="col-xs-12 col-sm-2 col-md-2 col-lg-1">
+				<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
 					<input type="hidden" name="token" value="{$_W['token']}" />
+					<button class="btn btn-default" name="export" value="1">导出Excel</button>
 				</div>
 			</div>
 		</form>

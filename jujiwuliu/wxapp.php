@@ -397,6 +397,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
       	//return $this->result(1, '系统升级中');
 		$setting = $this->seeting;
 		$setting['rolling_diagram']=unserialize($setting['rolling_diagram']);
+		$setting['rolling_areas'] = unserialize($setting['rolling_areas']);
+		$setting['rolling_advises'] = unserialize($setting['rolling_advises']);
 		foreach ($setting['rolling_diagram'] as & $value) {
 			$value=tomedia($value);
 		}
@@ -1309,7 +1311,11 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$res['images']=unserialize($res['images']);
 			foreach ($res['images'] as $k => $image){
 			    if(empty($image)){
-			        $res['images'][$k] = 'default.png';
+			        if($res['type'] == 0){
+                        $res['images'][$k] = 'default.png';
+                    }elseif ($res['type'] == 1){
+                        $res['images'][$k] = 'linshigong.png';
+                    }
                 }
             }
 
@@ -1374,6 +1380,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			}
 
 			$data['images']=unserialize($data['images']);
+            foreach ($data['images'] as $k => $image){
+                if(empty($image)){
+                    if($data['type'] == 0){
+                        $data['images'][$k] = 'default.png';
+                    }elseif ($data['type'] == 1){
+                        $data['images'][$k] = 'linshigong.png';
+                    }
+                }
+            }
 			$data['typename'] = $this->type_set[$data['type']];
 			$data['unit'] = $this->unit_set[$data['type']];
 			$data['staticname'] = $this->static_set[$data['static']];
@@ -1664,14 +1679,58 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $this->saveFormId($_W['openid'], $formid);
         $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where id=:id and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
         if(!empty($order)){
+            $release = pdo_fetch("select * from " . tablename($this->tabrelease) . " where id=:id and openid=:openid", array(':id' => $order['rid'], ':openid' => $_W['openid']));
+            if(empty($release)){
+                return $this->result(1,'单子不属于您！');
+            }
+
             $update = array(
                 'status' => 4,
+                'apply'  => 0,
                 'can_refund_bond' => 0
             );
             pdo_update($this->taborder, $update, array('id' => $id));
+
+            //判断是否取消订单，退金额
+            $canRefund = false; //不能取消
+
+            if($release['nums'] == 1){
+                $canRefund = true;
+            }else{
+                $count = pdo_fetchcolumn("select count(id) from " . tablename($this->taborder) . " where rid=:id and status<>4", array(':id' => $release['id']));
+                $count = empty($count) ? 0 : $count;
+                if($count == 0){ //已没有接单会员
+                    $canRefund = true;
+                }
+            }
+            if($canRefund){
+                $uid = mc_openid2uid($_W['openid']);
+                $log=array(
+                    0,
+                    '因工人未到场，自动退款和保证金',
+                    'jujiwuliu',
+                    '',
+                    '',
+                    4,
+                    $release['ordersn']
+                );
+                $money = $release['count_price'] + $release['cancel_refund_money'];
+                $result = $this->credit_update($uid,'credit2',$money,$log);
+                if($result){
+                    $releaseUpdate = array(
+                        'status'    => 4,
+                        'can_refund_bond' => 1,
+                        'apply_bond_status' => 2,
+                        'apply_refund' => 2
+                    );
+                    pdo_update($this->tabrelease, $releaseUpdate, array('id' => $release['id']));
+                }
+            }
+
+            return $this->result(0);
         }
 
-        return $this->result(0);
+        return $this->result(1,'未找到订单！');
     }
 
 	//发布方所有方法结束
@@ -1748,10 +1807,13 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                 $res['distance']=$distance['result']['rows'][0]['elements'][0]['distance']?rand((($distance['result']['rows'][0]['elements'][0]['distance'])/1000),2):$res['distance'];
             //}
 
-			$res['images']=unserialize($res['images']);
-            foreach ($res['images'] as $k => $image){
-                if(empty($image)){
-                    $res['images'][$k] = 'default.png';
+			$res['images'] = unserialize($res['images']);
+			$res['images'] = array_filter($res['images']);
+			if(empty($res['images'])){
+                if($res['type'] == 0){
+                    $res['images'] = array('default.png');
+                }elseif ($res['type'] == 1){
+                    $res['images'] = array('linshigong.png');
                 }
             }
 			$res['typename'] = $this->type_set[$res['type']];
@@ -1781,7 +1843,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 //		$data['status1'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid and deleted=0 and id not in(SELECT id FROM ".tablename($this->taborder)." WHERE openid = '".$_W['openid']."')", array(':uniacid' => $_W['uniacid']));
 		$data_status1 = pdo_fetchall("SELECT lat,lng,id FROM ".tablename($this->tabrelease)." as t left join (select rid as o_rid from ".tablename($this->taborder)." where openid = :openid) as o on t.id=o.o_rid WHERE o.o_rid is null and t.uniacid=:uniacid and t.pay_status=1 and t.deleted=0 and (starttime-".time().")>10" , array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
 		foreach ($data_status1 as $key => $item){
-            $count = pdo_fetchcolumn('select count(id) from ' .  tablename($this->taborder) . ' where rid=:rid and status<>4', array(':rid' => $item['id']));
+            $count = pdo_fetchcolumn('select count(id) from ' .  tablename($this->taborder) . ' where rid=:rid', array(':rid' => $item['id']));
             if(!empty($count) && $count >= $res['nums']){
                 unset($data_status1[$key]);
                 continue;
@@ -1844,6 +1906,17 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 				$deposit = $order['deposit'];
 			}
 			$item['images']=unserialize($item['images']);
+			if(empty(array_filter($item['images']))){
+			    if($item['type'] == 0){
+                    $item['images'] = array(
+                        'default.png'
+                    );
+                }elseif ($item['type'] == 1){
+			        $item['images'] = array(
+			            'linshigong.png'
+                    );
+                }
+            }
 			
 			$item['typename'] = $this->type_set[$item['type']];
 			$item['unit'] = $this->unit_set[$item['type']];
@@ -2191,7 +2264,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		if($upord){
 			return $this->result($errno, $message, $id);
 		}else{
-			return $this->result(1, '接单失败！');
+			return $this->result(1, '申请结算失败！');
 		}
 	}
 
@@ -2354,7 +2427,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         if($orders){
             $count = 0;
             foreach ($orders  as $order){
-                if($order['status'] == 0 || $order['status'] == 1){
+                if($order['status'] == 0 || $order['status'] == 1 || $order['status'] == 2){
                     $count += 1;
                 }
             }
@@ -2366,7 +2439,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             if($count == 0){
                 $count = count($orders);
                 $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $rid));
-                if($count < $release){
+                if($count < $release['nums']){
                     $surplus = $release['nums'] - $count;
                     if($surplus < 0){
                         $surplus = 0;
@@ -2378,14 +2451,14 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                     if(is_error($result)){
                         return $this->result(1,$result['message']);
                     }
-                    $update['refund_money'] = $surplus;
+                    $update['refund_num'] = $surplus;
                     $update['refund_money'] = $refund_money;
                 }
             }
         }
 
         $update['status'] = 3;
-        
+
         //将所有已申请结算，未完成的接单完成掉
         pdo_update($this->taborder, array('status' =>3), array('rid' => $rid,'status' => 2));
         pdo_update($this->tabrelease, $update, array('id' => $rid));
@@ -2472,6 +2545,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $idcard = (empty($_GPC['idcard']) || $_GPC['idcard'] == 'undefined') ? '' : $_GPC['idcard'];
         $address = $_GPC['address'];
         $weixinhao = (empty($_GPC['weixinhao']) || $_GPC['weixinhao'] == 'undefined') ? '' : $_GPC['weixinhao'];
+        $static = intval($_GPC['static']);
         //保存formid
         $this->saveFormId($openid, $formid);
 
@@ -2487,7 +2561,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             'createtime' => time(),
             'weixinhao' => $weixinhao,
             'license' => (empty($_GPC['image']) || $_GPC['images'] == 'undefined') ? '' : $_GPC['images'],
-            'status' => 0
+            'status' => 0,
+            'static' => $static
         );
 
         pdo_insert($this->tabareamanager, $insert);

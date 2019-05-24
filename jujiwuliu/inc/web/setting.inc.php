@@ -9,6 +9,8 @@ if($op=='display'){
 	$item = pdo_fetch('select * from '.tablename($this->tabsetting).' where uniacid='.$_W['uniacid'].' and uniacid='.$_W['uniacid']);
 	$item['rolling_diagram']=unserialize($item['rolling_diagram']);
 	$item['share_img']=unserialize($item['share_img']);
+	$item['rolling_areas'] = unserialize($item['rolling_areas']);
+	$item['rolling_advises'] = unserialize($item['rolling_advises']);
 	if(checksubmit('submit')){
 		if($op=='display'){
 			$data['rolling_diagram']=serialize($_GPC['rolling_diagram']);
@@ -16,6 +18,8 @@ if($op=='display'){
 			$data['share_title']=$_GPC['share_title'];
 			$data['rolling_time']=$_GPC['rolling_time'];
 			$data['rolling_interval_time']=$_GPC['rolling_interval_time'];
+			$data['rolling_areas'] = serialize($_GPC['rolling_areas']);
+			$data['rolling_advises'] = serialize($_GPC['rolling_advises']);
 		}
 		//搬运设置
 		if($op=='carry'){

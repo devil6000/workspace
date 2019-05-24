@@ -8,7 +8,10 @@
 		<a href="{php echo $this->createWebUrl('release', array('status' => 0))}">发布中</a>
 	</li>
 	<li {if $op=='display' && $status == 3 }class="active" {/if}>
-	<a href="{php echo $this->createWebUrl('release', array('status' => 3))}">已完成</a>
+		<a href="{php echo $this->createWebUrl('release', array('status' => 3))}">已完成</a>
+	</li>
+	<li {if $op=='display' && $status == 4}class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('release', array('status' => 4))}">已取消</a>
 	</li>
 	{if $op == 'post'}
 	<li class="active">

@@ -82,7 +82,7 @@ Page({
             success: function(res){
               if(res.data.errno == 0){
                 wx.redirectTo({
-                  url: 'jujiwuliu/pages/issuer/publish/list/index',
+                  url: '/jujiwuliu/pages/issuer/publish/list/index',
                 })
               }else{
                 wx.showModal({

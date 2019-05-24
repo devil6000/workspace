@@ -1,9 +1,14 @@
 <!--jujiwuliu/pages/common/advises/index.wxml-->
 <view class='container'>
-  <view class='header'>
-    <text>投诉建议</text>
-  </view>
-
+  <block wx:if="{{setting.rolling_advises}}">
+    <view class="swiper">
+        <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+          <swiper-item wx:for="{{setting.rolling_advises}}" wx:key="{{index}}">
+            <image class="nav-icon" mode="scaleToFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" class="itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+          </swiper-item>
+        </swiper>
+    </view>
+  </block>
   <form report-submit='true' bindsubmit='submit' class='form'>
     <view class='input-box'>
       <view class='form-group'>
