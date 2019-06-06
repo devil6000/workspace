@@ -36,6 +36,9 @@ if($op == 'display'){
         message('审核成功', referer(), 'success');
     }
     $item = pdo_fetch("select * from " . tablename('jujiwuliu_area_manager') . " where id=:id", array(':id' => $id));
+    if(!empty($item['license'])){
+        $item['license'] = tomedia($item['license']);
+    }
     include $this->template('area_apply');
     die;
 }elseif ($op == 'delete'){

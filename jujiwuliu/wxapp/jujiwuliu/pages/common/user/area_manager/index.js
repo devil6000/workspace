@@ -21,6 +21,7 @@ Page({
     areas: [],
     areasIndex: 0,
     areaManager: {},
+    agreement: true,
     //是否采用衔接滑动
     circular: true,
     //是否显示画板指示点
@@ -45,10 +46,59 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this;
     var setting = wx.getStorageSync('setting_set');
-    this.setData({
+    that.setData({
       setting: setting.data
+    });
+
+    wx.getLocation({
+      type: 'wgs84',
+      success: function (res) {
+        const latitude = res.latitude;
+        const longitude = res.longitude;
+        const speed = res.speed;
+        const accuracy = res.accuracy;
+
+        app.util.request({
+          url: 'entry/wxapp/getlocation',
+          data: { lat: latitude, lng: longitude },
+          success: function (res) {
+            var data = res.data.data.result;
+            app.util.request({
+              url: 'entry/wxapp/getchildren',
+              cache: false,
+              success: function (res) {
+                var provinces = [];
+                var objectProvinces = [];
+                var provincesIndex = 0;
+                res.data.data.result[0].forEach(function (pro, idx) {
+                  provinces.push(pro.fullname);
+                  objectProvinces[idx] = pro;
+                  objectProvinces[idx].name = pro.fullname;
+                  objectProvinces[idx].fullname = pro.name;
+                  if (data) {
+                    if (pro.fullname == data.address_component.province) {
+                      provincesIndex = idx;
+                    }
+                  }
+                })
+                that.get_citys(provincesIndex ? res.data.data.result[0][provincesIndex].id : res.data.data.result[0][0].id, 2, data.address_component ? data.address_component : 0);
+                that.setData({
+                  provinces: provinces,
+                  objectProvinces: res.data.data.result[0],
+                  provincesIndex: provincesIndex
+                })
+              }
+            })
+          }
+        })
+      },
     })
+  },
+
+  bindchange: function (e) {//轮播图无限滚动
+    this.setData({ current: e.detail.current })
   },
 
   /**
@@ -62,6 +112,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+
     var that = this;
     
     app.util.request({
@@ -75,6 +126,7 @@ Page({
       }
     });
 
+    /*
     wx.getLocation({
       type: 'wgs84',
       success: function(res) {
@@ -118,6 +170,7 @@ Page({
         })
       },
     })
+    */
   },
 
   /**
@@ -190,7 +243,7 @@ Page({
   provinceChange: function(e){
     var that = this;
     that.setData({
-      provincesIndex: e.detial.value
+      provincesIndex: e.detail.value
     })
     that.get_citys(that.data.objectProvinces[e.detail.value].id,2,0);
   },
@@ -208,7 +261,7 @@ Page({
     that.setData({
       districtsIndex: e.detail.value
     })
-    that.get_citys(that.data.objectCitys[e.detail.value].id, 4, 0);
+    that.get_citys(that.data.objectDistricts[e.detail.value].id, 4, 0);
   },
 
   areaChange: function(e){
@@ -251,6 +304,12 @@ Page({
   getWeixinhao: function(e){
     this.setData({
       weixinhao: e.detail.value
+    })
+  },
+  changeSelect: function(e){
+    var checked = e.target.dataset.checked;
+    this.setData({
+      agreement: checked == true ? false : true
     })
   },
   submit: function(e){
@@ -308,7 +367,7 @@ Page({
       return
     }
 
-    if(thiat.data.staticIndex == 1 && (that.data.images == undefined || that.data.images.length == 0 )){
+    if(that.data.staticIndex == 1 && (that.data.images == undefined || that.data.images.length == 0 )){
       wx.showModal({
         title: '温馨提示',
         content: '营业执照不能为空',
@@ -317,16 +376,20 @@ Page({
       return
     }
 
+    if(!that.data.agreement){
+      wx.showModal({
+        title: '温馨提示',
+        content: '请选择同意协议',
+      })
+    }
+
     app.util.request({
       url: 'entry/wxapp/setAreaManager',
       data: {
         formid: e.detail.formId,
         realname: that.data.realname,
         mobile: that.data.mobile,
-        ago: that.data.ago,
-        sex: that.data.sexIndex,
         idcard: that.data.id_card,
-        weixinhao: that.data.weixinhao,
         image: that.data.images,
         static: that.data.staticIndex,
         address: that.data.objectProvinces[that.data.provincesIndex].name + ' ' + that.data.objectCitys[that.data.citysIndex].name + ' ' + that.data.objectDistricts[that.data.districtsIndex].name + ' ' + that.data.objectAreas[that.data.areasIndex].name

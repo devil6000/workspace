@@ -1,8 +1,7 @@
-<!--jujiwuliu/pages/common/user/area_manager/list.wxml-->
-<view class='container'>
+<view class="container">
   <block wx:if="{{setting.rolling_areas}}">
     <view class="swiper">
-        <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+        <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange='bindchange' circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
           <swiper-item wx:for="{{setting.rolling_areas}}" wx:key="{{index}}">
             <image class="nav-icon" mode="scaleToFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" class="itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
           </swiper-item>
@@ -13,11 +12,25 @@
     <view class='container-header orange'>
       <view class='search-line'>
         <image class='search-img' src='/jujiwuliu/resource/images/home/icon_01.png' />
-        <text>当前位置:</text>
+        <text style='font-size: 25rpx;'>当前位置:</text>
         <view class='search-input'>
-          <picker class='input' mode="multiSelector" bindchange='submit' bindcolumnchange="mulitColumnChange" value='{{multiAreaIndex}}' range='{{multiArea}}'>
-            <view class='picker'>{{multiArea[0][multiAreaIndex[0]]}} {{multiArea[1][multiAreaIndex[1]]}} {{multiArea[2][multiAreaIndex[2]]}} {{multiArea[3][multiAreaIndex[3]]}}</view>
+          <picker bindchange='provinceChange' value="{{provincesIndex}}" range="{{provinces}}" class="input">
+            <view>{{objectProvinces[provincesIndex].fullname}}</view>
           </picker>
+          <picker bindchange="cityChange" value="{{citysIndex}}" range="{{citys}}" class="input">
+            <view>{{objectCitys[citysIndex].fullname}}</view>
+          </picker>
+          <picker bindchange='districtChange' value='{{districtsIndex}}' range='{{districts}}' class='input'>
+            <view>{{objectDistricts[districtsIndex].fullname}}</view>
+          </picker>
+          <picker bindchange='areaChange' value='{{areasIndex}}' range='{{areas}}' class='input'>
+            <view>{{objectAreas[areasIndex].fullname}}</view>
+          </picker>
+        </view>
+        <view class='search-btn'>
+          <form report-submit='true' bindsubmit='search'>
+            <button form-type='submit' class='submit'>查询</button>
+          </form>
         </view>
       </view>
     </view>
@@ -28,44 +41,39 @@
         <image class='search-img' src='/jujiwuliu/resource/images/home/icon_01.png' />
         <text>当前位置:</text>
         <view class='search-input'>
-          <picker class='input' mode="multiSelector" bindchange='submit' bindcolumnchange="mulitColumnChange" value='{{multiAreaIndex}}' range='{{multiArea}}'>
-            <view class='picker'>{{multiArea[0][multiAreaIndex[0]]}} {{multiArea[1][multiAreaIndex[1]]}} {{multiArea[2][multiAreaIndex[2]]}} {{multiArea[3][multiAreaIndex[3]]}}</view>
+          <picker bindchange='provinceChange' value="{{provincesIndex}}" range="{{provinces}}" class="input">
+            <view>{{objectProvinces[provincesIndex].fullname}}</view>
           </picker>
+          <picker bindchange="cityChange" value="{{citysIndex}}" range="{{citys}}" class="input">
+            <view>{{objectCitys[citysIndex].fullname}}</view>
+          </picker>
+          <picker bindchange='districtChange' value='{{districtsIndex}}' range='{{districts}}' class='input'>
+            <view>{{objectDistricts[districtsIndex].fullname}}</view>
+          </picker>
+        </view>
+        <view class='search-btn'>
+          <form report-submit='true' bindsubmit='search'>
+            <button form-type='submit' class='submit blue'>查询</button>
+          </form>
         </view>
       </view>
     </view>
   </block>
   <view class='container-body'>
-    <block wx:if="{{curArea}}">
-      <view class='cur-list'>
-        <text class='title'>当前区域负责人</text>
-        <view class='list-item'>
-          <view class='list-item-line'>
-            <text class='name'>{{curArea.realname}}</text>
-            <text class='mobile' bindtap='callPhone' data-mobile="{{curArea.mobile}}">{{curArea.mobile}}</text>
-          </view>
-          <view class='list-item-line'>
-            <text class='label'>负责区域：{{curArea.area}}</text>
-          </view>
-        </view>
-      </view>
-    </block>
     <view class='list-group'>
       <block wx:if="{{list}}">
-        <text class='title'>其它区域负责人</text>
         <block wx:for="{{list}}" wx:key="index" wx:for-item="item">
           <view class='list-item'>
+            <image src='{{item.avatar}}' class='avatar' />
             <view class='list-item-line'>
-              <text class='name'>{{item.realname}}</text>
-              <text class='mobile' bindtap='callPhone' data-mobile="{{item.mobile}}">{{item.mobile}}</text>
-            </view>
-            <view class='list-item-line'>
-              <text class='label'>负责区域：{{item.area}}</text>
+              <text>姓名：{{item.realname}}</text>
+              <text bindtap='callPhone' data-mobile="{{item.mobile}}">电话：{{item.mobile}}</text>
+              <text>区域：{{item.area}}</text>
             </view>
           </view>
         </block>
       </block>
-      <block wx:elif="{{!curArea && !list}}">
+      <block wx:elif="{{!list}}">
         <view class='item-empty'>
           <view class='empty-icon'><image  mode="widthFix" src="/jujiwuliu/resource/images/empty.png" /></view>
           <view class='empty-text'>无任何纪录</view>
@@ -74,6 +82,3 @@
     </view>
   </view>
 </view>
-
-<import src="../../template/footer.wxml"/>
-<template is="footerWx" data="{{...tabBar}}"/>

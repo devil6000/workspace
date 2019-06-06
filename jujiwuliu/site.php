@@ -406,11 +406,11 @@ class jujiwuliuModuleSite extends WeModuleSite {
 			$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabrelease).' where uniacid ='.$_W['uniacid'].' and pay_status=1  and deleted=0' . $condition);
 			$list = pdo_fetchall("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid  and pay_status=1 and deleted=0" . $condition . " order by createtime desc LIMIT " . (($pindex - 1) * $psize) . ',' . $psize, array(':uniacid' => $_W['uniacid']));
 			foreach($list as & $res){
-				$res['member'] = pdo_fetch('select * from '.tablename($this->tabmember).' where uniacid='.$_W['uniacid'].' and openid="'.$res['openid'].'"');
+				$res['member'] = pdo_fetch('select * from '.tablename($this->tabmember).' where uniacid='.$_W['uniacid'].' and openid=\''.$res['openid'].'\'');
 
 				$res['images']=unserialize($res['images']);
 				$res['typename'] = $this->type_set[$res['type']];
-				$res['unit'] = $this->unit_set[$res['type']];	
+				$res['unit'] = $this->unit_set[$res['type']];
 				$res['staticname'] = $this->static_set[$res['static']];
 				$res['sex'] = $this->sex_set[$res['sex']];
 				$res['createtime'] = date('m/d/y H:i', $res['createtime']);
@@ -419,6 +419,8 @@ class jujiwuliuModuleSite extends WeModuleSite {
 				$res['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and deleted=0", array(':uniacid' => $_W['uniacid'], ':rid' => $res['id']));
 				$res['gptu'] = $res['nums']  - $res['yet'];
 			}
+
+			unset($res);
 			
 			$pager = pagination($total, $pindex, $psize);
 		}

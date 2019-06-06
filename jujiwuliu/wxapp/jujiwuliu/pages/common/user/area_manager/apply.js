@@ -7,7 +7,14 @@ Page({
    */
   data: {
     siteinfo: app.siteInfo,
-    sexArray: ['保密', '男', '女'],
+    agreement: true
+  },
+
+  changeSelect: function(e){
+    var value = e.detail.value;
+    this.setData({
+      agreement: value
+    })
   },
 
   /**

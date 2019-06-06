@@ -10,14 +10,6 @@ page {
   font-size: 35rpx;
 }
 
-.orange {
-  background-color: #f66620;
-}
-
-.blue {
-  background-color: #0a95e9;
-}
-
 .search-line {
   width: calc(100% - 20rpx);
   height: 100rpx;
@@ -40,6 +32,7 @@ page {
 .search-line .search-input .input {
   flex: 1;
   overflow: hidden;
+  font-size: 25rpx;
 }
 
 .picker-view {
@@ -52,6 +45,14 @@ page {
   font-size: 30rpx;
   text-align: center;
   background-color: #f66620;
+}
+
+.orange {
+  background-color: #f66620 !important;
+}
+
+.blue {
+  background-color: #0a95e9 !important;
 }
 
 .container-body {
@@ -73,20 +74,26 @@ page {
 
 .list-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: #ffffff;
   margin-bottom: 20rpx;
   padding: 0 10rpx;
   width: calc(100% - 20rpx);
 }
 
+.list-item .avatar {
+  width: 150rpx;
+  height: 150rpx;
+}
+
 
 .list-item .list-item-line {
+  flex: 1;
   display: flex;
-  height: 90rpx;
-  flex-direction: row;
-  align-items: center;
-  font-size: 35rpx;
+  flex-direction: column;
+  height: 150rpx;
+  align-items: flex-start;
+  font-size: 30rpx;
 }
 
 .list-item .list-item-line .name {

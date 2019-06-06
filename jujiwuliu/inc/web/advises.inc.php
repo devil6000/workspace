@@ -45,7 +45,9 @@ if($op == 'display'){
     }
     $item['images'] = explode(',', $item['images']);
     foreach ($item['images'] as $ke => $v){
-        $item['images'][$k] = tomedia($v);
+        if(!empty($v)){
+            $item['images'][$ke] = tomedia($v);
+        }
     }
 
     if($_W['ispost']){

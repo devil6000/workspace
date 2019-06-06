@@ -85,6 +85,35 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             ihttp_request($_W['siteroot'] . 'addons/jujiwuliu/inc/tasks/order_settle.php', null,null, 1);
         }
 
+        //发送消息
+        $current = time() + 1800;
+        $list = pdo_fetchall("select o.openid,o.rid from ". tablename($this->taborder) . " o left join " . tablename($this->tabrelease) . " r on o.rid=r.id where o.status=1 and r.status=1 and r.starttime<=:time", array(':time' => $current));
+        if(!empty($list)){
+            foreach ($list as $item){
+                $formInfo = $this->getFormId($item['openid']);
+                if(!empty($formInfo)){
+                    $result = $this->sendMessage($item['rid'], $item['openid'], '', $formInfo['formid'], 'take_semih');
+                    if(!is_error($result)){
+                        $this->updateFormId($formInfo['openid'], $formInfo['id']);
+                    }
+                }
+            }
+        }
+
+        //发送到达开工时间消息
+        $current = time();
+        $list = pdo_fetchall("select o.openid,o.rid from ". tablename($this->taborder) . " o left join " . tablename($this->tabrelease) . " r on o.rid=r.id where o.status=1 and r.status=1 and r.starttime<=:time", array(':time' => $current));
+        if(!empty($list)){
+            foreach ($list as $item){
+                $formInfo = $this->getFormId($item['openid']);
+                if(!empty($formInfo)){
+                    $result = $this->sendMessage($item['rid'], $item['openid'], '', $formInfo['formid'], 'take_open');
+                    if(!is_error($result)){
+                        $this->updateFormId($formInfo['openid'], $formInfo['id']);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -263,10 +292,83 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                     $tmp = str_replace('[地址]', $release['address'], $tmp);
                     $data[$key]['value'] = $tmp;
                 }
+            }elseif ($type == 'issue_settle'){
+                //接单方申请结算提醒
+                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
+                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
+                foreach ($data as $key => $item){
+                    $tmp = $item['value'];
+                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
+                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
+                    $tmp = str_replace('[数量]', $release['count'], $tmp);
+                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
+                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
+                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
+                    $tmp = str_replace('[单价]', $release['price'], $tmp);
+                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
+                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
+                    $tmp = str_replace('[地址]', $release['address'], $tmp);
+                    $data[$key]['value'] = $tmp;
+                }
+            }elseif ($type == 'take_semih'){
+                //开工时间前30分钟提醒
+                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
+                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
+                foreach ($data as $key => $item){
+                    $tmp = $item['value'];
+                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
+                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
+                    $tmp = str_replace('[数量]', $release['count'], $tmp);
+                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
+                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
+                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
+                    $tmp = str_replace('[单价]', $release['price'], $tmp);
+                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
+                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
+                    $tmp = str_replace('[地址]', $release['address'], $tmp);
+                    $data[$key]['value'] = $tmp;
+                }
+            }elseif ($type == 'take_open'){
+                //开工提醒
+                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
+                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
+                foreach ($data as $key => $item){
+                    $tmp = $item['value'];
+                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
+                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
+                    $tmp = str_replace('[数量]', $release['count'], $tmp);
+                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
+                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
+                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
+                    $tmp = str_replace('[单价]', $release['price'], $tmp);
+                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
+                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
+                    $tmp = str_replace('[地址]', $release['address'], $tmp);
+                    $data[$key]['value'] = $tmp;
+                }
+            }elseif ($type == 'take_money'){
+                //发布方打款提醒
+                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
+                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
+                foreach ($data as $key => $item){
+                    $tmp = $item['value'];
+                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
+                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
+                    $tmp = str_replace('[数量]', $release['count'], $tmp);
+                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
+                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
+                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
+                    $tmp = str_replace('[单价]', $release['price'], $tmp);
+                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
+                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
+                    $tmp = str_replace('[地址]', $release['address'], $tmp);
+                    $data[$key]['value'] = $tmp;
+                }
             }
 
             return $this->sendTplNotice($openid, $template['template_id'], $data, $url, $formid);
         }
+        return error(1,'没有找到消息模版');
     }
 
 
@@ -1101,8 +1203,13 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		}
 		$data=file_get_contents('https://apis.map.qq.com/ws/district/v1/getchildren?key='.$this->map_apikey.$term);
 		$data=json_decode($data);
+		if($data->status == 0){
+            return $this->result($errno,$message, $data);
+        }else{
+		    $data->result = [[]];
+            return $this->result($errno,$message, $data);
+        }
 
-		return $this->result($errno,$message, $data);
 	}
 	//获取所有地区
     public function doPageGetAllArea(){
@@ -1451,36 +1558,6 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
                 $ref = pdo_update($this->tabrelease,$update,array('uniacid'=>$_W['uniacid'],'id'=>$data));
                 if($ref){
-                    //取消订单消息
-                    $data = array(
-                        'first' => array(
-                            'value' => "取消发布成功！",
-                            'color' => '#ff510'
-                        ),
-                        'keyword1' => array(
-                            'value' => '',
-                            'color' => '#ff510'
-                        ),
-                        'keyword2' => array(
-                            'value' => '已取消',
-                            'color' => '#ff510'
-                        ),
-                        'keyword3' => array(
-                            'value' => date('Y-m-d H:i:s', time()),
-                            'color' => '#ff510'
-                        ),
-                        'keyword4' => array(
-                            'value' => '' ,
-                            'color' => '#ff510'
-                        ),
-                    );
-                    /*
-                    $result = $this->sendTplNotice($_W['openid'], 'hWvSnAaQ_Atx_BOFLNuTMCxQRttC1Wu3El1U8MCvRS4', $data, $formId);
-                    if(is_error($result)){
-                        return $this->result($result['errno'], $result['message']);
-                    }
-                    */
-
                     return $this->result(0, '操作成功!', $data);
                 }else{
                     return $this->result(1, '操作失败!', $data);
@@ -1663,6 +1740,16 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $i = $this->credit_update($uid, 'credit2', $release['total_price'], $log);
         if($i){
             pdo_update($this->taborder, array('status' => 3,'apply' => 2), array('id' => $id, 'uniacid' => $_W['uniacid']));
+
+            //发消息
+            $formInfo = $this->getFormId($order['openid']);
+            if(!empty($formInfo)){
+                $result = $this->sendMessage($release['id'], $order['openid'], '', $formInfo['formid'], 'take_money');
+                if(!is_error($result)){
+                    $this->updateFormId($formInfo['openid'], $formInfo['id']);
+                }
+            }
+
             return $this->result(0,'');
         }else{
             return $this->result(1, '确认打款失败');
@@ -1719,7 +1806,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                 if($result){
                     $releaseUpdate = array(
                         'status'    => 4,
-                        'can_refund_bond' => 1,
+                        'can_refund_bond' => 0,
                         'apply_bond_status' => 2,
                         'apply_refund' => 2
                     );
@@ -1840,24 +1927,29 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		}
 		//unset($res);
 		$data['list'] = $list;
+        $total = count($list);
 //		$data['status1'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid and deleted=0 and id not in(SELECT id FROM ".tablename($this->taborder)." WHERE openid = '".$_W['openid']."')", array(':uniacid' => $_W['uniacid']));
-		$data_status1 = pdo_fetchall("SELECT lat,lng,id FROM ".tablename($this->tabrelease)." as t left join (select rid as o_rid from ".tablename($this->taborder)." where openid = :openid) as o on t.id=o.o_rid WHERE o.o_rid is null and t.uniacid=:uniacid and t.pay_status=1 and t.deleted=0 and (starttime-".time().")>10" , array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
-		foreach ($data_status1 as $key => $item){
-            $count = pdo_fetchcolumn('select count(id) from ' .  tablename($this->taborder) . ' where rid=:rid', array(':rid' => $item['id']));
-            if(!empty($count) && $count >= $res['nums']){
-                unset($data_status1[$key]);
-                continue;
-            }
-            $distance = $this->getDistance($item['lat'],$item['lng'],$lat,$lng);
-            if($default_distance > 0){
-                $distance_value = $this->distance_set[$default_distance];
-                if($distance > $distance_value){
+        if($_GPC['status'] > 1){
+            $data_status1 = pdo_fetchall("SELECT *,(t.lat-:lat) * (t.lng-:lng) as dist FROM ".tablename($this->tabrelease)." as t left join (select rid as o_rid from ".tablename($this->taborder)." where openid = :openid) as o on t.id=o.o_rid WHERE o.o_rid is null and t.uniacid=:uniacid and (starttime-".time().")>10 and t.pay_status=1 and t.status<>4 and t.deleted=0 ORDER BY dist desc " , array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid'], ":lat" => $lat, ":lng" => $lng));
+            foreach ($data_status1 as $key => $item){
+                $count = pdo_fetchcolumn('select count(id) from ' .  tablename($this->taborder) . ' where rid=:rid and status<>4', array(':rid' => $item['id']));
+                if(!empty($count) && $count >= $res['nums']){
                     unset($data_status1[$key]);
                     continue;
                 }
+                $distance = $this->getDistance($item['lat'],$item['lng'],$lat,$lng);
+                if($default_distance > 0){
+                    $distance_value = $this->distance_set[$default_distance];
+                    if($distance > $distance_value){
+                        unset($data_status1[$key]);
+                        continue;
+                    }
+                }
             }
+            $total = count($data_status1);
         }
-		$data['status1'] = count($data_status1);
+
+		$data['status1'] = $total;
 		$data['status4'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and openid=:openid and status=3 and deleted=0", array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
 		$data['status2'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and openid=:openid and status<=2 and deleted=0", array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
 		$data['status3'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and openid=:openid and status=4 and deleted=0", array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
@@ -2092,10 +2184,12 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         pdo_update($this->tabbond, array('status' => 1), array('id' => $info['id']));
 
-        $formidInfo = $this->getFormId($_W['openid']);
-        if(!empty($formidInfo)){
-            $this->sendMessage($release['id'],$_W['openid'],'',$formidInfo['formid'],'take_ok');
-            $this->updateFormId($formidInfo['openid'],$formidInfo['id']);
+        $formidInfo = $this->getFormId($release['openid']);
+        if(!empty($formid)){
+            $result = $this->sendMessage($release['id'],$release['openid'],'', $formidInfo['formid'],'take_ok');
+            if(!is_error($result)){
+                $this->updateFormId($formidInfo['openid'],$formidInfo['id']);
+            }
         }
 
         return $this->result(0, '接单成功');
@@ -2262,6 +2356,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		$upord=pdo_update($this->taborder, array('apply'=>1,'apply_time'=>time(), 'status' => 2),array('uniacid'=>$_W['uniacid'],'id'=>$id));
 		
 		if($upord){
+		    //发消息
+            $formidInfo = $this->getFormId($release['openid']);
+            if(!empty($formidInfo)){
+                $result = $this->sendMessage($release['id'], $release['openid'], '', $formidInfo['formid'], 'issue_settle');
+                if(!is_error($result)){
+                    $this->updateFormId($formidInfo['openid'], $formidInfo['id']);
+                }
+            }
+
 			return $this->result($errno, $message, $id);
 		}else{
 			return $this->result(1, '申请结算失败！');
@@ -2286,6 +2389,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             return $this->result(1,'订单已取消或不存在');
         }
 
+        $release = pdo_fetch("select * from " . tablename($this->tabrelease) . " where id=:id", array(':id' => $order['rid']));
+
         $update['status'] = 4;
         //$update['deposit_paystatus'] = 2;   //退款申请中
         if($setting['issue_worker_time'] && ((time() - $order['createtime']) > ($setting['issue_worker_time'] * 60))){
@@ -2294,9 +2399,12 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         $upord = pdo_update($this->taborder, $update, array('uniacid' => $_W['uniacid'], 'id' => $id));
         if($upord){
-            $formIdInfo = $this->getFormId($_W['openid']);
+            $formIdInfo = $this->getFormId($release['openid']);
             if(!empty($formIdInfo)){
-                $result = $this->sendMessage($order['rid'], $_W['openid'], '', $formIdInfo['formid'], 'take_cancel');
+                $result = $this->sendMessage($order['rid'], $release['openid'], '', $formIdInfo['formid'], 'take_cancel');
+                if(!is_error($result)){
+                    $this->updateFormId($formIdInfo['openid'],$formIdInfo['id']);
+                }
             }
             return $this->result($errno,$message);
         }else{
@@ -2495,6 +2603,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $user = pdo_fetch('select * from ' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $release['openid']));
         $release['realname'] = $user['realname'];
         $release['mobile'] = $user['mobile'];
+        $total = pdo_fetch("select count(id) from " . tablename($this->taborder) . " where rid=:rid and openid=:openid", array(':rid' => $release['id'], ':openid' => $_W['openid']));
+        $release['order_count'] = empty($total) ? 0 : 1;
         return $this->result(0,'', $release);
 
     }
@@ -2540,11 +2650,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $formid = $_GPC['formid'];
         $realname = $_GPC['realname'];
         $mobile = $_GPC['mobile'];
-        $ago = (empty($_GPC['ago']) || $_GPC['ago'] == 'undefined') ? 0 : $_GPC['ago'];
-        $sex = $_GPC['sex'];
         $idcard = (empty($_GPC['idcard']) || $_GPC['idcard'] == 'undefined') ? '' : $_GPC['idcard'];
         $address = $_GPC['address'];
-        $weixinhao = (empty($_GPC['weixinhao']) || $_GPC['weixinhao'] == 'undefined') ? '' : $_GPC['weixinhao'];
         $static = intval($_GPC['static']);
         //保存formid
         $this->saveFormId($openid, $formid);
@@ -2554,13 +2661,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             'openid' => $openid,
             'realname' => $realname,
             'mobile' => $mobile,
-            'ago' => $ago,
-            'sex' => $sex,
             'id_card' => $idcard,
             'area' => $address,
             'createtime' => time(),
-            'weixinhao' => $weixinhao,
-            'license' => (empty($_GPC['image']) || $_GPC['images'] == 'undefined') ? '' : $_GPC['images'],
+            'license' => (empty($_GPC['image']) || $_GPC['image'] == 'undefined') ? '' : $_GPC['image'],
             'status' => 0,
             'static' => $static
         );
@@ -2588,24 +2692,25 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     public function doPageGetAreaManagerList(){
         global $_W,$_GPC;
         $page = max(1,intval($_GPC['page']));
-        //$formid = $_GPC['formid'];
-        //$this->saveFormId($_W['openid'], $formid);
+        $formid = $_GPC['formid'];
+        $this->saveFormId($_W['openid'], $formid);
         $area = $_GPC['area'];
         $pageSize = 16;
 
         $conditions = " uniacid=:uniacid and status=1";
         $params[':uniacid'] = $_W['uniacid'];
 
-        if(!empty($area)){
-            $conditions .= " and area not like :area";
-            $params[':area'] = $area;
-        }
+        $conditions .= " and area like :area";
+        $params[':area'] = $area . "%";
 
-        if(!empty($area)){
-            $cur = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where uniacid=:uniacid and status=1 and area like :area", array(':uniacid' => $_W['uniacid'], ':area' => $area));
-        }
         $list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where " . $conditions . " order by id desc limit " . ($page - 1) * $pageSize . "," . $pageSize, $params);
-        $data['curArea'] = empty($cur) ? false : $cur;
+        if(!empty($list)){
+            foreach ($list as &$item){
+                $member = pdo_fetch("select * from " . tablename($this->tabmember) . " where openid=:openid", array(':openid' => $item['openid']));
+                $item['avatar'] = $member['avatar'];
+            }
+            unset($item);
+        }
         $data['list'] = $list;
         return $this->result(0,'',$data);
     }

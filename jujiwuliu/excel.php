@@ -184,7 +184,7 @@ class Excel{
         $sheet = $excel->setActiveSheetIndex(0);
         $rownum = 1;
         foreach ($params['columns'] as $key => $column) {
-            $sheet->getStyle($this->column_str($key))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+            //$sheet->getStyle($this->column_str($key))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
             $sheet->setCellValue($this->column($key, $rownum), $column['title']);
             if (!empty($column['width'])) {
                 $sheet->getColumnDimension($this->column_str($key))->setWidth($column['width']);

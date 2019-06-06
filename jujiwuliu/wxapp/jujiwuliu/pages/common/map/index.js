@@ -30,6 +30,7 @@ Page({
             y: -60
         }
     } ],
+    showMobile: false
   },
   get_list: function() {},
   regionchange(e) {
@@ -60,7 +61,8 @@ Page({
           realname: data.realname,
           address: data.address,
           mobile: data.mobile,
-          markers: markers
+          markers: markers,
+          showMobile: data.order_count == 1 ? true : false
         })
       }
     })

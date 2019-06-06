@@ -4,7 +4,9 @@
       <cover-view class='client'>
         <cover-view class='client_item left'>
           <cover-view>客户姓名：{{realname}}</cover-view> 
-          <cover-view>联系电话：{{mobile}}</cover-view>
+          <block wx:if="{{showMobile}}">
+            <cover-view>联系电话：{{mobile}}</cover-view>
+          </block>
           <cover-view>地址：{{address}}</cover-view>
         </cover-view> 
         <cover-view class='client_item navigation' bindtap="open_location">

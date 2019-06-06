@@ -56,7 +56,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">模版ID</label>
                 <div class="col-sm-8">
-                    <input type="text" name="template_id" value="{$item['template']}" class="form-control" placeholder="公众平台模版消息编号" />
+                    <input type="text" name="template_id" value="{$item['template_id']}" class="form-control" placeholder="公众平台模版消息编号" />
                 </div>
             </div>
             <div class="form-group">
@@ -117,12 +117,23 @@
         <form method="post">
             <div class="panel-body">发布方消息</div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">发布成提醒</label>
+                <label class="col-sm-2 control-label">接单方接单成功提醒</label>
                 <div class="col-sm-8">
-                    <select name="template[issue_ok]" class="form-control">
+                    <select name="template[take_ok]" class="form-control">
                         <option value="0">请选择</option>
                         {loop $list $item}
-                        <option value="{$item['id']}" {if $template['issue_ok'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        <option value="{$item['id']}" {if $template['take_ok'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">接单方取消提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[take_cancel]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['take_cancel'] == $item['id']}selected{/if}>{$item['title']}</option>
                         {/loop}
                     </select>
                 </div>
@@ -138,25 +149,47 @@
                     </select>
                 </div>
             </div>
-            <div class="panel-body">接单方消息</div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">接单成功提醒</label>
+                <label class="col-sm-2 control-label">接单方结算申请提醒</label>
                 <div class="col-sm-8">
-                    <select name="template[take_ok]" class="form-control">
+                    <select name="template[issue_settle]" class="form-control">
                         <option value="0">请选择</option>
                         {loop $list $item}
-                        <option value="{$item['id']}" {if $template['take_ok'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        <option value="{$item['id']}" {if $template['issue_settle'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="panel-body">接单方消息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">开工前30分钟提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[take_semih]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['take_semih'] == $item['id']}selected{/if}>{$item['title']}</option>
                         {/loop}
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">接单取下提醒</label>
+                <label class="col-sm-2 control-label">开工提醒</label>
                 <div class="col-sm-8">
-                    <select name="template[take_cancel]" class="form-control">
+                    <select name="template[take_open]" class="form-control">
                         <option value="0">请选择</option>
                         {loop $list $item}
-                        <option value="{$item['id']}" {if $template['take_cancel'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        <option value="{$item['id']}" {if $template['take_open'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发布方打款提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[take_money]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['take_money'] == $item['id']}selected{/if}>{$item['title']}</option>
                         {/loop}
                     </select>
                 </div>

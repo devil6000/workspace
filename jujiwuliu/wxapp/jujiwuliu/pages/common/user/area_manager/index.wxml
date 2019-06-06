@@ -20,6 +20,7 @@
         <text class='fui-cell-label'>手机号</text>
         <input type='number' placeholder='请输入电话' bindinput='getMobile' class='input' value=''></input>
       </view>
+      <!--
       <view class='fui-cell'>
         <text class='fui-cell-label'>年龄</text>
         <input type='number' placeholder='请输入年龄' bindinput='getAgo' class='input' value=""></input>
@@ -30,6 +31,7 @@
           <view>{{sexArray[sexIndex]}}</view>
         </picker>
       </view>
+      -->
       <view class='fui-cell'>
         <text class='fui-cell-label'>性质</text>
         <picker bindchange='staticPickerChange' value='{{staticIndex}}' range='{{staticArray}}' class='input'>
@@ -59,10 +61,12 @@
           </view>
         </view>
       </block>
+      <!--
       <view class='fui-cell'>
         <text class='fui-cell-label'>微信号</text>
         <input type='text' placeholder='请输入微信号' bindinput='getWeixinhao' class='input' value='' />
       </view>
+      -->
       <view class='fui-cell'>
         <text class='fui-cell-label'>负责地区</text>
         <picker bindchange='provinceChange' value="{{provincesIndex}}" range="{{provinces}}" class="input">
@@ -77,6 +81,12 @@
         <picker bindchange='areaChange' value='{{areasIndex}}' range='{{areas}}' class='input'>
           <view>{{objectAreas[areasIndex].fullname}}</view>
         </picker>
+      </view>
+      <view class='fui-cell'>
+        <view class='input'>
+          <checkbox bindtap='changeSelect' data-checked='{{agreement}}' checked='{{agreement}}' />
+          <text>我同意《巨吉搬运工区域负责人注册协议》</text>
+        </view>
       </view>
       <button class='submit' form-type='submit'>提交</button>
     </form>
@@ -93,6 +103,7 @@
         <text class='fui-cell-label'>手机号</text>
         <text class='input'>{{areaManager.mobile}}</text>
       </view>
+      <!--
       <view class='fui-cell'>
         <text class='fui-cell-label'>年龄</text>
         <text class='input'>{{areaManager.ago}}</text>
@@ -101,6 +112,7 @@
         <text class='fui-cell-label'>性别</text>
         <text class='input'>{{sexArray[areaManager.sex]}}</text>
       </view>
+      -->
       <view class='fui-cell'>
         <text class='fui-cell-label'>性质</text>
         <text class='input'>{{staticArray[areaManager.static]}}</text>
@@ -111,12 +123,15 @@
           <text class='input'>{{areaManager.id_card}}</text>
         </view>
       </block>
+      <!--
       <block wx:elif="{{areaManager.static == 1}}">
         <view class='fui-cell'>
           <text class='fui-cell-label'>微信号</text>
           <text class='input'>{{areaManager.weixinhao}}</text>
         </view>
       </block>
+      -->
+      <block wx:if="{{staticIndex == 1}}">
       <view class='fui-cell lagre'>
         <text class='fui-cell-label'>营业执照</text>
         <view class='input'>
@@ -125,6 +140,7 @@
           </view>
         </view>
       </view>
+      </block>
       <view class='fui-cell'>
         <text class='fui-cell-label'>负责地区</text>
         <text class='input'>{{areaManager.area}}</text>

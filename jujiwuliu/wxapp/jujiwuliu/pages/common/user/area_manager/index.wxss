@@ -7,6 +7,10 @@ form {
   width: 100%;
 }
 
+.form {
+  width: 100%;
+}
+
 .input-box {
   width: calc(100% - 60rpx);
   height: 100%;

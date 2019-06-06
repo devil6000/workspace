@@ -11,7 +11,7 @@
     <view>提现金额</view>
     <view><input placeholder='请输入提现金额' name='money' /></view>
     </view>
-    <view class='remark'>您的金额将提现到您的微信钱包余额，请注意查收！</view>
+    <view class='remark'>您的金额将提现到您的微信钱包余额，请注意查收！最少提现2元</view>
     <button class='btn btn-draw_money'  formType="submit">提现</button>
   </view>
 </form>
