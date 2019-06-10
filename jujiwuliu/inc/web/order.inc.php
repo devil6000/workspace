@@ -21,6 +21,11 @@ if($op=='display'){
     if($status > -1){
         $condition .=  ' and status=' . $status;
     }
+    if(!empty($_GPC['time'])){
+        $starttime = strtotime($_GPC['time']['start']);
+        $endtime = strtotime($_GPC['time']['end']);
+        $condition .= " and createtime between {$starttime} and {$endtime}";
+    }
     $pindex = max(1,intval($_GPC['page']));
     $psize = 20;
     $total = pdo_fetchcolumn('select count(*) from '.tablename($this->taborder).' where ' . $condition);
@@ -50,17 +55,32 @@ if($op=='display'){
     $pager = pagination($total, $pindex, $psize);
 
     if($_GPC['export'] == 1){
-        require IA_ROOT . '/addons/jujiwuliu/excel.php';
+        set_time_limit(0);
+        $export = array();
+        foreach ($list as $key => $item){
+            $temp = array(
+                'ordersn' => $item['release']['ordersn'],
+                'nickname' => $item['member']['nickname'],
+                'create_time' => str_replace('/','-',$item['createtime']),
+                'money' => $item['release']['money'],
+                'pumping' => $item['release']['pumping'],
+                'deposit' => $item['deposit'],
+                'total_price' => $item['release']['total_price'],
+                'status_str' => $item['status']
+            );
+            $export[$key] = $temp;
+        }
+        require_once IA_ROOT . '/addons/jujiwuliu/excel.php';
         $excel = new Excel();
-        $excel->export(array(), array(
+        $excel->export($export, array(
             'title' => '接单信息',
             'columns' => array(
                 array('title' => '接单号', 'field' => 'ordersn', 'width' => 20),
                 array('title' => '接单人', 'field' => 'nickname', 'width' => 20),
+                array('title' => '接单时间', 'field' => 'create_time', 'width' => 20),
                 array('title' => '金额', 'field' => 'money', 'width' => 12),
                 array('title' => '抽成', 'field' => 'pumping', 'width' => 12),
                 array('title' => '保证金', 'field' => 'deposit', 'width' => 12),
-                array('title' => '人数', 'field' => 'num', 'width' => 12),
                 array('title' => '预计公费', 'field' => 'total_price', 'width' => 12),
                 array('title' => '状态', 'field' => 'status_str', 'width' => 12)
             )

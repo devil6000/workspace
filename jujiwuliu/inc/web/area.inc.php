@@ -23,6 +23,10 @@ if($op == 'display'){
         $conditions .= " and status=:status";
         $params[':status'] = $status;
     }
+    if(!empty($_GPC['keyword'])){
+        $conditions .= " and (realname like :keyword or mobile like :keyword)";
+        $params[':keyword'] = "%{$_GPC['keyword']}%";
+    }
 
     $count = pdo_fetchcolumn("select count(id) from " . tablename('jujiwuliu_area_manager') . " where " . $conditions, $params);
     $pager = pagination($count, $pageIndex, $pageSize);

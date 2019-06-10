@@ -1807,7 +1807,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
                     $releaseUpdate = array(
                         'status'    => 4,
                         'can_refund_bond' => 0,
-                        'apply_bond_status' => 2,
+                        'apply_refund_bond' => 2,
                         'apply_refund' => 2
                     );
                     pdo_update($this->tabrelease, $releaseUpdate, array('id' => $release['id']));
@@ -2640,6 +2640,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         global $_W,$_GPC;
         $openid = $_W['openid'];
         $item = pdo_fetch("select * from " . tablename($this->tabareamanager) . " where openid=:openid", array(':openid' => $openid));
+        if(!empty($item)){
+            if(empty($item['status'])){
+                $item['status_str'] = '待审核';
+            }elseif ($item['status'] == 1){
+                $item['status_str'] = '已通过';
+            }elseif ($item['status'] == 2){
+                $item['status_str'] = '未通过';
+            }
+        }
         return $this->result(0,'',$item);
     }
 
@@ -2702,8 +2711,9 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         $conditions .= " and area like :area";
         $params[':area'] = $area . "%";
-
-        $list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where " . $conditions . " order by id desc limit " . ($page - 1) * $pageSize . "," . $pageSize, $params);
+        $sql = "select * from " . tablename($this->tabareamanager) . " where uniacid=" . $_W['uniacid'] . " and status=1 and area like '" . $area . "%' order by id desc limit " . ($page - 1) * $pageSize . "," . $pageSize;
+        //$list = pdo_fetchall("select * from " . tablename($this->tabareamanager) . " where " . $conditions . " order by id desc limit " . ($page - 1) * $pageSize . "," . $pageSize, $params);
+        $list = pdo_fetchall($sql);
         if(!empty($list)){
             foreach ($list as &$item){
                 $member = pdo_fetch("select * from " . tablename($this->tabmember) . " where openid=:openid", array(':openid' => $item['openid']));

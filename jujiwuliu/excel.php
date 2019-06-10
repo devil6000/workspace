@@ -180,11 +180,11 @@ class Excel{
 
         require_once IA_ROOT . '/framework/library/phpexcel/PHPExcel.php';
         $excel = new PHPExcel();
-        $excel->getProperties()->setCreator('巨吉搬运')->setLastModifiedBy('巨吉搬运')->setTitle('Office 2007 XLSX Test Document')->setSubject('Office 2007 XLSX Test Document')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 2007 openxml php')->setCategory('report file');
+        $excel->getProperties()->setCreator("巨吉搬运")->setLastModifiedBy("巨吉搬运")->setTitle("Office 2007 XLSX Test Document")->setSubject("Office 2007 XLSX Test Document")->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")->setKeywords("office 2007 openxml php")->setCategory("report file");
         $sheet = $excel->setActiveSheetIndex(0);
         $rownum = 1;
         foreach ($params['columns'] as $key => $column) {
-            //$sheet->getStyle($this->column_str($key))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+            $sheet->getStyle($this->column_str($key))->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
             $sheet->setCellValue($this->column($key, $rownum), $column['title']);
             if (!empty($column['width'])) {
                 $sheet->getColumnDimension($this->column_str($key))->setWidth($column['width']);
@@ -204,6 +204,7 @@ class Excel{
         $excel->getActiveSheet()->setTitle($params['title']);
         $filename = urlencode($params['title'] . '-' . date('Y-m-d H:i', time()));
         header('Content-Type: application/octet-stream');
+        //header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
         header('Cache-Control: max-age=0');
         $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');

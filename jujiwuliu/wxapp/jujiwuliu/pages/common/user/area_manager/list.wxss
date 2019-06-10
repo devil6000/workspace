@@ -76,14 +76,15 @@ page {
   display: flex;
   flex-direction: row;
   background-color: #ffffff;
-  margin-bottom: 20rpx;
-  padding: 0 10rpx;
+  margin-top: 20rpx;
+  padding: 20rpx 10rpx;
   width: calc(100% - 20rpx);
 }
 
 .list-item .avatar {
   width: 150rpx;
   height: 150rpx;
+  margin-right: 10rpx;
 }
 
 

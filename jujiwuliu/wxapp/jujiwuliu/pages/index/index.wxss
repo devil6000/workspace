@@ -107,7 +107,8 @@ page{
 }
 .page_container .logo image{
     width: 300rpx;
-    height: 300rpx;
+    /*height: 300rpx;*/
+    height: 216.75rpx;
 }
 
 .page_container .con_btn{

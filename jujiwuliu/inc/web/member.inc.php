@@ -13,6 +13,12 @@ if($op=='display'){
 	if(!empty($keyword)){
 		$condition.=' and (nickname like "%'.$keyword.'%" or mobile like "%'.$keyword.'%" or realname like "%'.$keyword.'%")';
 	}
+	if(!empty($_GPC['time'])){
+        $starttime = strtotime($_GPC['time']['start']);
+        $endtime = strtotime($_GPC['time']['end']);
+        $condition .= " and (createtime between {$starttime} and {$endtime})";
+    }
+
 	$pindex = max(1,intval($_GPC['page']));
 	$psize = 20;
 	$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabmember).' where uniacid ='.$_W['uniacid'].$condition);

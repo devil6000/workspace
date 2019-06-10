@@ -52,7 +52,7 @@
       <form report-submit='true' bindsubmit='cancelOrder'>
         <button class='btn-cancel' form-type='submit'>人未到场</button>
       </form> 
-      <block wx:if="{{!data.apply}}">
+      <block wx:if="{{data.apply == 0}}">
         <form report-submit='true' bindsubmit='fulfilOrder'>
           <button class='btn-fulfil' form-type='submit'>结算</button>
         </form>

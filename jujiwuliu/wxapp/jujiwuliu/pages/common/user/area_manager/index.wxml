@@ -145,6 +145,10 @@
         <text class='fui-cell-label'>负责地区</text>
         <text class='input'>{{areaManager.area}}</text>
       </view>
+      <view class='fui-cell'>
+        <text class='fui-cell-label'>状态</text>
+        <text class='input'>{{areaManager.status_str}}</text>
+      </view>
     </view>
   </view>
   </block>

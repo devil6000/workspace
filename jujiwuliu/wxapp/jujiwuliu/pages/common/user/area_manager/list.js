@@ -151,6 +151,9 @@ Page({
   search: function(e){
     var that = this;
     var formid = e.detail.formId;
+    that.setData({
+      page: 0
+    })
     that.on_loadlist(formid);
   },
 
