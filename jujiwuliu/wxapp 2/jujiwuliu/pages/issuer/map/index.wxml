@@ -1,0 +1,2 @@
+<map id="map" bindcontroltap="controltap" bindmarkertap="markertap" bindregionchange="regionchange" latitude="{{lat}}" longitude="{{lng}}" subkey="{{subkey}}" scale="{{scale}}" markers="{{markers}}"></map>
+<view class="weui-bottom"><view class="weui-btn" bindtap="goback">提交位置</view></view>

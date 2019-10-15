@@ -1,0 +1,88 @@
+<!--jujiwuliu/pages/worker/details/index.wxml-->
+<view class='container'>
+  <view class="swiper">
+      <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+        <swiper-item wx:for="{{slide}}" wx:key="{{index}}">
+          <image class="nav-icon" mode="aspectFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad"   class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+        </swiper-item>
+      </swiper>
+  </view>
+  <view class='status'>
+    <view class='status-status'>{{data.statusname}}</view>
+    <view class='status-date'>开工时间：{{data.starttime}}</view>
+  </view>
+  <view class='weui-cells info'>
+    <view class='weui-cell info-cell info-title'>{{data.title}}</view>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item'>工种：<text>{{data.typename}}</text></view>
+      <view class='info-cell-item'>活种：<text>{{data.staticname}}</text></view>
+    </view>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item'>人数：<text>{{data.nums}}人</text>(还差{{data.gptu}}人)</view>
+      <view class='info-cell-item'>性别：<text>{{data.sex}}</text></view>
+    </view>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item'>价格：<text style='color: #f4430c;'>{{data.static == 4 ? data.total_price : data.price}}元</text><block wx:if="{{data.static != 4}}">(1{{data.unit}})</block></view>
+      <block wx:if="{{data.type == 0}}">
+      <view class='info-cell-item'>{{data.unit}}数：<text>{{data.count}}{{data.unit}}</text></view>
+      </block>
+      <block wx:elif="{{data.type == 1}}">
+        <block wx:if="{{data.static != 4}}">
+          <view class='info-cell-item'>{{data.unit}}数：<text>{{data.count}}{{data.unit}}</text></view>
+        </block>
+        <block wx:else>
+          <view class='info-cell-item'>用工时间：<text><block wx:if="{{data.time_unit != 2}}">{{data.count}}</block>{{data.timeuintname}}</text></view>
+        </block>
+      </block>
+    </view>
+    <view class="weui-cell info-cell">
+      <view class="info-cell-item">货物类型：<text>{{data.cargoname}}</text></view>
+    </view>
+    <navigator  class='weui-cell info-cell' style='display:block;overflow: hidden;' url="../../../pages/common/map/index?lat={{data.lat}}&lng={{data.lng}}">
+        <view class='info-cell-item' style='width:calc(100% - 150rpx);float:left;white-space: nowrap;text-overflow:ellipsis;overflow:hidden;'>地点：<text style='color:#666;'>{{data.address}}</text></view>
+        <view class='right lcoation'><image src='../../../resource/images/icon_01.png'></image>{{data.distance}}km</view>
+    </navigator>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item' bindtap='callPhone'>联系方式：<text>{{data.jd_mobile}}</text></view>
+    </view>
+    </view>
+
+
+  
+  <view class='weui-cells info'>
+    <view class='weui-cell info-cell info-title'>货物描述和用功要求说明</view>
+    <view class='weui-cell info-describe'>{{data.description}}</view>
+  </view>
+  <block wx:if="{{data.status == 0}}">
+    <block wx:if="{{!data.orderid}}">
+      <block wx:if="{{rest == 1}}"> 
+      <view class='btn-submit' bindtap='takeOrder'>我要接单</view>
+      </block>
+    </block>
+  </block>
+  <block wx:if="{{data.orderid && data.status!=4 && data.status!=3 }}">
+    <block wx:if="{{data.order_status != 4}}">
+      <block wx:if="{{data.apply != 2}}">
+      <form report-submit='true' bindsubmit='cancelOrder'>
+        <button class='btn-cancel' form-type='submit'>人未到场</button>
+      </form> 
+      </block>
+      <block wx:if="{{data.apply == 0}}">
+        <form report-submit='true' bindsubmit='fulfilOrder'>
+          <button class='btn-fulfil' form-type='submit'>结算</button>
+        </form>
+      </block>
+      <block wx:elif="{{data.apply == 1}}">
+        <form report-submit='true' bindsubmit='fulfilPay'>
+          <button class='btn-fulfil' form-type='submit'>确认打款</button>
+        </form>
+      </block>
+      <block wx:else>
+        <view class="btn-fulfil wait">已打款</view>
+      </block>
+    </block>
+  </block>
+</view>
+  <!--授权  -->
+<import src="../../common/template/model.wxml"/>
+<template is="model_shouquan" data="{{locationModelShow}}"/>

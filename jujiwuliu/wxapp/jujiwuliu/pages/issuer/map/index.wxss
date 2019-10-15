@@ -1,0 +1,89 @@
+/* jujiwuliu/pages/issuer/map/index.wxss */
+page {
+  height: 100%;
+}
+
+.map-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.search-form {
+  height: 70rpx;
+  width: 100%;
+  border: solid 1rpx #dedede;
+  border-radius: 10rpx;
+}
+
+.search-form .input-c {
+  font-size: 30rpx;
+  padding: 10rpx 20rpx;
+  height: 50rpx;
+}
+
+#map {
+  width: 100%;
+  flex: 1;
+}
+
+.search-list{
+  height: 400rpx;
+  overflow: hidden;
+  padding: 5rpx 10rpx 20rpx 10rpx;
+}
+
+.search-box {
+  height: 320rpx;
+  margin-top: 10rpx;
+  overflow: auto;
+}
+
+.search-item {
+  height: 80rpx;
+  width: 100%;
+  border-bottom: solid 1rpx #dedede;
+  display: flex;
+  align-items: center;
+}
+
+.search-item > image {
+  width: 30rpx;
+  height: 36rpx;
+  margin-right: 15rpx;
+}
+
+.search-item .search-item-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.search-item-list > .title {
+  font-size: 25rpx;
+  color: #333;
+}
+
+.search-item-list > .addr {
+  font-size: 25rpx;
+  color: #dcdcdc;
+}
+
+.weui-bottom {
+  display: flex;
+  width: 100%;
+  height: 80rpx;
+  align-items: center;
+  justify-content: center;
+}
+
+.weui-btn {
+  background: #f66620;
+  line-height: 60rpx;
+  color: #fff;
+  height: 60rpx;
+  font-size: 30rpx;
+  border-radius: 10rpx;
+  padding:0 30rpx;
+}

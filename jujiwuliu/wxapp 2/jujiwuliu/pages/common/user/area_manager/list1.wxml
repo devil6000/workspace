@@ -1,0 +1,79 @@
+<!--jujiwuliu/pages/common/user/area_manager/list.wxml-->
+<view class='container'>
+  <block wx:if="{{setting.rolling_areas}}">
+    <view class="swiper">
+        <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+          <swiper-item wx:for="{{setting.rolling_areas}}" wx:key="{{index}}">
+            <image class="nav-icon" mode="scaleToFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" class="itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+          </swiper-item>
+        </swiper>
+    </view>
+  </block>
+  <block wx:if="{{userType == 'issuer'}}">
+    <view class='container-header orange'>
+      <view class='search-line'>
+        <image class='search-img' src='/jujiwuliu/resource/images/home/icon_01.png' />
+        <text>当前位置:</text>
+        <view class='search-input'>
+          <picker class='input' mode="multiSelector" bindchange='submit' bindcolumnchange="mulitColumnChange" value='{{multiAreaIndex}}' range='{{multiArea}}'>
+            <view class='picker'>{{multiArea[0][multiAreaIndex[0]]}} {{multiArea[1][multiAreaIndex[1]]}} {{multiArea[2][multiAreaIndex[2]]}} {{multiArea[3][multiAreaIndex[3]]}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{userType == 'worker'}}">
+    <view class='container-header blue'>
+      <view class='search-line'>
+        <image class='search-img' src='/jujiwuliu/resource/images/home/icon_01.png' />
+        <text>当前位置:</text>
+        <view class='search-input'>
+          <picker class='input' mode="multiSelector" bindchange='submit' bindcolumnchange="mulitColumnChange" value='{{multiAreaIndex}}' range='{{multiArea}}'>
+            <view class='picker'>{{multiArea[0][multiAreaIndex[0]]}} {{multiArea[1][multiAreaIndex[1]]}} {{multiArea[2][multiAreaIndex[2]]}} {{multiArea[3][multiAreaIndex[3]]}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view class='container-body'>
+    <block wx:if="{{curArea}}">
+      <view class='cur-list'>
+        <text class='title'>当前区域负责人</text>
+        <view class='list-item'>
+          <view class='list-item-line'>
+            <text class='name'>{{curArea.realname}}</text>
+            <text class='mobile' bindtap='callPhone' data-mobile="{{curArea.mobile}}">{{curArea.mobile}}</text>
+          </view>
+          <view class='list-item-line'>
+            <text class='label'>负责区域：{{curArea.area}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view class='list-group'>
+      <block wx:if="{{list}}">
+        <text class='title'>其它区域负责人</text>
+        <block wx:for="{{list}}" wx:key="index" wx:for-item="item">
+          <view class='list-item'>
+            <view class='list-item-line'>
+              <text class='name'>{{item.realname}}</text>
+              <text class='mobile' bindtap='callPhone' data-mobile="{{item.mobile}}">{{item.mobile}}</text>
+            </view>
+            <view class='list-item-line'>
+              <text class='label'>负责区域：{{item.area}}</text>
+            </view>
+          </view>
+        </block>
+      </block>
+      <block wx:elif="{{!curArea && !list}}">
+        <view class='item-empty'>
+          <view class='empty-icon'><image  mode="widthFix" src="/jujiwuliu/resource/images/empty.png" /></view>
+          <view class='empty-text'>无任何纪录</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
+
+<import src="../../template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

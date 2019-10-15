@@ -1,0 +1,31 @@
+var t = getApp();
+
+Page({
+    data: {
+        close: 0,
+        text: ""
+    },
+    onLoad: function(t) {
+        console.log(t), this.setData({
+            close: t.close,
+            text: t.text
+        });
+    },
+    onShow: function() {
+        
+    },
+    bind: function() {
+        var t = this, e = setInterval(function() {
+            wx.getSetting({
+                success: function(n) {
+                    var a = n.authSetting["scope.userInfo"];
+                    a && (wx.reLaunch({
+                      url: "/jujiwuliu/pages/index/index"
+                    }), clearInterval(e), t.setData({
+                        userInfo: a
+                    }));
+                }
+            });
+        }, 1e3);
+    }
+});

@@ -5,7 +5,10 @@
     <navigator url='' class='head_right'></navigator>
   </view>
   <form bindsubmit='bind'>
-    <view class='reg-title'>请填写注册信息</view>
+    <block wx:if="{{!is_empower}}">
+    <view class="login-panel"><text>当前没有登录,请先登录</text><button bindtap="getEmpower" class="empower-btn" open-type="getUserInfo">登录</button></view>
+    </block>
+    <view class='reg-title'>请填写绑定信息</view>
     <view class='item'>
       <view class='weui-cell item-list'>
         <image src='/jujiwuliu/resource/images/reg_01.png'></image>
@@ -22,7 +25,9 @@
       </view>
     </view>
     <view class='btn_view'>
-      <button form-type="submit" class='btn-subimt'>注册</button>
+      <block wx:if="{{is_empower == 1}}">
+        <button form-type="submit" class='btn-subimt'>绑定</button>
+      </block>
     </view>
   </form>
 </view>

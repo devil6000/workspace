@@ -51,9 +51,9 @@
                         <td>{$row['firm_address']}</td>
                         <td>{$row['firm_tel']}</td>
                         <td>
-                            {if $row['deleted'] == 0}
+                         
                             <a href="{php echo $this->createWebUrl('receipt', array('op' => 'delete', 'id' => $row['id']))}" class="btn btn-default btn-sm" title="删除" onclick="if(!confirm('确定删除吗?')) return false;"><i class="fa fa-remove"></i>删除</a>
-                            {/if}
+                           
                         </td>
                     </tr>
                     {/loop}

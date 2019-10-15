@@ -1,0 +1,191 @@
+<!--jujiwuliu/pages/worker/details/index.wxml-->
+<view class='container'>
+  <view class="swiper">
+      <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+        <swiper-item wx:for="{{slide}}" wx:key="{{index}}">
+          <image class="nav-icon" mode="aspectFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" binderror='imageError'   class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+        </swiper-item>
+      </swiper>
+  </view>
+  <view class='status'>
+    <view class='status-status'>{{data.statusname}}</view>
+    <view class='status-date'>开工时间：{{data.starttime}}</view>
+    <block wx:if="{{present}}">
+      <view class='work-status'>到场</view>
+    </block>
+    <block wx:elif="{{!present}}">
+      <view class='work-status disabled'>休息</view>
+    </block>
+  </view>
+  <view class='weui-cells info'>
+    <view class='weui-cell info-cell info-title'>{{data.title}}</view>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item'>工种：<text>{{data.typename}}</text></view>
+      <view class='info-cell-item'>活种：<text>{{data.staticname}}</text></view>
+    </view>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item'>人数：<text>{{data.nums}}人</text>(还差{{data.gptu}}人)</view>
+      <view class='info-cell-item'>性别：<text>{{data.sex}}</text></view>
+    </view>
+    <view class='weui-cell info-cell'>
+      <view class='info-cell-item'>人均：<text style='color: #f4430c;'>{{data.static == 4 ? data.total_price : data.price}}元</text><block wx:if="{{data.static != 4}}">(1{{data.unit}})</block></view>
+      <block wx:if="{{data.type == 0}}">
+      <view class='info-cell-item'>{{data.unit}}数：<text>{{data.count}}{{data.unit}}</text></view>
+      </block>
+      <block wx:elif="{{data.type == 1}}">
+        <block wx:if="{{data.static != 4}}">
+        <view class='info-cell-item'>{{data.unit}}数：<text>{{data.count}}{{data.unit}}</text></view>
+        </block>
+        <block wx:else>
+          <view class='info-cell-item'>用工时间：<text><block wx:if="{{data.time_unit != 2}}">{{data.count}}</block>{{data.unit}}</text></view>
+        </block>
+      </block>
+    </view>
+    <view class="weui-cell info-cell">
+      <view class="info-cell-item">货物类型：<text>{{data.cargoname}}</text></view>
+    </view>
+    <navigator  class='weui-cell info-cell' style='display:block;overflow: hidden;' url="../../../pages/common/map/index?id={{data.id}}&lng={{data.lng}}">
+        <view class='info-cell-item' style='width:calc(100% - 150rpx);float:left;white-space: nowrap;text-overflow:ellipsis;overflow:hidden;'>地点：<text style='color:#666;'>{{data.address}}</text></view>
+        <view class='right lcoation'><image src='../../../resource/images/icon_01.png'></image>{{data.distance}}km</view>
+    </navigator>
+    <block wx:if="{{data.orderid}}">
+      <view class='weui-cell info-cell'>
+        <view class='info-cell-item' bindtap='callPhone'>联系方式：<text>{{data.release_mobile}}</text></view>
+      </view>
+    </block>
+    
+    </view>
+
+
+  
+  <view class='weui-cells info'>
+    <view class='weui-cell info-cell info-title'>货物描述和用功要求说明</view>
+    <view class='weui-cell info-describe'>{{data.description}}</view>
+  </view>
+  <block wx:if="{{data.status == 0}}">
+    <block wx:if="{{!data.orderid}}">
+      <block wx:if="{{rest == 1}}">
+      <view class='btn-submit'>
+        <form report-submit='true' bindsubmit='takeOrder'>
+          <button class='btn-submit' form-type='submit'>我要接单</button>
+        </form>
+      </view>
+      <!--
+      <view class='btn-submit' bindtap='takeOrder'>我要接单</view>
+      -->
+      </block>
+    </block>
+  </block>
+  <!--
+  <block wx:if="{{data.orderid && data.status!=4 && data.status!=3 }}"> 
+    <view class='btn-cancel' bindtap='cancelOrder'>取消订单</view>
+    <block wx:if="{{data.apply == 0 && !data.advance_payment}}"> 
+      <view class='btn-fulfil' bindtap='fulfilOrder'>申请结算</view>
+    </block>
+    <block wx:elif="{{data.advance_payment}}">
+      <view class='btn-fulfil wait' bindtap=''>1天后打款</view>
+    </block>
+    <block wx:else>
+      <view class='btn-fulfil wait' bindtap=''>待发布方确认</view>
+    </block>
+  </block>
+  -->
+  <block wx:if="{{data.orderid && data.order_status != 4}}">
+    <block wx:if="{{data.order_status == 0}}">
+      <form report-submit='true' bindsubmit='cancelOrder'>
+        <button class='btn-cancel' form-type='submit'>取消订单</button>
+      </form>
+      <!--<view class='btn-cancel' bindtap='cancelOrder'>取消订单</view>-->
+    </block>
+    <block wx:if="{{data.deposit_paystatus == 0}}">
+      <view class='btn-fulfil' bindtap='payDeposit'>支付保证金</view>
+    </block>
+    <block wx:else>
+      <block wx:if="{{present && data.order_status == 0}}">
+        <form report-submit='true' bindsubmit='startOperation'>
+          <button class='btn-fulfil' form-type='submit'>开工</button>
+        </form>
+        <!--<view class='btn-fulfil' bindtap='startOperation'>开工</view>-->
+      </block>
+      <block wx:elif="{{data.order_status == 1}}">
+        <block wx:if="{{data.apply == 0 && !data.advance_payment}}">
+          <block wx:if="{{!applystatus}}">
+            <form report-submit='true' bindsubmit='fulfilOrder'>
+              <button class='btn-submit' form-type='submit'>申请结算</button>
+            </form>
+            <!--<view class='btn-submit' bindtap='fulfilOrder'>申请结算</view>-->
+          </block>
+        </block>
+        <block wx:elif="{{data.advance_payment}}">
+          <view class='btn-submit wait' bindtap=''>3天后打款</view>
+        </block>
+        <block wx:else>
+          <view class='btn-submit wait' bindtap=''>待发布方确认</view>
+        </block>
+      </block>
+      <block wx:elif="{{data.order_status == 2}}">
+        <view class='btn-submit wait' bindtap=''>待发布方确认</view>
+      </block>
+      <block wx:elif="{{data.order_status == 3}}">
+        <block wx:if="{{data.deposit_paystatus == 1 && data.can_refund_bond == 1 && data.deposit_paystatus == 1}}">
+          <form report-submit='true' bindsubmit='applyrefundbond'>
+            <button class='btn-submit' form-type='submit'>申请保证金退款</button>
+          </form>
+          <!--<view class='btn-submit' bindtap='applyrefundbond'>申请保证金退款</view>-->
+        </block>
+      </block>
+    </block>
+  </block>
+  <block wx:elif="{{data.orderid && data.order_status == 4}}">
+    <block wx:if="{{data.deposit_paystatus == 1 && data.can_refund_bond == 1 && data.deposit_paystatus == 1}}">
+      <form report-submit='true' bindsubmit='applyrefundbond'>
+        <button class='btn-submit' form-type='submit'>申请保证金退款</button>
+      </form>
+      <!--<view class='btn-submit' bindtap='applyrefundbond'>申请保证金退款</view>-->
+    </block>
+  </block>
+</view>
+
+<!-- 支付方式选择 -->
+<!-->
+<view class='model_window {{modalPayBtns?"model_show":""}}'>
+  <view class='model_content'>
+    <view class='model_title'>接单需要支付保证金</view>
+    <view class='model_body'>
+      <view class='model_cell'>
+        保证金：{{bond}}元
+      </view>
+      <view class='model_cell'>
+        <radio-group class="radio-group" bindchange="payTypeChange">
+          <label class='model_cell_item'>
+            <radio value='1' />
+            <text class='fui_item'>微信支付</text>
+          </label>
+          <label class='model_cell_item'>
+            <block wx:if="{{!credit_enough}}">
+              <radio value='2' disabled='false' checked='false' />
+              <text class='fui_item disabled'>余额支付(余额不足以支付)</text>
+            </block>
+            <block wx:else>
+              <radio value='2' />
+              <text class='fui_item'>余额支付</text>
+            </block>
+          </label>
+        </radio-group>
+      </view>
+      <view class='model_footer'>
+        <view class='btn-pay' bindtap='check_pay'>支付</view>
+        <view class='btn-pay-cancel' bindtap='hide_paybtns'>取消</view>
+      </view>
+    </view>
+  </view>
+</view>
+-->
+
+  <!--授权  -->
+<import src="../../common/template/model.wxml"/>
+<template is="model_shouquan" data="{{locationModelShow}}"/>
+
+<!-- 支付 -->
+<import src="../../common/template/pay.wxml" />
+<template is="model_pay" data="{{...payData}}" />

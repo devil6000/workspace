@@ -1,0 +1,99 @@
+/* jujiwuliu/pages/common/user/credit/index.wxss */
+page{
+  background: #f4f4f4;
+}
+
+
+.credit{
+  background: #fff;
+  text-align: center;
+  padding-top: 20pt;
+  padding-bottom: 20pt;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10pt;
+}
+.credit .title{
+  font-size:1rem;
+}
+.credit .num_credit{
+  font-size:2.1rem;
+}
+.credit .num_credit view{
+  display: inline;
+  font-size: 1.5rem
+}
+.credit .btn{
+  width: 90%;
+  height: 40pt;
+  line-height: 40pt;
+  margin: 0 auto;
+  border-radius: 5px;
+  margin-top:15pt; 
+}
+.credit .btn.btn-recharge{
+  background: #f66620;
+  color: #fff;
+  border: 1px solid #f66620;
+}
+.credit .btn.btn-draw_money{
+  color: #f66620;
+  background: #fff;
+  border: 1px solid #f66620;
+}
+
+
+.item-list{
+  background: #fff;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.item-list>view{
+  padding:0% 20pt;
+}
+.item-list .item-title{
+  font-size: 1rem;
+  height: 50px;
+  line-height: 50px;
+  border-bottom:1px solid #e5e5e5;
+}
+.item-list .item-content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top:10pt;
+  padding-bottom:10pt;
+}
+.item-list .item-content .content-left .remarks{
+  font-size: 0.9rem;
+}
+.item-list .item-content .content-left .establish_time{
+  font-size: 0.75rem;
+  color: #999;
+}
+.item-list .item-content .content-right{
+  color: #999;
+  font-size: 1.5rem;
+}
+.item-list .item-content .content-right.multi{
+  color: #e52c29;
+}
+
+/* 下面是nav */
+.weui-navbar{
+  background: #fff;
+  border-top: 1px solid #e5e5e5;
+}
+.weui-navbar__slider{
+  width: 50%;
+}
+
+
+.not_worker{
+  padding:2%;
+  text-align: center;
+  font-size: 0.8rem;
+}
+.not_worker image{
+  width: 40%;
+}

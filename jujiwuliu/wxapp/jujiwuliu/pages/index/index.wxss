@@ -358,5 +358,11 @@ page{
   right: 30rpx;
 }
 
+.empower-btn {
+  width: 160rpx;
+  font-size: 25rpx;
+  float: left;
+}
+
 
 

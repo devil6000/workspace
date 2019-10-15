@@ -1,0 +1,80 @@
+/* jujiwuliu/pages/worker/login/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.container{
+  padding-top: 90rpx;
+  position: relative;
+}
+.head{
+  background: #0a95e9;
+  color: #fff;
+  height: 90rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: 36rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.head_title{
+  width: 100%;
+  text-align: center;
+}
+.head_right{
+  position: absolute;
+  right: 30rpx;
+}
+.btn_view{
+  padding: 30rpx;
+}
+.btn-subimt{
+  font-size: 36rpx;
+  line-height: 90rpx;
+  border-radius: 10rpx;
+  border: none;
+  background: #0a95e9;
+  color: #fff;
+}
+.item{
+  padding-left: 30rpx;
+  background: #fff;
+  margin-top: 30rpx;
+}
+.item-list{
+  padding: 0;
+  padding-right: 30rpx;
+  height: 90rpx;
+  position: relative;
+}
+.item-list image{
+  height: 36rpx;
+  max-width: 36rpx;
+  width: 24rpx;
+}
+.reg-input{
+  font-size: 28rpx;
+  margin-left: 20rpx;
+}
+.placeh-input{
+  color: #ccc;
+}
+.werch{
+  justify-content:center;
+  font-size: 28rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+
+}
+.werch image{
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}

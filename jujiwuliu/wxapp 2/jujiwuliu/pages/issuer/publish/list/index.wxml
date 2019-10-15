@@ -1,0 +1,102 @@
+<!--jujiwuliu/pages/issuer/publish/list/index.wxml-->
+<view class='container'>
+
+
+  <view class="nav_page">
+      <view class="page__bd">
+          <view class="weui-tab">
+              <view class="weui-navbar">
+                  <block wx:for-items="{{tabs.titles}}" wx:key="{{index}}">
+                      <view id="{{index}}" class="weui-navbar__item {{tabs.activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                          <view class="weui-navbar__title">{{item}}</view>
+                      </view>
+                  </block>
+                  <view class="weui-navbar__slider" style="left: {{tabs.sliderLeft}}px; transform: translateX({{tabs.sliderOffset}}px); -webkit-transform: translateX({{tabs.sliderOffset}}px);"></view>
+              </view>
+              <view class="weui-tab__panel">
+                  <block wx:for-items="{{laborer}}" wx:key="{{index}}">
+                  <view class="weui-tab__content" hidden="{{tabs.activeIndex != index}}">
+                    <block wx:if ='{{!laborer[index]}}'>
+                      <view class='not_record'>
+                      <view class='not_worker'><image  mode="widthFix" src="../../../../resource/images/empty.png" /></view>  
+                      <view class='not_worker'>无任何记录</view>     
+                    </view>  
+                    </block>
+                    <block wx:for="{{laborer[index]}}"  wx:for-item="labor" wx:key="{{labor_id}}">
+                    <view class='item-list'>
+                      <navigator class='item-content' url="../detail/index?issuer_id={{labor.id}}"> 
+                        <view class='content-left'>
+                          <image src='{{siteinfo.attachurl}}{{labor.images[0]}}' mode="widthFix" />
+                        </view>
+                        <view class='content-right '>
+                          <view class='detail'>
+                            <view>{{labor.typename}}</view>
+                            <view>{{labor.staticname}}</view>
+                            <view>
+                              <view class='red'>{{labor.price}}元</view>
+                              <view class='gray' ><block wx:if="{{labor.static != 4}}">(1{{labor.unit}})</block></view>
+                            </view>
+                          </view>
+                          <view class='detail'>
+                            <view>
+                              <view class='gray'>
+                                开工时间:
+                              </view>
+                                {{labor.starttime}}
+                            </view>
+                            
+                          </view>
+                          <view class='detail'>
+                            <view>
+                              <view class='gray'>
+                              数量:
+                              </view>
+                              {{labor.count}}{{labor.unit}}
+                            </view>
+                            <view>
+                              <view class='gray'>
+                              人数:
+                              </view>
+                              {{labor.nums}}人
+                            </view>
+                            <view>
+                              <view class='gray'>
+                              性别:
+                              </view>
+                              {{labor.sex}}
+                            </view>
+                          </view>
+                          <view class='detail'>
+                            <view>
+                              <view class='gray'>
+                                用工地点:
+                              </view>
+                                {{labor.address}}
+                            </view>
+                          </view>
+                          <view class='detail'>
+                            <view>
+                              <view class='gray'>保证金状态：</view>
+                              {{labor.bondname}}
+                            </view>
+                          </view>
+                          
+                        </view>
+                      </navigator>
+                     
+                    </view>
+                    </block>
+                  </view>
+                  </block>
+                  
+              </view>
+          </view>
+      </view>
+  </view>
+</view>
+
+  
+
+
+<import src="../../../common/template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

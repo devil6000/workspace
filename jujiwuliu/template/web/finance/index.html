@@ -62,8 +62,8 @@
 						<tr>
 							<td class="dm-hover" style="position: relative;">
 									uid:{$row['uid']}<br>
-									{$row['user']['nickname']}<br>
-								<img src="{if $row['user']['avatar']}{$row['user']['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
+									{$row['nickname']}<br>
+								<img src="{if $row['avatar']}{$row['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
 
 							</td>
 							<td {if $row['num']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['num']}</td>
@@ -133,13 +133,13 @@
 						<tr>
 							<td class="dm-hover" style="position: relative;">
 									uid:{$row['uid']}<br>
-									{$row['user']['nickname']}<br>
-								<img src="{if $row['user']['avatar']}{$row['user']['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
+									{$row['nickname']}<br>
+								<img src="{if $row['avatar']}{$row['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
 
 							</td>
-							<td {if $row['num']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['num']}</td>
-							<td>{$row['user']['alipay_account']}<br>{$row['user']['alipay_real']}</td>
-							<td>{$row['user']['bank_cardreal']}<br>{$row['user']['bank_cardid']}<br>{$row['user']['opening_bank']}</td>
+							<td {if $row['money']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['money']}</td>
+							<td>{$row['alipay_account']}<br>{$row['alipay_real']}</td>
+							<td>{$row['bank_cardreal']}<br>{$row['bank_cardid']}<br>{$row['opening_bank']}</td>
 							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
 							<td>{php echo date('Y-m-d H:i:s',$row['createtime'])}</td>
 							<td>
@@ -221,8 +221,8 @@
 						<tr>
 							<td class="dm-hover" style="position: relative;">
 									uid:{$row['uid']}<br>
-									{$row['user']['nickname']}<br>
-								<img src="{if $row['user']['avatar']}{$row['user']['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
+									{$row['nickname']}<br>
+								<img src="{if $row['avatar']}{$row['avatar']}{else}{MODULE_URL}fxstatic/images/defaultavatar.jpeg{/if}" width="35"><br>
 
 							</td>
 							<td {if $row['num']>0}style="color:red;"{else}style="color:green;"{/if}>{$row['num']}</td>

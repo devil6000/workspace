@@ -13,7 +13,8 @@ if($op=='display'){
 	if(!empty($keyword)){
 		$condition.=' and (nickname like "%'.$keyword.'%" or mobile like "%'.$keyword.'%" or realname like "%'.$keyword.'%")';
 	}
-	if(!empty($_GPC['time'])){
+	$searchtime = intval($_G['searchtime']);
+	if(!empty($searchtime)){
         $starttime = strtotime($_GPC['time']['start']);
         $endtime = strtotime($_GPC['time']['end']);
         $condition .= " and (createtime between {$starttime} and {$endtime})";
@@ -30,6 +31,10 @@ if($op=='display'){
 	$pager = pagination($total, $pindex, $psize);
 	if($_GPC['export'] == 1){
 	    set_time_limit(0);
+	    foreach ($list as &$item){
+	        $item['type_str'] = $this->type_set[$item['type']];
+        }
+        unset($item);
         require_once IA_ROOT . '/addons/jujiwuliu/excel.php';
         $excel = new Excel();
         $excel->export($list, array(
@@ -38,6 +43,8 @@ if($op=='display'){
                 array('title' => 'id', 'field' => 'id', 'width' => 12),
                 array('title' => '昵称', 'field' => 'nickname', 'width' => 20),
                 array('title' => '真实姓名', 'field' => 'realname', 'width' => 20),
+                array('title' => '手机号码', 'field' => 'mobile', 'width' => 12),
+                array('title' => '会员身份', 'field' => 'type_str', 'width' => 12),
                 array('title' => '余额', 'field' => 'credit2', 'width' => 12),
                 array('title' => '积分', 'field' => 'credit1', 'width' => 12)
             )

@@ -1,0 +1,181 @@
+/* jujiwuliu/pages/worker/index/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.fixed-header{
+  position: fixed;
+  height: 180rpx;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+.top{
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background: #0a95e9;
+  height: 90rpx;
+  color: #fff;
+
+}
+.page-title{
+  width: 100%;
+  text-align: center;
+  font-size: 36rpx;
+}
+.refresh{
+  position: absolute;
+  left: 20rpx;
+  font-size: 32rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.refresh image{
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 10rpx;
+}
+.message{
+  position: absolute;
+  right: 20rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.message image{
+  width: 45rpx;
+  height: 50rpx;
+}
+.message .num{
+  font-size: 20rpx;
+  background: #f66620;
+  height: 25rpx;
+  width: 25rpx;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 25rpx;
+}
+.tabs{
+  display: flex;
+  background: #fff;
+  color: #333;
+}
+.tab-item{
+  flex: 1;
+  font-size:32rpx;
+  line-height: 90rpx;
+  text-align: center;
+}
+.active{
+  color: #0a95e9;
+  border-bottom: 2rpx solid #0a95e9; 
+}
+.container{
+  padding-top: 180rpx;
+  padding-bottom: 150rpx;
+}
+
+.cell-list{
+  background: #fff;
+  margin-top: 25rpx;
+  padding: 20rpx;
+  overflow: hidden;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+}
+.cell-list image{
+  width: 200rpx;
+  height: 150rpx;
+  float: left;
+}
+.cell-list-item{
+  width: calc(100% - 220rpx);
+  float: left;
+  margin-left: 20rpx;
+}
+.cell-list-item view{
+  font-size: 22rpx;
+  color: #666;
+}
+view.cell-list-item-title{
+  font-size: 24rpx;
+  color: #333;
+  display: flex;
+}
+.cell-list-item-title text{
+  flex: 1;
+}
+.cell-list-item-title text text{
+  color: #f66620;
+}
+.btn-view{
+  padding: 30rpx;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 130rpx;
+  background: #f4f4f4;
+}
+.btn-start{
+  background: #0a95e9;
+  line-height: 90rpx;
+  font-size: 36rpx;
+  color: #fff;
+  text-align: center;
+  border-radius: 10rpx;
+}
+.c99{
+  color: #999;
+}
+.date{
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+}
+.date image{
+  width: 20rpx;
+  height: 24rpx;
+  margin-right: 10rpx;
+}
+.date .line{
+  background: #999;
+  width: 1rpx;
+  height: 20rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+}
+.empty{
+  text-align: center;
+  padding-top: 50rpx;
+}
+.empty image{
+  width: 380rpx;
+  height: 380rpx;
+}
+.empty text{
+  display: block;
+  text-align: center;
+  color: #a4a5a5;
+  font-size: 36rpx;
+}

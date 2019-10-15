@@ -1,5 +1,7 @@
 {template 'common/header'}
-
+<style type="text/css">
+    .btn { margin-bottom: 5px;}
+</style>
 <ul class="nav nav-tabs">
     <li {if in_array($op, array('display','post'))}class='active'{/if}>
         <a href="{php echo $this->createWebUrl('notice')}">消息管理</a>
@@ -44,63 +46,79 @@
 {if $op == 'post'}
 <div class="panel panel-default">
     <div class="panel-heading">{if $id}编辑{else}新增{/if}消息</div>
-    <div class="panel-body form-horizontal">
-        <form method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="{$id}" />
-            <div class="form-group">
-                <label class="col-sm-2 control-label">标题</label>
-                <div class="col-sm-8">
-                    <input type="text" name="title" value="{$item['title']}" class="form-control" placeholder="请输入消息标题" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">模版ID</label>
-                <div class="col-sm-8">
-                    <input type="text" name="template_id" value="{$item['template_id']}" class="form-control" placeholder="公众平台模版消息编号" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">头部标题</label>
-                <div class="col-sm-7">
-                    <textarea name="first" class="form-control" data-role-required="true" placeholder="{{first.DATA}}" rows="5" aria-required="true">{$item['first']}</textarea>
-                </div>
-                <div class="col-sm-1" style="padding-left: 0;">
-                    <input type="color" name="firstcolor" value="{$item['firstcolor']}" style="width: 32px; height: 32px;" />
-                </div>
-            </div>
-            {loop $data $da}
-            {template 'notice_template'}
-            {/loop}
-            <div id="type-items"></div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" ></label>
-                <div class="col-sm-9 col-xs-12">
-                    <a class="btn btn-default btn-add-type" href="javascript:;" onclick="addType();"><i class="fa fa-plus" title=""></i> 增加一条键</a>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">尾部描述</label>
-                <div class="col-sm-7">
-                    <textarea type="text" class="form-control" name="remark" data-role-required="true" placeholder="{{remark.DATA}}" rows="5" aria-required="true">{$item['remark']}</textarea>
-                </div>
-                <div class="col-sm-1" style="padding-left: 0;">
-                    <input type="color" name="remarkcolor" value="{$item['remarkcolor']}" style="width: 32px; height: 32px;" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">属性名称</label>
-                <div class="col-sm-9 col-xs-12">
-                    <div class="form-control-static">
-                        [工种],[类型],[数量],[单位],[发布时间],[开工时间],[单价],[单人金额],[总价],[地址],[接单时间]
+    <div class="panel-body col-sm-12">
+        <div class="panel panel-default col-sm-8">
+            <div class="panel-body form-horizontal">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="{$id}" />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="title" value="{$item['title']}" class="form-control" placeholder="请输入消息标题" />
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">模版ID</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="template_id" value="{$item['template_id']}" class="form-control" placeholder="公众平台模版消息编号" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">头部标题</label>
+                        <div class="col-sm-7">
+                            <textarea name="first" class="form-control" data-role-required="true" placeholder="{{first.DATA}}" rows="5" aria-required="true">{$item['first']}</textarea>
+                        </div>
+                        <div class="col-sm-1" style="padding-left: 0;">
+                            <input type="color" name="firstcolor" value="{$item['firstcolor']}" style="width: 32px; height: 32px;" />
+                        </div>
+                    </div>
+                    {loop $data $da}
+                    {template 'notice_template'}
+                    {/loop}
+                    <div id="type-items"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" ></label>
+                        <div class="col-sm-9 col-xs-12">
+                            <a class="btn btn-default btn-add-type" href="javascript:;" onclick="addType();"><i class="fa fa-plus" title=""></i> 增加一条键</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">尾部描述</label>
+                        <div class="col-sm-7">
+                            <textarea type="text" class="form-control" name="remark" data-role-required="true" placeholder="{{remark.DATA}}" rows="5" aria-required="true">{$item['remark']}</textarea>
+                        </div>
+                        <div class="col-sm-1" style="padding-left: 0;">
+                            <input type="color" name="remarkcolor" value="{$item['remarkcolor']}" style="width: 32px; height: 32px;" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="submit" value="提交" class="btn btn-default" />
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-8">
-                    <input type="submit" value="提交" class="btn btn-default" />
-                </div>
+        </div>
+        <div class="panel panel-default col-sm-3 pull-right">
+            <div class="panel-body tm tm-order">
+                <a href='JavaScript:' class="btn btn-default btn-sm">工种</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">接单人</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">接单时间</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">还差人数</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">取消人</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">取消时间</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">申请人</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">结算金额</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">申请时间</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">扣除金额</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">开工时间</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">工作地点</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">打款金额</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">打款时间</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">审核状态</a>
+                <a href='JavaScript:' class="btn btn-default btn-sm">审核日期</a>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -202,6 +220,19 @@
                     </select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">区域负责人审核提醒</label>
+                <div class="col-sm-8">
+                    <select name="template[take_area]" class="form-control">
+                        <option value="0">请选择</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}" {if $template['take_area'] == $item['id']}selected{/if}>{$item['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-8">
                     <input type="submit" value="提交" class="btn btn-default" />
@@ -211,5 +242,22 @@
     </div>
 </div>
 {/if}
+
+<script type="text/javascript">
+    $(function () {
+        require(['jquery.caret'], function () {
+            var jiaodian;
+            $(document).on('focus', 'input,textarea',function () {
+                jiaodian = this;
+            });
+
+            $("a[href='JavaScript:']").click(function () {
+                if (jiaodian) {
+                    $(jiaodian).insertAtCaret("["+this.innerText+"]" );
+                }
+            })
+        })
+    })
+</script>
 
 {template 'common/footer'}

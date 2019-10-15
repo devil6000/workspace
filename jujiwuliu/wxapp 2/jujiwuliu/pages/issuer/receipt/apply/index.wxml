@@ -1,0 +1,62 @@
+<!--jujiwuliu/pages/issuer/bind/index.wxml-->
+<view class='container'>
+    <view class='receipt_list'>
+        <view class='list_item'  wx:if="{{firms.length<=0}}" >请添加开票公司信息</view>
+         <view class='list_item' wx:for="{{firms}}" wx:key='index' wx:for-index="index">
+         <view class='firm_detail'>
+             <view>{{item.firm_name}}</view>
+            <view>{{item.firm_identifier}}</view>
+            <view>{{item.firm_email}}</view>
+         </view>
+         <view class='btn_edit' >
+            <view bindtap='sub_edit' data-firmindex='{{index}}'>修改</view>
+            <view bindtap='sub_del' data-firmindex='{{index}}'>删除</view>
+         </view>
+           
+        </view>
+    </view>
+    <form bindsubmit='submit_firm' bindreset="reset_firm">
+        <view class='item'>
+            <view class='weui-cell item-list'>
+                <view class='item_title'>公司名称</view>
+                <input type='text' name='firm_name' class='reg-input' placeholder-class='placeh-input' bindinput='getmobile' value='{{firm.firm_name}}' placeholder='请输入公司名称'></input>
+            </view>
+            <view class='weui-cell item-list code-cell'>
+                <view class='item_title'>公司税号</view>
+                <input type='text' name='firm_identifier' class='reg-input' placeholder-class='placeh-input' value='{{firm.firm_identifier}}' placeholder='请输入公司税号'></input>
+                
+            </view>
+            <view class='weui-cell item-list code-cell'>
+                <view class='item_title'>电子邮箱</view>
+                <input type='text' name='firm_email' class='reg-input' placeholder-class='placeh-input' value='{{firm.firm_email}}' placeholder='请输入您的电子邮箱'></input>
+                
+            </view>
+            <view class='weui-cell item-list code-cell'>
+              <view class='item_title'>开户行</view>
+              <input type='text' name='firm_bod' class='reg-input' placeholder-class='placeh-input' value='{{firm.firm_bod}}' placeholder='请输入开户行'></input>
+            </view>
+            <view class='weui-cell item-list code-cell'>
+              <view class='item_title'>开户账号</view>
+              <input type='text' name='firm_oaa' class='reg-input' placeholder-class='placeh-input' value='{{firm.firm_oaa}}' placeholder='请输入开户账号'></input>
+            </view>
+            <view class='weui-cell item-list code-cell'>
+              <view class='item_title'>公司地址</view>
+                <input type='text' name='firm_address' class='reg-input' placeholder-class='placeh-input' value='{{firm.firm_address}}' placeholder='请输入公司地址'></input>
+            </view>
+            <view class='weui-cell item-list code-cell'>
+              <view class='item_title'>公司电话</view>
+              <input type='text' name='firm_tel' class='reg-input' placeholder-class='placeh-input' value='{{firm.firm_tel}}' placeholder='请输入公司电话'></input>
+            </view>
+            </view>
+            <view class='reg-title'>请填写注册信息</view>
+            <view class='btn_view'>
+            <view class='btn-subimt-group' wx:if="{{show_editbtn}}">
+                <button form-type="submit" class='btn-subimt '>修改</button>
+                <button form-type="reset" class='btn-subimt '>取消</button>
+            </view>
+            <button form-type="submit" class='btn-subimt' wx:if="{{!show_editbtn}}">添加</button>
+            </view>
+    </form>
+</view>
+
+        

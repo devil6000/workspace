@@ -11,7 +11,8 @@ Page({
     vertifyname: '发送验证码',
     currentTime: 60, //倒计时时间
     mobile: '',
-    realname: ''
+    realname: '',
+    is_empower: 0
   },
   getmobile: function (e) {
     var that = this;
@@ -53,7 +54,6 @@ Page({
       disabled: true
     });
     var currentTime = that.data.currentTime;
-    console.log(currentTime);
     interval = setInterval(function () {
       currentTime--;
       that.setData({
@@ -75,7 +75,6 @@ Page({
       }),
       method: "POST",
       success: function (res) {
-        console.log(res);
         wx.showToast({
           title: '发送成功',
           icon: 'warn',
@@ -151,7 +150,6 @@ Page({
       },
       method: "POST",
       success: function (res) {
-        console.log(res);
 
         wx.setStorageSync('userType', 'issuer')
         app.globalData.userType = 'issuer';
@@ -174,7 +172,6 @@ Page({
       
       },
       fail: function (res) {
-        console.log(res)
         var message = res.data.message
         wx.showModal({
           title: '请求失败',
@@ -186,14 +183,29 @@ Page({
     })
   },
 
+  //注册
+  getEmpower: function () {
+    var t = this, e = setInterval(function () {
+      wx.getSetting({
+        success: function (n) {
+          var a = n.authSetting["scope.userInfo"];
+          a && (clearInterval(e), wx.setStorageSync('at_empower', 1), t.onShow());
+        }
+      });
+    }, 1e3);
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that=this;
     var introducer=wx.getStorageSync('introducer')
+    var at_empower = wx.getStorageSync('at_empower')
+    at_empower = at_empower ? at_empower : 0
     that.setData({
-      introducer: app.util.base64_decode(introducer)
+      introducer: app.util.base64_decode(introducer),
+      is_empower: at_empower
     });
   },
 
@@ -210,45 +222,53 @@ Page({
   onShow: function () {
     var  that = this
     this.pageLoading = !1;//防止多次跳转
-    app.util.getUserInfo(function (userInfo) {
-      //获取到用户信息后再执行下面的操作
-      if (userInfo.uid) {
-        app.memberInfo = userInfo;
-        app.util.request({
-          url: 'entry/wxapp/getcenter',
-          data: {},
-          method: "POST",
-          success: function (res) {
-            console.log(res);
-            var info = res.data.data.info;
-            if (info.type) {
-              if (info.type == 1) {
-                wx.setStorageSync('userType', 'worker')
-                app.globalData.userType = 'worker'
-              } else {
-                wx.setStorageSync('userType', 'user')
-                app.globalData.userType = 'user'
+    var at_empower = wx.getStorageSync('at_empower')
+    at_empower = at_empower ? at_empower : 0
+    that.setData({
+      is_empower: at_empower
+    })
+    if(at_empower == 1){
+      app.util.getUserInfo(function (userInfo) {
+        console.log(userInfo)
+        //获取到用户信息后再执行下面的操作
+        if (userInfo.uid) {
+          app.memberInfo = userInfo;
+          app.util.request({
+            url: 'entry/wxapp/getcenter',
+            data: {},
+            method: "POST",
+            success: function (res) {
+              console.log(res);
+              var info = res.data.data.info;
+              if (info.type) {
+                if (info.type == 1) {
+                  wx.setStorageSync('userType', 'worker')
+                  app.globalData.userType = 'worker'
+                } else {
+                  wx.setStorageSync('userType', 'user')
+                  app.globalData.userType = 'user'
+                }
+                wx.navigateTo({
+                  url: '/jujiwuliu/pages/index/index'
+                })
               }
-              wx.navigateTo({
-                url: '/jujiwuliu/pages/index/index'
-              })
+            },
+            fail: function (res) {
+              return false;
             }
-          },
-          fail: function (res) {
-            console.log(res)
-            return false;
-          }
-        })
-      } else {
-        //跳转到登陆引导页面
-        if (!that.pageLoading) {
-          that.pageLoading = !0;
-          wx.navigateTo({
-            url: '/jujiwuliu/pages/common/auth/index'
           })
+        } else {
+          //跳转到登陆引导页面
+          if (!that.pageLoading) {
+            that.pageLoading = !0;
+            wx.navigateTo({
+              url: '/jujiwuliu/pages/common/auth/index'
+            })
+          }
         }
-      }
-    });
+      });
+    }
+
   },
 
   /**

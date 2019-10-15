@@ -1,0 +1,65 @@
+/* jujiwuliu/pages/common/user/balance/draw_money/index.wxss */
+page{
+  background: #f4f4f4;
+}
+
+
+.credit{
+  background: #fff;
+  text-align: center;
+  padding-top: 20pt;
+  padding-bottom: 20pt;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10pt;
+}
+.credit .title{
+  font-size:1rem;
+}
+.credit .num_credit{
+  font-size:2.1rem;
+}
+
+
+.item-list{
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.item-list>view{
+  padding:0% 20pt;
+}
+.item-list .item-title{
+  background: #fff;
+  font-size: 1rem;
+  height: 35pt;
+  line-height: 35pt;
+  border-bottom:1px solid #e5e5e5;
+  display: flex;
+}
+.item-list .item-title view{
+  font-size:0.9rem;
+}
+.item-list .item-title view input{
+  height: 35pt;
+  margin-left: 10px;
+}
+.item-list .remark{
+  font-size: 0.8rem;
+  color:#f66620;
+  margin: 12px 0;
+}
+.item-list .btn.btn-draw_money{
+  background: #f66620;
+  color: #fff;
+  border: 1px solid #f66620;
+}
+.item-list .btn{
+  width: 90%;
+  height: 35pt;
+  line-height: 35pt;
+  margin: 0 auto;
+  border-radius: 5px;
+  margin-top:15pt; 
+  padding: 0;
+  text-align: center;
+}

@@ -34,6 +34,8 @@
                     <thead class="navbar-inner">
                     <tr>
                         <th>类型</th>
+                        <th>会员信息</th>
+                        <th>手机号</th>
                         <th>标题</th>
                         <th>时间</th>
                         <th>显示状态</th>
@@ -51,6 +53,10 @@
                                 建议
                             {/if}
                         </td>
+                        <td>
+                            <img src="{$row['avatar']}" class="img-circle" style="30px; height: 30px;" />{$row['realname']}
+                        </td>
+                        <td>{$row['mobile']}</td>
                         <td>{$row['title']}</td>
                         <td>{php echo date('Y-m-d H:i', $row['createtime'])}</td>
                         <td>

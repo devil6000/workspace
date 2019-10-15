@@ -10,7 +10,7 @@
 global $_W,$_GPC;
 $op = empty($_GPC['op']) ? 'display' : $_GPC['op'];
 
-if($op == 'dislpay'){
+if($op == 'display'){
 
     $pageIndex = max(1,intval($_GPC['page']));
     $pageSize = 20;
@@ -18,7 +18,7 @@ if($op == 'dislpay'){
     $condition = 'uniacid=:uniacid';
     $params[':uniacid'] = $_W['uniacid'];
 
-    $_GPC['delete'] = !isset($_GPC['delete']) ? -1 : $_GPC['delete'];
+    $_GPC['delete'] = isset($_GPC['delete']) ? $_GPC['delete'] : -1;
 
     if($_GPC['delete'] > -1){
         $condition .= ' and deleted=:deleted';
@@ -33,8 +33,9 @@ if($op == 'dislpay'){
 }
 
 if($op == 'delete'){
-    $id = intval($_GPC['id']);
-    pdo_update($this->tabfirm, array('deleted' => 1), array('id' => $id));
+	$id = intval($_GPC['id']);
+	pdo_delete($this->tabfirm,array('id' => $id));
+    //pdo_update($this->tabfirm, array('deleted' => 1), array('id' => $id));
     message('删除发票成功', $this->createWebUrl('receipt'), 'success');
 }
 

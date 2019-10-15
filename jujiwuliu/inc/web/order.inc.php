@@ -21,7 +21,8 @@ if($op=='display'){
     if($status > -1){
         $condition .=  ' and status=' . $status;
     }
-    if(!empty($_GPC['time'])){
+    $searchtime = intval($_GPC['searchtime']);
+    if(!empty($searchtime)){
         $starttime = strtotime($_GPC['time']['start']);
         $endtime = strtotime($_GPC['time']['end']);
         $condition .= " and createtime between {$starttime} and {$endtime}";

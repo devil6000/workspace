@@ -1,0 +1,34 @@
+<!--jujiwuliu/pages/common/advises/detail.wxml-->
+<view class='container'>
+  <view class='container-body'>
+    <view class='fui-row'>
+      <text class="label">类型</text>
+      <text class='text'>{{model[advises.model]}}</text>
+    </view>
+    <view class="fui-row">
+      <text class='label'>主题</text>
+      <text class='text'>{{advises.title}}</text>
+    </view>
+    <view class='fui-row large'>
+      <text class='text'>{{advises.content}}</text>
+    </view>
+    <block wx:if="{{images}}">
+      <view class='fui-row large images'>
+        <block wx:for="{{images}}" wx:key="index">
+          <view class='image'>
+            <image src="{{siteinfo.attachurl}}{{item}}" />
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:if="{{advises.reply_content}}">
+      <view class='fui-row'></view>
+      <view class='fui-row large'>
+        <text class='text'>{{advises.reply_content}}</text>
+      </view>
+    </block>
+  </view>
+</view>
+
+<import src="../template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

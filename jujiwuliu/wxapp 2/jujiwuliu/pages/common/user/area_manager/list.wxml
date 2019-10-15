@@ -1,0 +1,84 @@
+<view class="container">
+  <block wx:if="{{setting.rolling_areas}}">
+    <view class="swiper">
+        <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" bindchange='bindchange' circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+          <swiper-item wx:for="{{setting.rolling_areas}}" wx:key="{{index}}">
+            <image class="nav-icon" mode="scaleToFill" src="{{siteinfo.attachurl}}{{item}}"  bindload="imageLoad" class="itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" />
+          </swiper-item>
+        </swiper>
+    </view>
+  </block>
+  <block wx:if="{{userType == 'issuer'}}">
+    <view class='container-header orange'>
+      <view class='search-line'>
+        <image class='search-img' src='/jujiwuliu/resource/images/home/icon_01.png' />
+        <text style='font-size: 25rpx;'>当前位置:</text>
+        <view class='search-input'>
+          <picker bindchange='provinceChange' value="{{provincesIndex}}" range="{{provinces}}" class="input">
+            <view>{{objectProvinces[provincesIndex].fullname}}</view>
+          </picker>
+          <picker bindchange="cityChange" value="{{citysIndex}}" range="{{citys}}" class="input">
+            <view>{{objectCitys[citysIndex].fullname}}</view>
+          </picker>
+          <picker bindchange='districtChange' value='{{districtsIndex}}' range='{{districts}}' class='input'>
+            <view>{{objectDistricts[districtsIndex].fullname}}</view>
+          </picker>
+          <picker bindchange='areaChange' value='{{areasIndex}}' range='{{areas}}' class='input'>
+            <view>{{objectAreas[areasIndex].fullname}}</view>
+          </picker>
+        </view>
+        <view class='search-btn'>
+          <form report-submit='true' bindsubmit='search'>
+            <button form-type='submit' class='submit'>查询</button>
+          </form>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{userType == 'worker'}}">
+    <view class='container-header blue'>
+      <view class='search-line'>
+        <image class='search-img' src='/jujiwuliu/resource/images/home/icon_01.png' />
+        <text>当前位置:</text>
+        <view class='search-input'>
+          <picker bindchange='provinceChange' value="{{provincesIndex}}" range="{{provinces}}" class="input">
+            <view>{{objectProvinces[provincesIndex].fullname}}</view>
+          </picker>
+          <picker bindchange="cityChange" value="{{citysIndex}}" range="{{citys}}" class="input">
+            <view>{{objectCitys[citysIndex].fullname}}</view>
+          </picker>
+          <picker bindchange='districtChange' value='{{districtsIndex}}' range='{{districts}}' class='input'>
+            <view>{{objectDistricts[districtsIndex].fullname}}</view>
+          </picker>
+        </view>
+        <view class='search-btn'>
+          <form report-submit='true' bindsubmit='search'>
+            <button form-type='submit' class='submit blue'>查询</button>
+          </form>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view class='container-body'>
+    <view class='list-group'>
+      <block wx:if="{{list}}">
+        <block wx:for="{{list}}" wx:key="index" wx:for-item="item">
+          <view class='list-item'>
+            <image src='{{item.avatar}}' class='avatar' />
+            <view class='list-item-line'>
+              <text>姓名：{{item.realname}}</text>
+              <text bindtap='callPhone' data-mobile="{{item.mobile}}">电话：{{item.mobile}}</text>
+              <text>区域：{{item.area}}</text>
+            </view>
+          </view>
+        </block>
+      </block>
+      <block wx:elif="{{!list}}">
+        <view class='item-empty'>
+          <view class='empty-icon'><image  mode="widthFix" src="/jujiwuliu/resource/images/empty.png" /></view>
+          <view class='empty-text'>无任何纪录</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,106 @@
+/* jujiwuliu/pages/common/advises/index.wxss */
+page {
+  background-color: #f4f4f4;
+}
+
+radio .wx-radio-input {
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  margin-top: -8rpx;
+}
+
+.header {
+  width: 100%;
+  height: 2.345rem;
+  background-color: #f66620;
+  color: #ffffff;
+  text-align: center;
+  font-size: 40rpx;
+  line-height: 2.345rem;
+}
+
+.form {
+  width: 100%;
+}
+
+.input-box {
+  padding: 15rpx 20rpx;
+  background: #ffffff;
+}
+
+.form-group {
+  display: flex;
+  height: 90rpx;
+  align-items: center;
+  font-size: 30rpx;
+  border-bottom: solid 1rpx #f4f4f4;
+}
+
+.form-group.large {
+  height: 300rpx;
+}
+
+.form-group .label {
+  width: 120rpx;
+}
+
+.form-group .input {
+  flex: 1;
+}
+
+.form-group.large.images {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 15rpx 0;
+}
+
+.form-group.large.images .input {
+  display: flex;
+}
+
+.form-group.large.images .image-box {
+  border: solid 1px #d1d1d1;
+  width: 110rpx;
+  height: 110rpx;
+  position: relative;
+  margin-right: 20rpx;
+}
+
+.form-group.large.images .image-box image {
+  width: 110rpx;
+  height: 110rpx;
+}
+
+.form-group.large.images .image-box .image-remove {
+  position: absolute;
+  width: 40rpx;
+  height: 40rpx;
+  top: 5rpx;
+  right: 5rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff0000;
+  font-size: 40rpx;
+}
+
+.form-group .input .button {
+  height: 80rpx;
+  color: #ffffff;
+  font-size: 35rpx;
+}
+
+.radio {
+  margin-right: 30rpx;
+}
+
+.textarea {
+  height: 260rpx;
+}
+
+.placeholder {
+  color: #d1d1d1;
+}
+

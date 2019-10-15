@@ -1,0 +1,55 @@
+<!--jujiwuliu/pages/common/user/balance/list/index.wxml-->
+<view class='container'>
+  <view class='credit'>
+    <view class='title'>当前余额</view>
+    <view class='num_credit'><view>￥</view>{{memberInfo.credit2}}</view>
+      <navigator class='btn btn-recharge' url="../recharge/index">充值</navigator>
+      <navigator class='btn btn-draw_money' url="../draw_money/index">提现</navigator>
+  </view>
+
+  <view class="nav_page">
+      <view class="page__bd">
+          <view class="weui-tab">
+              <view class="weui-navbar">
+                  <block wx:for-items="{{tabs.titles}}" wx:key="{{index}}">
+                      <view id="{{index}}" class="weui-navbar__item {{tabs.activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                          <view class="weui-navbar__title">{{item}}</view>
+                      </view>
+                  </block>
+                  <view class="weui-navbar__slider" style="left: {{tabs.sliderLeft}}px; transform: translateX({{tabs.sliderOffset}}px); -webkit-transform: translateX({{tabs.sliderOffset}}px);"></view>
+              </view>
+              <view class="weui-tab__panel">
+                  <block wx:for-items="{{laborer}}" wx:key="{{index}}">
+                  <view class="weui-tab__content" hidden="{{tabs.activeIndex != index}}">
+                    <block wx:if ='{{!laborer[index]}}'>
+                      <view class='not_record'>
+                        <view class='not_worker'><image  mode="widthFix" src="../../../../../resource/images/empty.png" /></view>  
+                        <view class='not_worker'>无任何记录</view>     
+                      </view> 
+                    </block>
+                    <block wx:for="{{laborer[index]}}"  wx:for-item="labor" wx:key="{{labor_id}}">
+                    <view class='item-list'>
+                      <view class='item-content'>
+                        <view class='content-left'>
+                          <view class='remarks'>{{labor.title}} </view>
+                          <view class='establish_time'>{{labor.createtime}}</view>
+                        </view>
+                        <view class='content-right {{labor.num>0?"multi":""}}'><text>{{labor.num>0?"+":""}}</text>{{labor.num?labor.num:0}}</view>
+                      </view>
+                     
+                    </view>
+                    </block>
+                  </view>
+                  </block>
+                  
+              </view>
+          </view>
+      </view>
+  </view>
+</view>
+
+  
+
+
+<import src="../../../template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>

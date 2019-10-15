@@ -1,0 +1,29 @@
+/* jujiwuliu/pages/issuer/map/index.wxss */
+page {
+  height: 100%;
+}
+
+.weui-bottom {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 80rpx;
+  align-items: center;
+  justify-content: center;
+}
+
+.weui-btn {
+  background: #f66620;
+  line-height: 60rpx;
+  color: #fff;
+  height: 60rpx;
+  font-size: 30rpx;
+  border-radius: 10rpx;
+  padding:0 30rpx;
+}
+
+#map {
+  width: 100%;
+  height: calc(100% - 80rpx);
+}

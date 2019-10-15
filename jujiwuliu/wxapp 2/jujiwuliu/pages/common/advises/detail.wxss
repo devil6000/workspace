@@ -1,0 +1,42 @@
+/* jujiwuliu/pages/common/advises/detail.wxss */
+page {
+  background-color: #f4f4f4;
+}
+
+.container-body {
+  width: 100%;
+}
+
+.fui-row {
+  display: flex;
+  background: #ffffff;
+  height: 90rpx;
+  font-size: 30rpx;
+  align-items: center;
+  padding: 0 15rpx;
+  border-bottom: solid 1px #dfdfdf;
+}
+
+.fui-row.large {
+  height: 300rpx;
+  align-items: flex-start;
+}
+
+.fui-row .label {
+  width: 120rpx;
+}
+
+.fui-row .text {
+  flex: 1;
+}
+
+.fui-row .image {
+  width: 110rpx;
+  height: 110rpx;
+  margin: 15rpx 15rpx;
+}
+
+.fui-row .image image {
+  width: 110rpx;
+  height: 110rpx;
+}

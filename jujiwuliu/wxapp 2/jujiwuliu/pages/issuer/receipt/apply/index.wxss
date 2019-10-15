@@ -1,0 +1,85 @@
+/* jujiwuliu/pages/issuer/bind/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.container{
+  position: relative;
+}
+
+.btn-subimt{
+  font-size: 36rpx;
+  line-height: 90rpx;
+  border-radius: 10rpx;
+  border: none;
+  background: #f66620;
+  color: #fff;
+  margin:0 30rpx;
+  text-align: center;
+    margin-bottom: 30rpx;
+}
+.btn-subimt-group{
+  margin:0 30rpx;
+  display: flex;
+  justify-content: space-between;
+    margin-bottom: 30rpx;
+}
+.btn-subimt-group button{
+    width: 45%;
+    margin: 0;
+}
+
+.reg-title{
+  line-height: 90rpx;
+  padding: 0 30rpx;
+  font-size: 28rpx;
+  color: #f66620;
+}
+.item{
+  
+}
+.item-list{
+  padding: 0;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  height: 90rpx;
+  position: relative;
+  background: #fff;
+  margin-top: 20rpx;
+}
+.item-list .item_title{
+  font-size: 32rpx;
+}
+.reg-input{
+  font-size: 28rpx;
+  margin-left: 20rpx;
+}
+.placeh-input{
+  color: #ccc;
+}
+
+
+/* list */
+.receipt_list{
+
+}
+.receipt_list .list_item{
+    background: #fff;
+    border-radius: 10rpx;
+    margin:30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.receipt_list .list_item .btn_edit view{
+    height: 55rpx;
+    line-height: 55rpx;
+    padding: 0% 10rpx;
+   font-size:36rpx;
+    border-radius:10rpx;
+    border:none;
+    background:#f66620;
+    color:#fff;
+    display:inline-block;
+    margin-left: 10rpx;
+}

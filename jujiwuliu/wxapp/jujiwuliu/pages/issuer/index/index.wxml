@@ -80,8 +80,17 @@
 </view>
  <view class='weui-cell input-cell'>
         <view class='weui-label  input-label'>详细地址：</view>
-        <input type='text' class='weui-input input-input' name='address' bindinput='address' value='{{address}}' placeholder="用工详细地址" ></input>
+        <input type='text' class='weui-input input-input' name='address' bindinput='address' value='{{address}}' placeholder="用工详细地址" style="width: calc(100% - 210rpx);" ></input>
+        
         <!-- <input  class='weui-input input-input' placeholder="用工详细地址" ></input> -->
+</view>
+<view class="weui-cell input-cell">
+  <view class="weui-label input-label">货物类型：</view>
+  <view class="weui-input input-input">
+    <picker bindchange="cargoPickerChange" value="{{cargoIndex}}" range="{{cargoArray}}">
+      <view class="sex" style="font-size:28rpx;">{{cargoArray[cargoIndex]}}</view>
+    </picker>
+  </view>
 </view>
 
         <view class='weui-cell input-cell'>
@@ -97,7 +106,7 @@
           </view>
         </view>
       </view>
-      <view class='cell-title'>货物图片</view>
+      <view class='cell-title'>货物图片<text style="float: right">用工地点定位</text></view>
       <view class='release-images'>
         
         <block wx:for="{{images}}" wx:key="{{index}}">
@@ -109,7 +118,7 @@
         <view class='release-image' bindtap='bindChooiceProduct'>
           <image src='/jujiwuliu/resource/images/add.png'></image>
         </view>
-
+        <view class="weui-icon" bindtap="gotomap"><image src="/jujiwuliu/resource/images/icon_01.png"></image></view>
       </view>
 
       <view class='cell-title'>指定人员</view>
@@ -123,10 +132,9 @@
         <view class='release-image' bindtap='bindChooiceAppoint'>
           <image src='/jujiwuliu/resource/images/add.png'></image>
         </view>
-
       </view>
 
-      <view class='cell-title'>货物描述和用功要求说明</view>
+      <view class='cell-title'>货物描述和用工要求说明</view>
       <view class='release-textarea'>
         <textarea wx:if="{{isShowText}}" name='description' placeholder='填写货物描述内容'  bindblur='onRemarkInput' bindconfirm='onShowText' focus='{{onFocus}}' value='{{description}}'></textarea>
         <view wx:else class='remarks' bindtap='onShowTextare'>{{description?description:'填写货物描述内容'}}</view> 
@@ -168,14 +176,27 @@
       </view>
       <view class='weui-cells input-cells'>
         <view class='weui-cell input-cell'>
-          <view class='weui-label  input-label'>用工天数：</view>
-          <view class='weui-input input-input'>
-            <input type='text' name='count' bindinput='getCount'  value='{{count}}'  placeholder='请填写用工天数!'></input>
-          </view>
+          <view class='weui-label  input-label'>用工时间：</view>
+          <block wx:if="{{static == 4}}">
+            <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
+              <input type='text' name='count' bindinput='getCount'  value='{{count}}'  placeholder='请填写用工时间!'></input>
+            </view>
+            <view class='weui-label  input-label' style="width:120rpx; margin-left:20rpx;" >单位：</view>
+            <view class="weui-input input-input" style="width: calc(50% - 240rpx)">
+              <picker range="{{timeUintArray}}" value="{{timeUintIndex}}" bindchange="timeUintChange">
+                <view style="font-size: 28rpx;">{{timeUintArray[timeUintIndex]}}</view>
+              </picker>
+            </view>
+          </block>
+          <block wx:else>
+            <view class='weui-input input-input'>
+              <input type='text' name='count' bindinput='getCount'  value='{{count}}'  placeholder='请填写用工天数!'></input>
+            </view>
+          </block>
         </view>
         <view class='weui-cell input-cell'>
           <view class='weui-label  input-label'>开工时间：</view>
-          <view class='weui-input input-input'>
+          <view class='weui-input input-input' >
             <picker mode="multiSelector" value="{{dateTime}}" bindchange="getDateTime" bindcolumnchange="getDateTimeColumn" range="{{dateTimeArray}}">    
           <input hidden='true' name='starttime' value='{{starttime}}'></input>
           <view class="tui-picker-detail"  style='font-size:28rpx;'> {{starttime}}   
@@ -204,9 +225,21 @@
         <view class='weui-cell input-cell'>
           <view class='weui-label  input-label'>详细地址：</view>
           <view class='weui-input input-input'>
-            <input type='text' name='address' bindinput='address' value='{{address}}' placeholder="请填写用工地点！" ></input>
+            <input type='text' class='weui-input input-input' name='address' bindinput='address' value='{{address}}' placeholder="用工详细地址" style="width: calc(100% - 210rpx);" ></input>
+            <!--<input type='text' name='address' bindinput='address' value='{{address}}' placeholder="请填写用工地点！" ></input>-->
+            
           </view>
         </view>
+        
+      <view class="weui-cell input-cell">
+        <view class="weui-label input-label">货物类型：</view>
+        <view class="weui-input input-input">
+          <picker bindchange="cargoPickerChange" value="{{cargoIndex}}" range="{{cargoArray}}">
+            <view class="sex" style="font-size:28rpx;">{{cargoArray[cargoIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+
         <view class='weui-cell input-cell'>
           <view class='weui-label  input-label'>需要人数：</view>
           <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
@@ -220,7 +253,7 @@
           </view>
         </view>
       </view>
-      <view class='cell-title'>货物图片</view>
+      <view class='cell-title'>货物图片<text style="float: right">用工地点定位</text></view>
       <view class='release-images'>
         <block wx:for="{{images}}" wx:key="{{index}}">
         <view class='release-image'>
@@ -231,6 +264,7 @@
         <view class='release-image' bindtap='bindChooiceProduct'>
           <image src='/jujiwuliu/resource/images/add.png'></image>
         </view>
+        <view class="weui-icon" bindtap="gotomap"><image src="/jujiwuliu/resource/images/icon_01.png"></image></view>
       </view>
 
       <view class='cell-title'>指定人员</view>
@@ -247,7 +281,7 @@
         </view>
 
       </view>
-      <view class='cell-title'>货物描述和用功要求说明</view>
+      <view class='cell-title'>货物描述和用工要求说明</view>
       <view class='release-textarea'>
         <textarea wx:if="{{isShowText}}" name='description' placeholder='填写货物描述内容'  bindblur='onRemarkInput' bindconfirm='onShowText' focus='{{onFocus}}' value='{{description}}'></textarea>
         <view wx:else class='remarks' bindtap='onShowTextare'>{{description?description:'填写货物描述内容'}}</view> 

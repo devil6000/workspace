@@ -11,15 +11,23 @@
             <div class="form-group">
                 <div class="col-sm-4"><input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入姓名/手机号" /></div>
                 <div class="col-sm-2">
-                    <select class="form-control" name="status">
-                        <option value="-1">请选择</option>
+                    <select class="form-control input-sm" name="status">
+                        <option value="-1">请选择状态</option>
                         <option value="0" {if $status == 0}selected{/if}>待审核</option>
                         <option value="1" {if $status == 1}selected{/if}>已审核</option>
                         <option value="2" {if $status == 2}selected{/if}>未通过</option>
                     </select>
                 </div>
                 <div class="col-sm-2">
+                    <select class="form-control input-sm" name="static">
+                        <option value="-1">请选择性质</option>
+                        <option value="0" {if $static == 0}selected{/if}>个人</option>
+                        <option value="1" {if $static == 1}selected{/if}>企业</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
                     <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <button class="btn btn-default" name="export" value="1">导出</button>
                 </div>
             </div>
         </form>
@@ -31,6 +39,7 @@
                         <th>姓名</th>
                         <th>手机号</th>
                         <th>地区</th>
+                        <th>性质</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
@@ -42,6 +51,13 @@
                         <td>{$row['mobile']}</td>
                         <td>{$row['area']}</td>
                         <td>
+                            {if empty($row['static'])}
+                                个人
+                            {else}
+                                企业
+                            {/if}
+                        </td>
+                        <td>
                             {if $row['status'] == 1}
                                 已审核
                             {elseif $row['status'] == 2}
@@ -51,7 +67,7 @@
                             {/if}
                         </td>
                         <td>
-                            <a href="{php echo $this->createWebUrl('area', array('op' => 'delete', 'id' => $row['id']))}" class="btn btn-default btn-sm" title="删除"><i class="fa fa-edit"></i>删除</a>
+                            <a href="{php echo $this->createWebUrl('area', array('op' => 'delete', 'id' => $row['id']))}" onclick="return confirm('确认要删除吗?'); " class="btn btn-default btn-sm" title="删除"><i class="fa fa-edit"></i>删除</a>
                             <a rel="tooltip" onclick="util.ajaxshow('{php echo $this->createWebUrl('area', array('op' => 'apply', 'id' => $row['id']))}','审核')" href="#" class="btn btn-default btn-sm" title="审核"><i class="fa fa-edit"></i>审核</a>
                         </td>
                     </tr>

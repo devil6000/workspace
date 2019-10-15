@@ -1,0 +1,19 @@
+
+<view class="map-body">
+  <map id="map" bindcontroltap="controltap" bindmarkertap="markertap" bindregionchange="regionchange" latitude="{{lat}}" longitude="{{lng}}" subkey="{{subkey}}" scale="{{scale}}" markers="{{markers}}"></map>
+  <view class="search-list">
+    <view class="search-form">
+      <input placeholder="请输入地址" confirm-type="search" class="input-c" bindconfirm="getsuggest"></input>
+    </view>
+    <view class="search-box">
+      <view class="search-item" wx:for="{{longitudeList}}" wx:key="index" wx:for-item="data" bindtap="getlongitude" data-lat="{{data.location.lat}}" data-lng="{{data.location.lng}}">
+        <image src="/jujiwuliu/resource/images/icon_01.png"></image>
+        <view class="search-item-list">
+          <text class="title">{{data.title}}</text>
+          <text class="addr">{{data.address}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="weui-bottom"><view class="weui-btn" bindtap="goback">提交位置</view></view>
+</view>

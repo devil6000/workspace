@@ -73,6 +73,7 @@ class jujiwuliuModuleSite extends WeModuleSite {
 		$this->sex_set = array('0' => '不限', '1' => '男', '2' => '女');
 		$this->status_set = array('0' => '发布中', '1' => '工作中', '3' => '已完成', '4' => '已取消');
 		$this->order_status_set = array('0' => '接单中', '1' => '工作中', '2' => '已完工', '3' => '已完成', '4' => '已取消');
+		$this->cargo_set = array('0' => '重货', '1' => '泡货');
 		
 //		$refund= $this->refund('PU20181125103540849649',0.01,'后台处理退款！');//退款方法
 		
@@ -389,22 +390,30 @@ class jujiwuliuModuleSite extends WeModuleSite {
 		
 		$op = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 		if($op=='display'){
-			$keyword = $_GPC['keyword'];
+		    $condition = "r.uniacid=:uniacid and r.pay_status=1 and r.deleted=0";
+		    $params[':uniacid'] = $_W['uniacid'];
+
+			$keyword = trim($_GPC['keyword']);
 			if(!empty($keyword)){
-				$condition.=' and (nickname like "%'.$keyword.'%" or mobile like "%'.$keyword.'%" or realname like "%'.$keyword.'%")';
+				$condition.=" and (m.realname like :keyword or m.nickname like :keyword or m.mobile like :keyword)";
+				$params[':keyword'] = "%{$keyword}%";
 			}
-			$status = isset($_GPC['status']) ? intval($_GPC['status']) : -1;
+			//$status = isset($_GPC['status']) ? intval($_GPC['status']) : -1;
+            $status = isset($_GPC['status']) ? $_GPC['status'] : '';
+			$status = ($_GPC['status'] == '') ? -1 : $_GPC['status'];
 			if($status > -1){
-			    $condition .= ' and status=' . $status;
+			    $condition .= ' and r.status=' . $status;
             }
 
 			$pindex = max(1,intval($_GPC['page']));
 			$psize = 20;
 
 			$type=$_GPC["type"];//获取类型（进行中、已完成、已取消）
+            $total = pdo_fetchcolumn("select count(r.id) from " . tablename($this->tabrelease) . " r left join " . tablename($this->tabmember) . " m on r.openid=m.openid where " . $condition, $params);
+            $list = pdo_fetchall("select r.* from " . tablename($this->tabrelease) . " r left join " . tablename($this->tabmember) . " m on r.openid=m.openid where " . $condition . " order by r.createtime desc limit " . (($pindex - 1) * $psize) . ',' . $psize, $params);
 	
-			$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabrelease).' where uniacid ='.$_W['uniacid'].' and pay_status=1  and deleted=0' . $condition);
-			$list = pdo_fetchall("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid  and pay_status=1 and deleted=0" . $condition . " order by createtime desc LIMIT " . (($pindex - 1) * $psize) . ',' . $psize, array(':uniacid' => $_W['uniacid']));
+			//$total = pdo_fetchcolumn('select count(*) from '.tablename($this->tabrelease).' where uniacid ='.$_W['uniacid'].' and pay_status=1  and deleted=0' . $condition);
+			//$list = pdo_fetchall("SELECT * FROM ".tablename($this->tabrelease)." WHERE uniacid=:uniacid  and pay_status=1 and deleted=0" . $condition . " order by createtime desc LIMIT " . (($pindex - 1) * $psize) . ',' . $psize, array(':uniacid' => $_W['uniacid']));
 			foreach($list as & $res){
 				$res['member'] = pdo_fetch('select * from '.tablename($this->tabmember).' where uniacid='.$_W['uniacid'].' and openid=\''.$res['openid'].'\'');
 
@@ -473,6 +482,16 @@ class jujiwuliuModuleSite extends WeModuleSite {
 
             $uid = pdo_fetchcolumn('select uid from' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $release['openid']));
 
+            $fileName = __DIR__ . '/.locked';   //文件名称
+
+            //判断是否锁定支付
+            if(file_exists($fileName) && (filectime($fileName) + 600) < time()){
+                message('支付锁定，请10分钟后在操作', '', 'error');
+                exit;
+            }
+
+            file_put_contents($fileName, time());
+
             if($type == 'money'){
                 $log=array(
                     1,
@@ -522,6 +541,8 @@ class jujiwuliuModuleSite extends WeModuleSite {
                    pdo_update($this->tabrelease, array('surplus_status' => 2,'refund_money' => $price), array('id' => $id, 'uniacid' => $_W['uniacid']));
                 }
             }
+
+            unlink($fileName);  //删除文件
 
             message('退款成功！', referer(), 'success');
         }
@@ -694,5 +715,64 @@ class jujiwuliuModuleSite extends WeModuleSite {
                 return error(-1, '未知错误');
             }
         }
+    }
+
+    public function sendTplNotice($touser, $template_id, $postdata, $url = '', $form_id = '', $topcolor = '#FF683F') {
+        $account_api = WeAccount::create();
+
+        if(empty($touser)) {
+            return error(-1, '参数错误,粉丝openid不能为空');
+        }
+        if(empty($template_id)) {
+            return error(-1, '参数错误,模板标示不能为空');
+        }
+        if(empty($postdata) || !is_array($postdata)) {
+            return error(-1, '参数错误,请根据模板规则完善消息内容');
+        }
+        $token = $account_api->getAccessToken();
+        if (is_error($token)) {
+            return $token;
+        }
+
+
+        $data = array();
+        $data['touser'] = $touser;
+        $data['template_id'] = trim($template_id);
+        $data['page'] = trim($url);
+        $data['topcolor'] = trim($topcolor);
+        $data['form_id'] = $form_id;
+        $data['data'] = $postdata;
+        $data = json_encode($data);
+
+        $post_url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token={$token}";
+        $response = ihttp_request($post_url, $data);
+        if(is_error($response)) {
+            return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+        }
+        $result = @json_decode($response['content'], true);
+        if(empty($result)) {
+            return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+        } elseif(!empty($result['errcode'])) {
+            return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']},信息详情：{$this->errorCode($result['errcode'])}");
+        }
+        return true;
+    }
+
+    public function getFormId($openid){
+        global $_W;
+        $condition = 'uniacid=:uniacid and openid=:openid and TIMESTAMPDIFF(DAY,from_unixtime(createtime),now()) < 7 and isuserd=0';
+        $params = array(':uniacid' => $_W['uniacid'], ':openid' => $openid);
+        $info = pdo_fetch('select * from ' . tablename('jujiwuliu_formid') . ' where ' . $condition . ' order by createtime asc limit 1', $params);
+        if(!empty($info)){
+            if($info['formid'] == 'undefined' || $info['formid'] == 'the formId is a mock one' || empty($info['formid'])){
+                $this->updateFormId($info['openid'], $info['id']);
+                $info = $this->getFormId($openid);
+            }
+        }
+        return $info;
+    }
+
+    public function updateFormId($openid, $id) {
+        pdo_update('jujiwuliu_formid', array('isuserd' => 1), array('id' => $id, 'openid' => $openid));
     }
 }

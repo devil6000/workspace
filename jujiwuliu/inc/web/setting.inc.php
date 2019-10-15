@@ -47,6 +47,10 @@ if($op=='display'){
             $data['explain'] = $_GPC['explain'];
             $data['explain_receipt'] = $_GPC['explain_receipt'];
         }
+        //协议
+        if($op == 'agree'){
+            $data['agree_on'] = $_GPC['agree_on'];
+        }
 		$res=pdo_update($this->tabsetting,$data,array('uniacid'=>$_W['uniacid']));
 		if(!empty($res)){
 			message('保存成功！', referer(), 'success');

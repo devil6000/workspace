@@ -31,6 +31,9 @@ if($op == 'display'){
     $list = pdo_fetchall("select * from " . tablename('jujiwuliu_advises') . " where " . $conditions . " order by id desc limit " . ($pageIndex - 1) * $pageSize . "," . $pageSize, $params);
     if(!empty($list)){
         foreach ($list as &$item){
+            $member = pdo_fetch("select * from " . tablename($this->tabmember) . " where openid=:openid", array(':openid' => $item['openid']));
+            $item['avatar'] = $member['avatar'];
+            $item['realname'] = $member['realname'];
             $aid = $item['id'];
             $total = pdo_fetchcolumn("select count(id) from " . tablename('jujiwuliu_advises_reply') . " where advisies_id=:id", array(':id' => $aid));
             $item['reply'] = intval($total);

@@ -1,29 +1,28 @@
 <block wx:if="{{is_firing_page==1}}">
-    <view class="swiper" >
-     
-      <view class='swiper_time'>
-          <view class='progress_box' bindtap='touchHideLoading'>
-            <!-- 绘制圆环背景 -->
-            <canvas class="progress_bg" canvas-id="canvasProgressbg" />
-            <!-- 绘制加载中圆弧 -->
-            <canvas class="progress_canvas" canvas-id="canvasProgress" /> 
-            <!-- 绘制圆弧中心提示文字 -->
-            <view class="progress_text">
-              <text class='progress_info'> {{progress_txt}}</text>
-            </view>
+  <view class="swiper" >
+    <view class='swiper_time'>
+        <view class='progress_box' bindtap='touchHideLoading'>
+          <!-- 绘制圆环背景 -->
+          <canvas class="progress_bg" canvas-id="canvasProgressbg" />
+          <!-- 绘制加载中圆弧 -->
+          <canvas class="progress_canvas" canvas-id="canvasProgress" /> 
+          <!-- 绘制圆弧中心提示文字 -->
+          <view class="progress_text">
+            <text class='progress_info'> {{progress_txt}}</text>
           </view>
-      </view>
-      
-      <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" interval='{{interval}}' bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
-        <block wx:for="{{setting_set.rolling_diagram?setting_set.rolling_diagram :slide}}" wx:key="{{index}}">
-          <swiper-item >
-            <image class="nav-icon" mode="aspectFill" src="{{item}}"  bindload="imageLoad" bindtap="link_url" data-index="{{index}}"  class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" mode="widthFix" />
-          </swiper-item>
-        </block>
-      </swiper>
+        </view>
     </view>
-
+    <swiper class="swiper" indicator-dots="{{indicatorDots}}" vertical="{{vertical}}" autoplay="{{autoplay}}" duration="{{duration}}" interval='{{interval}}' bindchange="bindchange"  circular="{{circular}}" style="height:{{imgheights[current]}}rpx;">
+      <block wx:for="{{setting_set.rolling_diagram?setting_set.rolling_diagram :slide}}" wx:key="{{index}}">
+        <swiper-item >
+          <image class="nav-icon" mode="aspectFill" src="{{item}}"  bindload="imageLoad" bindtap="link_url" data-index="{{index}}"  class=".itemimage" style="height:{{imgheights[current]}}rpx;width:{{imgwidth}}rpx;" mode="widthFix" />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
 </block>
+
+<!-- 发布方 -->
 <block wx:if="{{userType == 'issuer' && !is_firing_page}}">
   <view class='container'>
     <view class='userinfo'>
@@ -31,21 +30,15 @@
           <image mode="widthFix" src="{{memberInfo.avatar}}" />
         </view>
         <view class='info title'>
+          <block wx:if="{{is_empower == 1}}">
           <view>{{memberInfo.realname}}</view>
+          </block>
+          <block wx:else>
+          <view><button bindtap="getEmpower" class="empower-btn" open-type="getUserInfo">会员登录</button></view>
+          </block>
           <view>{{memberInfo.mobile}}</view>
         </view>
-        <view class='btn-bell'>
-          <!-- <navigator url='../common/information/index'>
-            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
-            <text>1</text>
-          </navigator> -->
-          <!--
-          <view >
-            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
-            <text>1</text>
-          </view>
-          -->
-        </view>
+        <view class='btn-bell'></view>
     </view>
     <view class='info_card'>
       <view class='info_card-title'>我的信息</view>
@@ -72,14 +65,14 @@
       <view class='info_card-title'>搬运家园</view>
       <view class='info_card-ul'>
         <navigator class='info_card-li' url='../../pages/common/user/area_manager/index'>
-          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_09.png'></image></view>
           <view class='info_card-info'>
             <view class='title'>诚招区域负责人</view>
           </view>
         </navigator>
         <view class='info_card-line'></view>
         <navigator class='info_card-li' url='../../pages/common/user/area_manager/list'>
-          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_10.png'></image></view>
           <view class='info_card-info'>
             <view class='title'>查看区域负责人</view>
           </view>
@@ -128,17 +121,13 @@
         <view class='list-text'>联系客服</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </button>
-      <!-- <view class='weui-cell list-item' bindtap='imagecheck'>
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_07.png'></image>
-        <view class='list-text'>在线客服</view>
-        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
-      </view> -->
-
     </view>
   </view>
   <import src="../common/template/footer.wxml"/>
   <template is="footerWx" data="{{...tabBar}}"/>
 </block>
+
+<!-- 搬运工 -->
 <block wx:elif="{{userType == 'worker' && !is_firing_page}}">
   <view class='container'>
     <view class='workerinfo'>
@@ -146,14 +135,16 @@
           <image mode="widthFix" src="{{memberInfo.avatar}}" />
         </view>
         <view class='info title'>
+          <block wx:if="{{is_empower == 1}}">
           <view>{{memberInfo.realname}}</view>
+          </block>
+          <block wx:else>
+          <view><button bindtap="getEmpower" class="empower-btn" open-type="getUserInfo">会员登录</button></view>
+          </block>
           <view>{{memberInfo.mobile}}</view>
         </view>
         <view class='btn-bell'>
-          <!-- <navigator  url='../common/information/index'>
-            <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
-            <text>1</text>
-          </navigator> -->
+
           <view bindtap='setDistance'>
             <image src='/jujiwuliu/resource/images/home/icon_01.png'></image>
             <!--<text>1</text>-->
@@ -170,15 +161,6 @@
             <view class='des'>{{memberInfo.order_num?memberInfo.order_num:0}}笔订单</view>
           </view>
         </navigator>
-
-        <!-- <view class='worker_card-line'></view>
-        <view class='worker_card-li'>
-          <view class='worker_card-image'><image src='/jujiwuliu/resource/images/carry/icon_02.png'></image></view>
-          <view class='worker_card-info'>
-            <view class='title'>我的搬运次数</view>
-            <view class='des'>0次搬运</view>
-          </view>
-        </view> -->
         <view class='worker_card-line'></view>
         
         <!-- <view class='worker_card-line2'></view> -->
@@ -204,14 +186,14 @@
       <view class='info_card-title'>搬运家园</view>
       <view class='info_card-ul'>
         <navigator class='info_card-li' url='../../pages/common/user/area_manager/index'>
-          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_09.png'></image></view>
           <view class='info_card-info'>
             <view class='title'>诚招区域负责人</view>
           </view>
         </navigator>
         <view class='info_card-line'></view>
         <navigator class='info_card-li' url='../../pages/common/user/area_manager/list'>
-          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_02.png'></image></view>
+          <view class='info_card-image'><image src='/jujiwuliu/resource/images/home/icon_10.png'></image></view>
           <view class='info_card-info'>
             <view class='title'>查看区域负责人</view>
           </view>
@@ -220,11 +202,6 @@
     </view>
 
     <view class='list_card'>
-      <!-- <navigator class='weui-cell list-item' url="../../pages/common/user/credit/list/index">
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/carry/icon_04.png'></image>
-        <view class='list-text'>我的积分</view>
-        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
-      </navigator> -->
       <navigator class='weui-cell list-item' url='../../pages/common/advises/index'>
         <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_04.png'></image>
         <view class='list-text'>投诉建议</view>
@@ -235,13 +212,7 @@
         <view class='list-text'>邀请注册</view>
         <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
       </button>
-      <!--
-      <button class='weui-cell list-item' open-type="contact">
-        <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_06.png'></image>
-        <view class='list-text'>在线客服</view>
-        <view class='weui-cell__ft weui-cell__ft_in-access list-item-arrow_right'></view>
-      </button>
-      -->
+
       <navigator class='weui-cell list-item' url="../../pages/common/user/explain/index?type=2">
         <image class='list-item-icon' src='/jujiwuliu/resource/images/home/icon_08.png'></image>
         <view class='list-text'>使用说明</view>
@@ -258,17 +229,7 @@
   <template is="footerWx" data="{{...tabBar}}"/>
 </block>
 
-<!-- 老首页 -->
-<!-- <block wx:elif="{{userType == 'index' && !is_firing_page}}">
-<view class='container'>
-  <view class='navs'>
-    <view bindtap='issuer' class='nav release'>发布方</view>
-    <view bindtap='worker' class='nav carry'>搬运工</view>
-  </view>
-</view>
-</block> -->
-
-
+<!-- 首页 -->
 <block wx:elif="{{userType == 'index' && !is_firing_page}}">
 <view class='page_container '>
     <view class='logo'><image src='/jujiwuliu/resource/images/logo.png'></image></view>
@@ -286,11 +247,6 @@
 </view>
 </block>
 
-
-
-  <!--授权  -->
-<import src="../common/template/model.wxml"/>
-<template is="model_shouquan" data="{{locationModelShow}}"/>
 
 <!-- 距离设置 -->
 <import src="../common/template/distance.wxml" />

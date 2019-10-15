@@ -39,6 +39,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		$this->sex_set = array('0' => '不限', '1' => '男', '2' => '女');
 		$this->status_set = array('0' => '发布中', '1' => '工作中', '3' => '已完成', '4' => '已取消');
 		$this->distance_set = array('0' => 10, '1' => 20);
+		$this->cargo_set = array('0' => '重货', '1' => '泡货', '2' => '重泡货');
+		$this->timeuint_set = array('0' => '天', '1' => '小时', '2' => '完成即止');
 		$this->seeting=pdo_fetch("SELECT * FROM ".tablename($this->tabsetting)." WHERE uniacid=:uniacid ", array(':uniacid' => $_W['uniacid']));
 		$this->seeting['dock_light']=floatval($this->seeting['dock_light']);
 		$this->seeting['dock_moderate']=floatval($this->seeting['dock_moderate']);
@@ -85,14 +87,14 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             ihttp_request($_W['siteroot'] . 'addons/jujiwuliu/inc/tasks/order_settle.php', null,null, 1);
         }
 
-        //发送消息
+        //发送半小时提醒开工消息
         $current = time() + 1800;
         $list = pdo_fetchall("select o.openid,o.rid from ". tablename($this->taborder) . " o left join " . tablename($this->tabrelease) . " r on o.rid=r.id where o.status=1 and r.status=1 and r.starttime<=:time", array(':time' => $current));
         if(!empty($list)){
             foreach ($list as $item){
                 $formInfo = $this->getFormId($item['openid']);
                 if(!empty($formInfo)){
-                    $result = $this->sendMessage($item['rid'], $item['openid'], '', $formInfo['formid'], 'take_semih');
+                    $result = $this->sendMessage($item['rid'], '', $item['openid'], $formInfo['formid'], 'take_semih');
                     if(!is_error($result)){
                         $this->updateFormId($formInfo['openid'], $formInfo['id']);
                     }
@@ -107,7 +109,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             foreach ($list as $item){
                 $formInfo = $this->getFormId($item['openid']);
                 if(!empty($formInfo)){
-                    $result = $this->sendMessage($item['rid'], $item['openid'], '', $formInfo['formid'], 'take_open');
+                    $result = $this->sendMessage($item['rid'], '', $item['openid'], $formInfo['formid'], 'take_open');
                     if(!is_error($result)){
                         $this->updateFormId($formInfo['openid'], $formInfo['id']);
                     }
@@ -208,7 +210,17 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		return true;
 	}
 
-	public function sendMessage($id, $openid, $url, $formid, $type = ''){
+    /**
+     * @param $id   //发布单ID
+     * @param $openid   //接单会员openid
+     * @param $fopenid  //接收信息会员openid
+     * @param $formid   //formid
+     * @param string $type  //信息类型
+     * @param string $url   //url
+     * @return array|bool
+     */
+	public function sendMessage($id, $openid, $fopenid, $formid, $type = '', $url = ''){
+        global $_W;
 	    $setting = $this->seeting;
 	    $binds = unserialize($setting['notice_binds']);
         $template_id = $binds[$type];
@@ -221,152 +233,49 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             }
             $data['remark'] = array('value' => $template['remark'], 'color' => $template['remarkcolor']);
 
-            if($type == 'issue_ok'){
-                //发布方发布消息
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
-                }
-            }elseif ($type == 'issue_cancel'){
-                //取消发布信息
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
-                }
-            }elseif ($type == 'take_ok'){
-                //接单成功信息
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
+            //发布单信息
+            $release = $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id and uniacid=:uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
+            $total = pdo_fetchcolumn("select ifnull(count(id),0) from " . tablename($this->taborder) . " where rid=:rid and uniacid=:uniacid and status<>4", array(':rid' => $release['id'], ':uniacid' => $_W['uniacid']));
+            $diffNum = $release['nums'] - $total;   //剩余人数
+            if(!empty($openid)){
+                $order = pdo_fetch("select * from " . tablename($this->taborder) . " where rid=:rid and openid=:openid and uniacid=:uniacid", array(':rid' => $release['id'], ':openid' => $openid, ':uniacid' => $_W['uniacid']));
+                $receive = pdo_fetch("select * from " . tablename($this->tabmember) . " where openid=:openid and uniacid=:uniacid", array(':openid' => $openid, ':uniacid' => $_W['uniacid']));
+            }
+            foreach ($data as $key => $item){
+                $tmp = $item['value'];
+                $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
+                if(!empty($openid)){
+                    $tmp = str_replace('[接单人]', $receive['realname'], $tmp);
                     $tmp = str_replace('[接单时间]', date('Y-m-d H:i:s', $order['createtime']), $tmp);
-                    $data[$key]['value'] = $tmp;
+                    $tmp = str_replace('[取消人]', $receive['realname'], $tmp);
+                    $tmp = str_replace('[取消时间]', date('Y-m-d H:i:s', time()), $tmp);
+                    $tmp = str_replace('[申请人]', $receive['realname'], $tmp);
+                    $tmp = str_replace('[结算金额]', $release['total_price'], $tmp);
+                    $tmp = str_replace('[申请时间]', date('Y-m-d H:i:s', $order['apply_time']), $tmp);
+                    if($type == 'take_cancel'){
+                        if($setting['issue_worker_time'] && ((time() - $order['createtime']) > ($setting['issue_worker_time'] * 60))){
+                            $tmp = str_replace('[扣除金额]', "已超出取消时间,扣除押金{$order['deposit']}元", $tmp);
+                        }else{
+                            $tmp = str_replace('[扣除金额]','',$tmp);
+                        }
+                    }
                 }
-            }elseif ($type == 'take_cancel'){
-                //取消接单信息
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
+                $tmp = str_replace('[还差人数]', $diffNum, $tmp);
+                $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
+                $tmp = str_replace('[工作地点]', $release['address'], $tmp);
+                $tmp = str_replace('[打款时间]', date('Y-m-d H:i:s', time()), $tmp);
+                $tmp = str_replace('[打款金额]', $release['total_price'], $tmp);
+                if($type == 'issue_cancel'){
+                    if($setting['issue_worker_time'] && ((time() - $release['createtime']) > ($setting['issue_worker_time'] * 60))){
+                        $tmp = str_replace('[扣除金额]', "已超出取消时间,扣除押金{$release['cancel_refund_money']}元", $tmp);
+                    }else{
+                        $tmp = str_replace('[扣除金额]','',$tmp);
+                    }
                 }
-            }elseif ($type == 'issue_settle'){
-                //接单方申请结算提醒
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
-                }
-            }elseif ($type == 'take_semih'){
-                //开工时间前30分钟提醒
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
-                }
-            }elseif ($type == 'take_open'){
-                //开工提醒
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
-                }
-            }elseif ($type == 'take_money'){
-                //发布方打款提醒
-                $release = pdo_fetch('select * from ' . tablename($this->tabrelease) . ' where id=:id', array(':id' => $id));
-                $order = pdo_fetch('select * from ' . tablename($this->taborder) . ' where rid=:rid and openid=:openid', array(':rid' => $id, ':openid' => $openid));
-                foreach ($data as $key => $item){
-                    $tmp = $item['value'];
-                    $tmp = str_replace('[工种]', $this->type_set[$release['type']], $tmp);
-                    $tmp = str_replace('[类型]', $this->static_set[$release['static']], $tmp);
-                    $tmp = str_replace('[数量]', $release['count'], $tmp);
-                    $tmp = str_replace('[单位]', $this->unit_set[$release['type']], $tmp);
-                    $tmp = str_replace('[发布时间]', date('Y-m-d H:i:s', $release['createtime']), $tmp);
-                    $tmp = str_replace('[开工时间]', date('Y-m-d H:i:s', $release['starttime']), $tmp);
-                    $tmp = str_replace('[单价]', $release['price'], $tmp);
-                    $tmp = str_replace('[单人金额]', $release['total_price'], $tmp);
-                    $tmp = str_replace('[总价]', $release['count_price'], $tmp);
-                    $tmp = str_replace('[地址]', $release['address'], $tmp);
-                    $data[$key]['value'] = $tmp;
-                }
+                $data[$key]['value'] = $tmp;
             }
 
-            return $this->sendTplNotice($openid, $template['template_id'], $data, $url, $formid);
+            return $this->sendTplNotice($fopenid, $template['template_id'], $data, $url, $formid);
         }
         return error(1,'没有找到消息模版');
     }
@@ -958,8 +867,6 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		$r_ord=pdo_get($this->tabrelease,array('ordersn'=>$log['tid']));
 		if(!empty($r_ord)){
 			pdo_update($this->tabrelease,array('pay_status'=>1,'pay_type'=>$log['pay_type']),array('ordersn'=>$log['tid']));
-			//发送发布信息
-            $result = $this->sendMessage($r_ord['id'], $r_ord['openid'], '', $log['formid'], 'issue_ok');
 		}
 		//先查询
 		$recharge=pdo_get($this->tabglide,array('ordersn'=>$log['tid']));
@@ -974,14 +881,6 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         if(!empty($order)){
             $this->getTakeOrder($order,$log['pay_type']);
         }
-
-        /*
-        $order = pdo_get($this->taborder, array('depositsn' => $log['tid']));
-		if(!empty($order)){
-		    pdo_update($this->taborder, array('deposit_paystatus' => 1, 'deposit_paytype' => $log['pay_type']), array('depositsn' => $log['tid']));
-            $result = $this->sendMessage($order['rid'], $order['openid'], '', $log['formid'], 'take_ok');
-        }
-        */
 	}
 //	$refund= $this->refund('PU20181125103540849649',0.01,'后台处理退款！');//退款方法调用
 	
@@ -1279,20 +1178,21 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		$release=pdo_get($this->tabrelease,array('uniacid'=>$_W['uniacid'],'count_price'=>$_GPC['count_price'],'id'=>$id));
 		if($_GPC['static'] == 4){
 		    $_GPC['price'] = $_GPC['count_price'];
-		    /*
-            if($_GPC['nums'] * $_GPC['price'] != $_GPC['count_price']){
-                $errno = 1;
-                $message = "提交失败，请稍后重试！";
-                return $this->result($errno, $message);
-            }
-		    */
         }else{
-            if($_GPC['price']  * $_GPC['count']!= $_GPC['count_price']){
-                $errno = 1;
-                $message = "提交失败，请稍后重试！";
-                return $this->result($errno, $message);
+		    if($_GPC['type'] == '1'){
+		        if($_GPC['price'] * $_GPC['count'] * $_GPC['nums'] != $_GPC['count_price']){
+                    $errno = 1;
+                    $message = "提交失败，请稍后重试！";
+                    return $this->result($errno, $message);
+                }
+            }else{
+                if($_GPC['price']  * $_GPC['count']!= $_GPC['count_price']){
+                    $errno = 1;
+                    $message = "提交失败，请稍后重试！";
+                    return $this->result($errno, $message);
+                }
             }
-        }
+	}
 
         $setting = $this->seeting;
 
@@ -1320,8 +1220,14 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			'lat' => $_GPC['lat'],
 			'lng' => $_GPC['lng'],
             'cancel_refund_money' => $_GPC['bond'],
-            'can_refund_bond' => 1
+            'can_refund_bond' => 1,
+            'cargo' => $_GPC['cargo'],
+            'time_unit' => $_GPC['time_uint']
 		);
+
+		if(empty($data['count'])){
+		    return $this->result(1,'数量不能为空');
+        }
 		
 		//由于提交到微信的订单金额无法修改下面方法不可取只能每次生成新订单了……
 		if(empty($release)){
@@ -1435,6 +1341,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$res['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and deleted=0", array(':uniacid' => $_W['uniacid'], ':rid' => $res['id']));
 			$res['gptu'] = $res['nums']  - $res['yet'];
             $res['bondname'] = empty($res['can_refund_bond']) ? '不可退' : '可退';
+            $res['cargoname'] = $this->cargo_set[$res['cargo']];
+            $res['timeuintname'] = $this->timeuint_set[$res['time_unit']];
 			
 			$res['distance']=$this->getDistance($res['lat'],$res['lng'],$lat,$lng);
 			if($res['distance']<15){
@@ -1502,6 +1410,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$data['sex'] = $this->sex_set[$data['sex']];
 			$data['starttime'] = !empty($data['starttime']) ? date('Y-m-d H:i:s', $data['starttime']) : '';
 			$data['statusname'] =  $this->status_set[$data['status']];
+			$data['cargoname'] = $this->cargo_set[$data['cargo']];
+			$data['timeuintname'] = $this->timeuint_set[$data['time_unit']];
 
 			//判断是否有剩余金额
             $data['apply_surplus'] = 0; //默认不用申请
@@ -1740,11 +1650,15 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $i = $this->credit_update($uid, 'credit2', $release['total_price'], $log);
         if($i){
             pdo_update($this->taborder, array('status' => 3,'apply' => 2), array('id' => $id, 'uniacid' => $_W['uniacid']));
+            //已经打款了，判断单子的状态是否还是待接单状态(开工状态可能存在，状态没有改变状态)
+            if($release['status'] == 0){
+                pdo_update($this->tabrelease, array('status' => 1), array('id' => $order['rid'], 'uniacid' => $_W['uniacid']));
+            }
 
-            //发消息
+            //发送发布方确认打款消息
             $formInfo = $this->getFormId($order['openid']);
             if(!empty($formInfo)){
-                $result = $this->sendMessage($release['id'], $order['openid'], '', $formInfo['formid'], 'take_money');
+                $result = $this->sendMessage($release['id'], '', $order['openid'], $formInfo['formid'], 'take_money');
                 if(!is_error($result)){
                     $this->updateFormId($formInfo['openid'], $formInfo['id']);
                 }
@@ -1769,6 +1683,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             $release = pdo_fetch("select * from " . tablename($this->tabrelease) . " where id=:id and openid=:openid", array(':id' => $order['rid'], ':openid' => $_W['openid']));
             if(empty($release)){
                 return $this->result(1,'单子不属于您！');
+            }
+
+            if($order['apply'] == 2){
+                $this->result(1,'已支付不能设定人未到场');
             }
 
             $update = array(
@@ -1912,6 +1830,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             //$res['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and deleted=0 and status<>4", array(':uniacid' => $_W['uniacid'], ':rid' => $res['id']));
             $res['yet'] = empty($count) ? 0 : $count;
             $res['gptu'] = $res['nums']  - $res['yet'];
+            $res['cargoname'] = $this->cargo_set[$res['cargo']];
 //			if($_GPC['status']==1){
 
 //			}
@@ -1919,7 +1838,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			
 			//$res['price']=$res['price']-$res['price']*$seeting['pumping']/100;
 			//$res['total_price']=$res['total_price']-$res['total_price']*$seeting['pumping']/100;
-            $res['price'] = round($res['total_price'] / $res['count'],2);
+            if($res['count'] > 0){
+                $res['price'] = round($res['total_price'] / $res['count'],2);
+            }
+
             $res['total_price']=$res['total_price'];
 			$res['count_price']=$res['count_price']-$res['count_price']*$seeting['pumping']/100;
 
@@ -2021,6 +1943,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			$item['deposit_paystatus'] = empty($order) ? 1 : $order['deposit_paystatus'];
 			$item['credit_enough'] = ($this->user['credit2'] - $deposit) >= 0 ? 1 : 0;
 			$item['order_status'] = empty($order) ? 0 : $order['status'];
+			$item['cargoname'] = $this->cargo_set[$item['cargo']];
+			$item['timeuintname'] = $this->timeuint_set[$item['time_unit']];
 			
 			//计算距离
 			$item['distance']=$this->getDistance($item['lat'],$item['lng'],$lat,$lng);
@@ -2141,6 +2065,8 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         }
     }
 
+
+    //接单
     public function getTakeOrder($info,$paytype){
         global $_W;
 
@@ -2184,9 +2110,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 
         pdo_update($this->tabbond, array('status' => 1), array('id' => $info['id']));
 
+        //发布接单消息
         $formidInfo = $this->getFormId($release['openid']);
-        if(!empty($formid)){
-            $result = $this->sendMessage($release['id'],$release['openid'],'', $formidInfo['formid'],'take_ok');
+        if(!empty($formidInfo)){
+            $result = $this->sendMessage($release['id'],$info['openid'],$release['openid'], $formidInfo['formid'],'take_ok');
             if(!is_error($result)){
                 $this->updateFormId($formidInfo['openid'],$formidInfo['id']);
             }
@@ -2196,6 +2123,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
     }
 	
 //	接单
+/*
 	public function doPageGettakeOrder(){
 		global $_GPC, $_W;
 		if(empty($_W['openid'])){
@@ -2274,6 +2202,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 			return $this->result(1, '该发布不存在！');
 		}
 	}
+*/
 
 	//支付保证金
 	public function doPageCreateWorkerPay(){
@@ -2356,10 +2285,10 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
 		$upord=pdo_update($this->taborder, array('apply'=>1,'apply_time'=>time(), 'status' => 2),array('uniacid'=>$_W['uniacid'],'id'=>$id));
 		
 		if($upord){
-		    //发消息
+		    //发送申请结算消息
             $formidInfo = $this->getFormId($release['openid']);
             if(!empty($formidInfo)){
-                $result = $this->sendMessage($release['id'], $release['openid'], '', $formidInfo['formid'], 'issue_settle');
+                $result = $this->sendMessage($release['id'], $order['openid'], $release['openid'], $formidInfo['formid'], 'issue_settle');
                 if(!is_error($result)){
                     $this->updateFormId($formidInfo['openid'], $formidInfo['id']);
                 }
@@ -2398,10 +2327,11 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         }
 
         $upord = pdo_update($this->taborder, $update, array('uniacid' => $_W['uniacid'], 'id' => $id));
+        //取消订单消息
         if($upord){
-            $formIdInfo = $this->getFormId($release['openid']);
+            $formIdInfo = $this->getFormId($order['openid']);
             if(!empty($formIdInfo)){
-                $result = $this->sendMessage($order['rid'], $release['openid'], '', $formIdInfo['formid'], 'take_cancel');
+                $result = $this->sendMessage($order['rid'], $order['openid'], $order['openid'], $formIdInfo['formid'], 'take_cancel');
                 if(!is_error($result)){
                     $this->updateFormId($formIdInfo['openid'],$formIdInfo['id']);
                 }
@@ -2487,6 +2417,7 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
             $release['statusname'] =  $this->status_set[$release['status']];
             $release['yet'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->taborder)." WHERE uniacid=:uniacid and rid=:rid and deleted=0", array(':uniacid' => $_W['uniacid'], ':rid' => $release['id']));
             $release['gptu'] = $release['nums']  - $release['yet'];
+            $release['cargoname'] = $this->cargo_set[$release['cargo']];
 
             //计算抽成后价格与金额
 
@@ -2603,12 +2534,13 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         $user = pdo_fetch('select * from ' . tablename($this->tabmember) . ' where openid=:openid', array(':openid' => $release['openid']));
         $release['realname'] = $user['realname'];
         $release['mobile'] = $user['mobile'];
-        $total = pdo_fetch("select count(id) from " . tablename($this->taborder) . " where rid=:rid and openid=:openid", array(':rid' => $release['id'], ':openid' => $_W['openid']));
+        $total = pdo_fetchcolumn("select count(id) from " . tablename($this->taborder) . " where rid=:rid and openid=:openid", array(':rid' => $release['id'], ':openid' => $_W['openid']));
         $release['order_count'] = empty($total) ? 0 : 1;
         return $this->result(0,'', $release);
 
     }
 
+    //支付保证金接单
     public function doPageGetOrderPay(){
         global $_W,$_GPC;
         $id = intval($_GPC['id']);
@@ -2790,5 +2722,11 @@ class jujiwuliuModuleWxapp extends WeModuleWxapp {
         }
 
         return $this->result(0,'',$item);
+    }
+
+    public function doPageGetAgreeOn(){
+        $setting = $this->seeting;
+        $html = htmlspecialchars_decode($setting['agree_on']);
+        return $this->result(0,'',$html);
     }
 }

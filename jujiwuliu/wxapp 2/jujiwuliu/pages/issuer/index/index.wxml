@@ -1,0 +1,369 @@
+<!--jujiwuliu/pages/issuer/index/index.wxml-->
+<!-- <form bindsubmit="formSubmit" bindreset="formReset" report-submit='true'>
+  <view class="btn-area">
+    <button form-type="submit">Submit</button>
+    <button form-type="reset">Reset</button>
+  </view>
+</form> -->
+<view class="container {{modalPayBtns?'page_over_hidden':''}}" style="{{inputMarBot?'margin-bottom:50rpx':''}}">
+    <view class='release-type'>
+     <view wx:for="{{navList}}" wx:key="{{index}}" data-index="{{index}}" bindtap="getNav" class='release-type-item {{type == index ? "release-type-active" : ""}}'>{{item}}</view>
+    </view>
+    <form report-submit='true' bindsubmit='submit' class='{{type == 0 ? "show" : "hide"}}'>
+      <view class='release-cates'>
+        <view class='release-cate {{static == 1 ? "release-cate-active" : ""}}' data-index="1" data-price="{{setting_set.dock_light}}" bindtap="getStatis">
+          <view><image src='{{static == 1 ? "/jujiwuliu/resource/images/img_01_1.png" : "/jujiwuliu/resource/images/img_01.png"}}'></image></view>
+          <view  class='catename'>轻活</view>
+          <view  class='cateprice'>{{setting_set.dock_light}}元/吨</view>
+        </view>
+        <view class='release-cate {{static == 2 ? "release-cate-active" : ""}}' data-index="2" data-price="{{setting_set.dock_moderate}}" bindtap="getStatis">
+          <view><image src='{{static == 2 ? "/jujiwuliu/resource/images/img_02_1.png" : "/jujiwuliu/resource/images/img_02.png"}}'></image></view>
+          <view  class='catename'>中活</view>
+          <view  class='cateprice'>{{setting_set.dock_moderate}}元/吨</view>
+        </view>
+        <view class='release-cate {{static == 3 ? "release-cate-active" : ""}}' data-index="3" data-price="{{setting_set.dock_heavy}}" bindtap="getStatis">
+          <view><image src='{{static == 3 ? "/jujiwuliu/resource/images/img_03_1.png" : "/jujiwuliu/resource/images/img_03.png"}}'></image></view>
+          <view  class='catename'>重活</view>
+          <view  class='cateprice'>{{setting_set.dock_heavy}}元/吨</view>
+        </view>
+        <view class='release-cate {{static == 4 ? "release-cate-active" : ""}}' data-index="4" bindtap="getStatis">
+          <view><image src='{{static == 4 ? "/jujiwuliu/resource/images/img_04_1.png" : "/jujiwuliu/resource/images/img_04.png"}}'></image></view>
+          <view  class='catename'>一口价</view>
+          <view  class='cateprice'>
+          <input type='text' name='pices' class='release-cate-input' bindinput='getPices' value='{{prices}}'></input>
+          </view>
+        </view>
+      </view>
+      <view class='weui-cells input-cells'>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>吨位数量：</view>
+          <view class='weui-input input-input'>
+            <input type='text' name='count' bindinput='getCount' value='{{count}}'  placeholder='请填写吨位数量!'></input>
+          </view>
+        </view>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>开工时间：</view>
+          <view class='weui-input input-input'>
+            <picker mode="multiSelector" value="{{dateTime}}" bindchange="getDateTime" bindcolumnchange="getDateTimeColumn" range="{{dateTimeArray}}">    
+          <input hidden='true' name='starttime' value='{{starttime}}'></input>
+          <view class="tui-picker-detail"  style='ont-size:28rpx;'>{{starttime}}
+          </view>  
+          </picker>
+          </view>
+        </view>
+        <!-- <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>用工地点：</view>
+          <view class='weui-input input-input'>
+            <input type='text' name='address' bindinput='address' value='{{address}}' placeholder="请填写用工地点！" ></input>
+          </view>
+        </view> -->
+ 
+ <view class='weui-cell input-cell'>
+        <view class='weui-label  input-label'>用工地点：</view>
+        <picker bindchange="bindProvincesChange" value="{{provincesIndex}}" range="{{provinces}}">
+                <view class='weui-input input-input address' style='width: calc(40% - 130rpx)'>
+                    {{objectProvinces[provincesIndex].fullname}}
+                </view>
+        </picker>
+        
+        <picker bindchange="bindCitysChange" value="{{citysIndex}}" range="{{citys}}">
+                <view class='weui-input input-input address' style='width: calc(40% - 130rpx)'>
+                    {{objectCitys[citysIndex].fullname}}
+                </view>
+        </picker>
+        <picker bindchange="bindDistrictsChange" value="{{districtsIndex}}" range="{{districts}}">
+                <view class='weui-input input-input address' style='width: calc(40% - 130rpx)'>
+                    {{objectDistricts[districtsIndex].fullname}}
+                </view>
+        </picker>
+
+</view>
+ <view class='weui-cell input-cell'>
+        <view class='weui-label  input-label'>详细地址：</view>
+        <input type='text' class='weui-input input-input' name='address' bindinput='address' value='{{address}}' placeholder="用工详细地址" style="width: calc(100% - 210rpx);" ></input>
+        
+        <!-- <input  class='weui-input input-input' placeholder="用工详细地址" ></input> -->
+</view>
+<view class="weui-cell input-cell">
+  <view class="weui-label input-label">货物类型：</view>
+  <view class="weui-input input-input">
+    <picker bindchange="cargoPickerChange" value="{{cargoIndex}}" range="{{cargoArray}}">
+      <view class="sex" style="font-size:28rpx;">{{cargoArray[cargoIndex]}}</view>
+    </picker>
+  </view>
+</view>
+
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>需要人数：</view>
+          <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
+            <input type='text' name='nums' bindinput='getNums' value='{{nums}}'  placeholder='请填写需要人数!'></input>
+          </view>
+          <view class='weui-label  input-label' style='width:80rpx;'>性别</view>
+          <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
+            <picker bindchange="sexPickerChange" value="{{sexIndex}}" range="{{sexArray}}">
+              <view class="sex" style='font-size:28rpx;'>{{sexArray[sexIndex]}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+      <view class='cell-title'>货物图片<text style="float: right">用工地点定位</text></view>
+      <view class='release-images'>
+        
+        <block wx:for="{{images}}" wx:key="{{index}}">
+        <view class='release-image'>
+          <image src='{{siteinfo.attachurl}}{{item}}'></image>
+          <view class='remove' bindtap='bindRemoveImg' data-index="{{index}}" >×</view>
+        </view>
+        </block>
+        <view class='release-image' bindtap='bindChooiceProduct'>
+          <image src='/jujiwuliu/resource/images/add.png'></image>
+        </view>
+        <view class="weui-icon" bindtap="gotomap"><image src="/jujiwuliu/resource/images/icon_01.png"></image></view>
+      </view>
+
+      <view class='cell-title'>指定人员</view>
+      <view class='release-images'>
+        <block wx:for="{{check_users}}" wx:key="{{index}}" >
+        <view class='release-image' wx:if="{{item}}">
+          <image src='{{item.avatar}}'></image>
+          <view class='remove' bindtap='bindRemoveAppoint' data-index="{{index}}"  >×</view>
+        </view>
+        </block>
+        <view class='release-image' bindtap='bindChooiceAppoint'>
+          <image src='/jujiwuliu/resource/images/add.png'></image>
+        </view>
+      </view>
+
+      <view class='cell-title'>货物描述和用功要求说明</view>
+      <view class='release-textarea'>
+        <textarea wx:if="{{isShowText}}" name='description' placeholder='填写货物描述内容'  bindblur='onRemarkInput' bindconfirm='onShowText' focus='{{onFocus}}' value='{{description}}'></textarea>
+        <view wx:else class='remarks' bindtap='onShowTextare'>{{description?description:'填写货物描述内容'}}</view> 
+      </view>
+      <!-- <view class='weui-cells input-cells'>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label' style='width:80rpx;'>价格</view>
+          <view class='price'>{{count_price}}元</view>
+        </view>
+      </view> -->
+      <!-- <view class='btn_view'>
+        <button form-type="submit" class='btn-subimt'>确认发布</button>
+      </view> -->
+    </form>
+    <form bindsubmit='submit1' class='{{type == 1 ? "show" : "hide"}}'>
+      <view class='release-cates'>
+        <view class='release-cate {{static == 1 ? "release-cate-active" : ""}}' data-index="1" data-price="{{setting_set.temporary_light}}" bindtap="getStatis">
+          <view><image src='{{static == 1 ? "/jujiwuliu/resource/images/img_01_1.png" : "/jujiwuliu/resource/images/img_01.png"}}'></image></view>
+          <view  class='catename'>轻活</view>
+          <view  class='cateprice'>{{setting_set.temporary_light}}元/天</view>
+        </view>
+        <view class='release-cate {{static == 2 ? "release-cate-active" : ""}}' data-index="2" data-price="{{setting_set.temporary_moderate}}" bindtap="getStatis">
+          <view><image src='{{static == 2 ? "/jujiwuliu/resource/images/img_02_1.png" : "/jujiwuliu/resource/images/img_02.png"}}'></image></view>
+          <view  class='catename'>中活</view>
+          <view  class='cateprice'>{{setting_set.temporary_moderate}}元/天</view>
+        </view>
+        <view class='release-cate {{static == 3 ? "release-cate-active" : ""}}' data-index="3" data-price="{{setting_set.temporary_heavy}}" bindtap="getStatis">
+          <view><image src='{{static == 3 ? "/jujiwuliu/resource/images/img_03_1.png" : "/jujiwuliu/resource/images/img_03.png"}}'></image></view>
+          <view  class='catename'>重活</view>
+          <view  class='cateprice'>{{setting_set.temporary_heavy}}元/天</view>
+        </view>
+        <view class='release-cate {{static == 4 ? "release-cate-active" : ""}}' data-index="4" bindtap="getStatis">
+          <view><image src='{{static == 4 ? "/jujiwuliu/resource/images/img_04_1.png" : "/jujiwuliu/resource/images/img_04.png"}}'></image></view>
+          <view  class='catename'>一口价</view>
+          <view  class='cateprice'>
+          <input type='text' name='pices' class='release-cate-input' bindinput='getPices' value='{{prices}}'></input>
+          </view>
+        </view>
+      </view>
+      <view class='weui-cells input-cells'>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>用工时间：</view>
+          <block wx:if="{{static == 4}}">
+            <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
+              <input type='text' name='count' bindinput='getCount'  value='{{count}}'  placeholder='请填写用工时间!'></input>
+            </view>
+            <view class='weui-label  input-label' style="width:80rpx; margin-left:20rpx;" >单位：</view>
+            <view class="weui-input input-input" style="width: calc(50% - 160rpx)">
+              <picker range="{{timeUintArray}}" value="{{timeUintIndex}}" bindchange="timeUintChange">
+                <view style="font-size: 28rpx;">{{timeUintArray[timeUintIndex]}}</view>
+              </picker>
+            </view>
+          </block>
+          <block wx:else>
+            <view class='weui-input input-input'>
+              <input type='text' name='count' bindinput='getCount'  value='{{count}}'  placeholder='请填写用工天数!'></input>
+            </view>
+          </block>
+        </view>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>开工时间：</view>
+          <view class='weui-input input-input' >
+            <picker mode="multiSelector" value="{{dateTime}}" bindchange="getDateTime" bindcolumnchange="getDateTimeColumn" range="{{dateTimeArray}}">    
+          <input hidden='true' name='starttime' value='{{starttime}}'></input>
+          <view class="tui-picker-detail"  style='font-size:28rpx;'> {{starttime}}   
+          </view>  
+          </picker>
+          </view>
+        </view>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>用工地点：</view>
+          <picker bindchange="bindProvincesChange" value="{{provincesIndex}}" range="{{provinces}}">
+                  <view class='weui-input input-input address' style='width: calc(40% - 130rpx)'>
+                      {{objectProvinces[provincesIndex].fullname}}
+                  </view>
+          </picker>
+          <picker bindchange="bindCitysChange" value="{{citysIndex}}" range="{{citys}}">
+                  <view class='weui-input input-input address' style='width: calc(40% - 130rpx)'>
+                      {{objectCitys[citysIndex].fullname}}
+                  </view>
+          </picker>
+          <picker bindchange="bindDistrictsChange" value="{{districtsIndex}}" range="{{districts}}">
+                  <view class='weui-input input-input address' style='width: calc(40% - 130rpx)'>
+                      {{objectDistricts[districtsIndex].fullname}}
+                  </view>
+          </picker>
+        </view>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>详细地址：</view>
+          <view class='weui-input input-input'>
+            <input type='text' class='weui-input input-input' name='address' bindinput='address' value='{{address}}' placeholder="用工详细地址" style="width: calc(100% - 210rpx);" ></input>
+            <!--<input type='text' name='address' bindinput='address' value='{{address}}' placeholder="请填写用工地点！" ></input>-->
+            
+          </view>
+        </view>
+        
+      <view class="weui-cell input-cell">
+        <view class="weui-label input-label">货物类型：</view>
+        <view class="weui-input input-input">
+          <picker bindchange="cargoPickerChange" value="{{cargoIndex}}" range="{{cargoArray}}">
+            <view class="sex" style="font-size:28rpx;">{{cargoArray[cargoIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>需要人数：</view>
+          <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
+            <input type='text' name='nums' bindinput='getNums' value='{{nums}}' placeholder='请填写需要人数!'></input>
+          </view>
+          <view class='weui-label  input-label' style='width:80rpx;'>性别</view>
+          <view class='weui-input input-input' style='width: calc(50% - 160rpx)'>
+            <picker bindchange="sexPickerChange" value="{{sexIndex}}" range="{{sexArray}}">
+              <view class="sex" style='font-size:28rpx;'>{{sexArray[sexIndex]}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+      <view class='cell-title'>货物图片<text style="float: right">用工地点定位</text></view>
+      <view class='release-images'>
+        <block wx:for="{{images}}" wx:key="{{index}}">
+        <view class='release-image'>
+          <image src='{{siteinfo.attachurl}}{{item}}'></image>
+          <view class='remove' bindtap='bindRemoveImg' data-index="{{index}}" >×</view>
+        </view>
+        </block>
+        <view class='release-image' bindtap='bindChooiceProduct'>
+          <image src='/jujiwuliu/resource/images/add.png'></image>
+        </view>
+        <view class="weui-icon" bindtap="gotomap"><image src="/jujiwuliu/resource/images/icon_01.png"></image></view>
+      </view>
+
+      <view class='cell-title'>指定人员</view>
+      <view class='release-images'>
+        
+        <block wx:for="{{check_users}}" wx:key="{{index}}" >
+        <view class='release-image' wx:if="{{item}}">
+          <image src='{{item.avatar}}'></image>
+          <view class='remove' bindtap='bindRemoveAppoint' data-index="{{index}}"  >×</view>
+        </view>
+        </block>
+        <view class='release-image' bindtap='bindChooiceAppoint'>
+          <image src='/jujiwuliu/resource/images/add.png'></image>
+        </view>
+
+      </view>
+      <view class='cell-title'>货物描述和用功要求说明</view>
+      <view class='release-textarea'>
+        <textarea wx:if="{{isShowText}}" name='description' placeholder='填写货物描述内容'  bindblur='onRemarkInput' bindconfirm='onShowText' focus='{{onFocus}}' value='{{description}}'></textarea>
+        <view wx:else class='remarks' bindtap='onShowTextare'>{{description?description:'填写货物描述内容'}}</view> 
+      </view>
+      <!-- <view class='weui-cells input-cells'>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label'>指定人员</view>
+          <view class='release-staffs'>
+            <view class='release-staff'>张工<view class='staff-remove'>×</view></view>
+          </view>
+          <view class='weui-cell__ft_in-access choice'>选择</view>
+        </view>
+      </view> -->
+      <!-- <view class='weui-cells input-cells'>
+        <view class='weui-cell input-cell'>
+          <view class='weui-label  input-label' style='width:80rpx;'>价格</view>
+          <view class='price'>{{count_price}}元</view>
+        </view>
+      </view> -->
+      <!-- <view class='btn_view'>
+        <button form-type="submit" class='btn-subimt'>确认发布</button>
+      </view> -->
+    </form>
+    <!-- <picker bindchange="sexPickerChange" value="{{sexIndex}}" range="{{sexArray}}">
+      <view class="sex" style='font-size:28rpx;'>{{sexArray[sexIndex]}}</view>
+    </picker> -->
+    <form bindsubmit="submit" bindreset="formReset" report-submit='true'>
+        <view class='count_price'>
+        <view >
+            总价：<text>{{count_price}}+{{bond}}={{all_price}}元 </text>
+        </view>
+        <view >
+            <!-- <view class='btn-subimt' bindtap='check_modalpay'   >确认发布</view> -->
+            <!-- <view class='btn-subimt' bindtap='submit'   >确认发布</view> -->
+            <button class='btn-subimt' form-type='submit'  style='margin-top:40rpx;' >确认发布</button >
+        </view>
+        </view>
+    </form>
+
+</view>
+
+<view class='modal_user_check' wx:if="{{modalCheckUser}}">
+    <view>
+        <view class='swiper'>
+          <block wx:for="{{user_list}}" wx:key='index' wx:for-index="bindex" >
+            <view class='swiper-item {{item.active==1?"active":""}}' bindtap='bindAddAppoint' data-index="{{bindex}}">
+                <view class='image'>
+                    <image src="{{item.avatar}}" class="slide-image" mode='heightFix' />
+                </view>
+                <view class='nickname'>
+                {{item.nickname}} 
+                </view>
+            </view>
+          </block>
+        </view>
+        <view class='close' bindtap='colseCheckAppoint'>x</view>
+        <view class='btn_bar'>
+            <view class='btn_sub' bindtap='submitCheckAppoint'>确认</view>
+        </view>
+  </view>
+    
+</view>
+<!-- 支付方式选择 -->
+
+<!--
+<view class='model_pay {{modalPayBtns?"show":""}}'  >
+    <view class='model_background' bindtap='hide_paybtns'></view>
+    <view class='model_btns'>
+      <view class='model_btns_title'>请选择支付方式</view>
+      <view data-paytype='1'  bindtap='check_pay' >微信支付</view>
+      <view  data-paytype='2' bindtap='check_pay'  class="{{!credit_enough?'disabled':''}}" >余额支付<text wx:if="{{!credit_enough}}">(余额不足以支付)</text></view>
+    </view>
+</view>
+-->
+
+<import src="../../common/template/footer.wxml"/>
+<template is="footerWx" data="{{...tabBar}}"/>
+
+<!-- 支付 -->
+
+<import src="../../common/template/pay.wxml" />
+<template is="model_pay" data="{{...payData}}" />
+
+
+

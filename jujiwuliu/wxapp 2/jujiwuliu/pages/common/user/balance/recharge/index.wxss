@@ -1,0 +1,62 @@
+/* jujiwuliu/pages/common/user/balance/recharge/index.wxss */
+page{
+  background: #f4f4f4;
+}
+
+
+
+
+
+
+
+.item-list>view{
+  padding:0% 20pt;
+}
+.item-list .item-title{
+  margin-top: 10pt;
+  background: #fff;
+  font-size: 1rem;
+  height: 35pt;
+  line-height: 35pt;
+  border-top: 1px solid #e5e5e5;
+  border-bottom:1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+}
+.item-list .item-title view{
+  font-size:0.9rem;
+}
+.item-list .item-title view.headline{
+  flex: 5;
+}
+.item-list .item-title view.input{
+  flex: 10;
+}
+.item-list .item-title view.img{
+  flex: 5;
+  display: block;
+}
+.item-list .item-title view input{
+  height: 35pt;
+  margin-left: 10px;
+}
+.item-list .item-title view image{
+  max-height: 35pt;
+  max-width: 60pt;
+}
+
+.item-list .btn.btn-draw_money{
+  background: #f66620;
+  color: #fff;
+  border: 1px solid #f66620;
+}
+.item-list .btn{
+  width: 90%;
+  height: 35pt;
+  line-height: 35pt;
+  margin: 0 auto;
+  border-radius: 5px;
+  margin-top:15pt; 
+  padding: 0;
+  text-align: center;
+}

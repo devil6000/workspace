@@ -7,8 +7,10 @@
     <view class='line-centent'>{{issuer.typename}}</view>
   </view>
   <view>
-    <view class='line-title'>轻度活</view>
-    <view class='line-centent'>{{issuer.price}}元/{{issuer.unit}}</view>
+    <view class='line-title'>{{issuer.staticname}}</view>
+    <view class='line-centent'>
+    {{issuer.price}}元<block wx:if="{{issuer.static != 4}}">/{{issuer.unit}}</block>
+    </view>
   </view>
   </view>
 </view>
@@ -16,8 +18,31 @@
 <view class='list_card'>
   <view class=' list-item' >
     <view class='list-text'>
-      <view class='line-title'>数量</view>
-      <view class='line-centent'>{{issuer.count}}{{issuer.unit}}</view>
+      <view class='line-title'>
+      <block wx:if="{{issuer.type == 0}}">
+      数量
+      </block>
+      <block wx:elif="{{issuer.type == 1}}">
+      用工时间
+      </block>
+      </view>
+      <view class='line-centent'>
+      <block wx:if="{{issuer.type == 1}}">
+        <block wx:if="{{issuer.time_unit != 2}}">
+        {{issuer.count}}
+        </block>
+        {{issuer.timeuintname}}
+      </block>
+      <block wx:else>
+      {{issuer.count}}{{issuer.unit}}
+      </block>
+      </view>
+    </view>
+  </view>
+  <view class="list-item">
+    <view class="list-text">
+      <view class="line-title">货物类型</view>
+      <view class="line-centent">{{issuer.cargoname}}</view>
     </view>
   </view>
   <view class=' list-item' >
@@ -59,7 +84,7 @@
 
 <view class='item-list'>
   <view class='item-title'>
-  <view>货物描述和用功要求说明</view>
+  <view>货物描述和用工要求说明</view>
   </view>
   <view  class='item-content'>
     {{issuer.description}}

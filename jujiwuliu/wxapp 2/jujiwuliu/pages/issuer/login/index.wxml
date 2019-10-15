@@ -1,0 +1,25 @@
+<!--jujiwuliu/pages/issuer/login/index.wxml-->
+<view class='container'>
+  <view class='head'>
+    <view class='head_title'>登录发布</view>
+    <navigator url='/jujiwuliu/pages/issuer/reg/index' class='head_right'>注册</navigator>
+  </view>
+  <form bindsubmit='login'>
+    <view class='item'>
+      <view class='weui-cell item-list'>
+        <image src='/jujiwuliu/resource/images/reg_01.png'></image>
+        <input type='text' class='reg-input' name='mobile' placeholder-class='placeh-input' placeholder='请输入手机号码'></input>
+      </view>
+      <view class='weui-cell item-list'>
+        <image src='/jujiwuliu/resource/images/reg_03.png'></image>
+        <input type='password' name='password' class='reg-input' placeholder-class='placeh-input' placeholder='请输入密码'></input>
+      </view>
+    </view>
+    <view class='btn_view'>
+      <button form-type="submit" class='btn-subimt'>确认登录</button>
+    </view>
+    <view class='werch'>
+        <image src='/jujiwuliu/resource/images/werch.png'></image>微信快捷登录
+    </view>
+  </form>
+</view>

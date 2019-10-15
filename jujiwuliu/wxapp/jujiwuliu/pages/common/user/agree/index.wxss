@@ -1,0 +1,13 @@
+/* jujiwuliu/pages/common/user/agree/index.wxss */
+page{
+  background: #f4f4f4;
+}
+.content {
+  padding: 10rpx 10rpx 10rpx 10rpx;
+  background-color: #ffffff;
+}
+
+.content-item {
+  line-height: 25px;
+  font-size: 12px;
+}

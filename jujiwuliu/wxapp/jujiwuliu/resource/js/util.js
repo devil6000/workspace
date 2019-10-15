@@ -355,7 +355,6 @@ util.getUserInfo = function (cb) {
 			'wxInfo': '',
 			'memberInfo': '',
 		};
-    
 		wx.login({
 			success: function (res) {
 				util.request({
@@ -364,10 +363,10 @@ util.getUserInfo = function (cb) {
 					data: { code: res.code },
 					cachetime: 0,
 					success: function (session) {
-            
 						if (!session.data.errno) {
 							userInfo.sessionid = session.data.data.sessionid
 							wx.setStorageSync('userInfo', userInfo);
+
 							wx.getUserInfo({
 								success: function (wxInfo) {
 									userInfo.wxInfo = wxInfo.userInfo
@@ -409,11 +408,13 @@ util.getUserInfo = function (cb) {
                 //   return;
 								// }
 							})
+
 						}
 					}
 				});
 			},
 			fail: function () {
+
 				wx.showModal({
 					title: '获取信息失败',
 					content: '请允许授权以便为您提供给服务',
@@ -423,6 +424,7 @@ util.getUserInfo = function (cb) {
 						}
 					}
 				})
+
 			}
 		});
 	};
